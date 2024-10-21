@@ -25,7 +25,7 @@
 #include "LIEF/ELF/EnumToString.hpp"
 #include "ELF/Structures.hpp"
 
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 
 namespace LIEF {
 namespace ELF {

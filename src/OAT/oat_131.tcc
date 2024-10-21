@@ -16,7 +16,7 @@
 
 #include <type_traits>
 
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 
 #include "LIEF/utils.hpp"
 

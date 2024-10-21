@@ -19,7 +19,7 @@
 #include <iterator>
 #include <numeric>
 
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 
 #include "third-party/utfcpp.hpp"
 

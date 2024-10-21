@@ -19,7 +19,7 @@
 
 #include "LIEF/MachO/Binary.hpp"
 
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 #include "messages.hpp"
 #include "internal_utils.hpp"
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 #include "LIEF/ELF/hash.hpp"
 #include "LIEF/ELF/NoteDetails/core/CoreFile.hpp"
 #include "LIEF/BinaryStream/SpanStream.hpp"

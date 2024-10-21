@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 #include <sstream>
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 #include "frozen.hpp"
 #include "LIEF/iostream.hpp"
 

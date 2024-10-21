@@ -16,7 +16,7 @@
 #include <fstream>
 #include <climits>
 #include "LIEF/BinaryStream/SpanStream.hpp"
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 #include "LIEF/DEX/File.hpp"
 #include "LIEF/DEX/utils.hpp"
 #include "LIEF/DEX/instructions.hpp"

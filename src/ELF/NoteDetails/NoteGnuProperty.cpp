@@ -17,7 +17,7 @@
 
 #include "spdlog/fmt/fmt.h"
 
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 #include "frozen.hpp"
 
 #include "ELF/NoteDetails/properties/common.hpp"

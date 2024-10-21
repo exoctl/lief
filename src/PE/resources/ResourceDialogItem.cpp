@@ -18,7 +18,7 @@
 #include <algorithm>
 #include <numeric>
 
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 
 
 #include "LIEF/PE/hash.hpp"

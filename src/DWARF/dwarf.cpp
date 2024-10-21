@@ -24,7 +24,7 @@
 #include "LIEF/DWARF/types/Base.hpp"
 #include "LIEF/DWARF/types/Array.hpp"
 
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 #include "messages.hpp"
 #include "internal_utils.hpp"
 

@@ -20,7 +20,7 @@
 #include <numeric>
 #include <unordered_map>
 
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 
 #include "LIEF/BinaryStream/VectorStream.hpp"
 

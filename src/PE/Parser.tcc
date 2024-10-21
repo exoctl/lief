@@ -15,7 +15,7 @@
  */
 #include <memory>
 
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 
 #include "LIEF/BinaryStream/BinaryStream.hpp"
 #include "LIEF/PE/LoadConfigurations.hpp"

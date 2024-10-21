@@ -16,7 +16,7 @@
 #include "LIEF/ELF/DynamicEntryArray.hpp"
 #include "LIEF/Visitor.hpp"
 
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 
 #include <algorithm>
 

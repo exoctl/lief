@@ -17,7 +17,7 @@
 #include <iterator>
 
 #include "spdlog/fmt/fmt.h"
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 #include "frozen.hpp"
 #include "fmt_formatter.hpp"
 

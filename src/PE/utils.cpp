@@ -16,7 +16,7 @@
 #include <algorithm>
 #include <iterator>
 
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 #include "mbedtls/md5.h"
 
 #include "LIEF/PE/utils.hpp"

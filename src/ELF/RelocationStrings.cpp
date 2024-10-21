@@ -15,7 +15,7 @@
  */
 #include "LIEF/ELF/Relocation.hpp"
 #include "frozen.hpp"
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 
 #define ELF_RELOC(X, _) std::pair(Relocation::TYPE::X, #X),
 

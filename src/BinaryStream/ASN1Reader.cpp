@@ -14,7 +14,7 @@
  */
 #include "LIEF/BinaryStream/ASN1Reader.hpp"
 #include "LIEF/BinaryStream/BinaryStream.hpp"
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 
 #include <array>
 #include <mbedtls/platform.h>

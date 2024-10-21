@@ -16,7 +16,7 @@
 
 #include <memory>
 
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 
 #include "LIEF/VDEX/Parser.hpp"
 #include "LIEF/VDEX/File.hpp"

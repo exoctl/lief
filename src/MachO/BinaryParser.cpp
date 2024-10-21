@@ -15,7 +15,6 @@
  */
 #include <memory>
 
-#include "logging.hpp"
 #include "BinaryParser.tcc"
 
 #include "LIEF/BinaryStream/VectorStream.hpp"
@@ -27,6 +26,7 @@
 #include "LIEF/MachO/ExportInfo.hpp"
 #include "LIEF/MachO/DyldExportsTrie.hpp"
 
+#include "LIEF/logging.hpp"
 #include "internal_utils.hpp"
 
 namespace LIEF {

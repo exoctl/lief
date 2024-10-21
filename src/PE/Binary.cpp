@@ -20,7 +20,7 @@
 #include <numeric>
 #include <limits>
 
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 #include "hash_stream.hpp"
 #include "internal_utils.hpp"
 

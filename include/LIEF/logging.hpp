@@ -1,5 +1,6 @@
 /* Copyright 2017 - 2024 R. Thomas
  * Copyright 2017 - 2024 Quarkslab
+ * Copyright 2024 - 2024 remoob
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,101 +14,160 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef LIEF_LOGGING_H
-#define LIEF_LOGGING_H
-
-#include "LIEF/visibility.h"
-
-#include <string>
+#ifndef LIEF_PRIVATE_LOGGING_H
+#define LIEF_PRIVATE_LOGGING_H
+#include <cstring>
 #include <memory>
-#include <vector>
-#include <cstdint>
 
-namespace spdlog {
-class logger;
-}
+#include <iostream> 
+#include "LIEF/config.h"
+#include <spdlog/spdlog.h>
+#include <sstream>
 
-namespace LIEF {
-namespace logging {
+#define CHECK(X, ...)                                                          \
+    do {                                                                       \
+        if (!(X)) {                                                            \
+            LIEF_ERR(fmt::format(msg, __VA_ARGS__));                           \
+        }                                                                      \
+    } while (false)
 
-//! **Hierarchical** logging level
-//!
-//! From a given level set, all levels below this ! level are enabled
-//!
-//! For example, if LEVEL::INFO is enabled then LEVEL::WARN, LEVEL::ERR are also enabled
-enum class LEVEL : uint32_t {
-  OFF = 0,
+#define CHECK_FATAL(X, ...)                                                    \
+    do {                                                                       \
+        if ((X)) {                                                             \
+            LIEF_ERR(fmt::format(msg, __VA_ARGS__));                           \
+            std::abort();                                                      \
+        }                                                                      \
+    } while (false)
 
-  TRACE,
-  DEBUG,
-  INFO,
-  WARN,
-  ERR,
-  CRITICAL,
-};
+namespace LIEF
+{
+    namespace logging
+    {
+        enum class LEVEL : uint32_t {
+#ifndef ERROR
+#ifndef DEBUG
+            TRACE = 0,
+            DEBUG,
+            INFO,
+            WARN,
+            ERR,
+            CRITICAL,
+#endif
+#endif
 
-//! Current log level
-LIEF_API LEVEL get_level();
+            Trace = 0,
+            Debug,
+            Info,
+            Warn,
+            Err,
+            Critical,
+        };
 
-LIEF_API const char* to_string(LEVEL e);
+        class ILogHandler
+        {
+          public:
+            virtual ~ILogHandler() = default;
 
-//! Globally disable the logging module
-LIEF_API void disable();
+            virtual void log(std::string message, LEVEL level) = 0;
+        };
 
-//! Globally enable the logging module
-LIEF_API void enable();
+        class logger
+        {
+          public:
+            logger(LEVEL level);
+            ~logger();
 
-//! Change the logging level (**hierarchical**)
-LIEF_API void set_level(LEVEL level);
+            //
+            template <typename T> logger &operator<<(T const &value)
+            {
+                if (level_ >= get_current_log_level()) {
+                    stringstream_ << value;
+                }
+                return *this;
+            }
 
-//! Change the logger as a file-base logging and set its path
-LIEF_API void set_path(const std::string& path);
+            static void setLogLevel(LEVEL level);
 
-//! Log a message with the LIEF's logger
-LIEF_API void log(LEVEL level, const std::string& msg);
+            static void setHandler(ILogHandler *handler);
 
-LIEF_API void log(LEVEL level, const std::string& fmt,
-                  const std::vector<std::string>& args);
+            static LEVEL get_current_log_level();
 
-template <typename... Args>
-void log(LEVEL level, const std::string& fmt, const Args &... args) {
-  std::vector<std::string> vec_args;
-  vec_args.insert(vec_args.end(), { static_cast<decltype(vec_args)::value_type>(args)...});
-  return log(level, fmt, vec_args);
-}
+          private:
+            //
+            static LEVEL &get_log_level_ref();
+            static ILogHandler *&get_handler_ref();
+            //
+            std::ostringstream stringstream_;
+            LEVEL level_;
+        };
 
-LIEF_API void set_logger(std::shared_ptr<spdlog::logger> logger);
+        inline void critial(const char *msg)
+        {
+            LIEF::logging::logger(LIEF::logging::LEVEL::Critical) << msg;
+        }
 
-LIEF_API void reset();
+        template <typename... Args>
+        void critial(const char *fmt, const Args &...args)
+        {
+            // LIEF::logging::log(LIEF::logging::LIEF::logging::LEVEL::CRITICAL,
+            //   fmt::format(fmt::runtime(fmt), args...)
+            //);
+        }
 
-class Scoped {
-  public:
-  Scoped(const Scoped&) = delete;
-  Scoped& operator=(const Scoped&) = delete;
+        [[noreturn]] inline void terminate()
+        {
+            std::abort();
+        }
 
-  Scoped(Scoped&&) = delete;
-  Scoped& operator=(Scoped&&) = delete;
+        [[noreturn]] inline void fatal_error(const char *msg)
+        {
+            critial(msg);
+            terminate();
+        }
 
-  explicit Scoped(LEVEL level) :
-    level_(get_level())
-  {
-    set_level(level);
-  }
+        template <typename... Args>
+        [[noreturn]] void fatal_error(const char *fmt, const Args &...args)
+        {
+            critial(fmt, args...);
+            terminate();
+        }
 
-  const Scoped& set_level(LEVEL lvl) const {
-    logging::set_level(lvl);
-    return *this;
-  }
+        inline void needs_lief_extended()
+        {
+            if constexpr (!lief_extended) {
+            }
+        }
+    } // namespace logging
+} // namespace LIEF
 
-  ~Scoped() {
-    set_level(level_);
-  }
+#define LIEF_TRACE(msg, ...)                                                   \
+    if (LIEF::logging::logger::get_current_log_level() <=                      \
+        LIEF::logging::LEVEL::TRACE)                                           \
+    LIEF::logging::logger(LIEF::logging::LEVEL::TRACE)                         \
+        << fmt::format(msg __VA_OPT__(, ) __VA_ARGS__)
 
-  private:
-  LEVEL level_ = LEVEL::INFO;
-};
+#define LIEF_DEBUG(msg, ...)                                                   \
+    if (LIEF::logging::logger::get_current_log_level() <=                      \
+        LIEF::logging::LEVEL::DEBUG)                                           \
+    LIEF::logging::logger(LIEF::logging::LEVEL::DEBUG)                         \
+        << fmt::format(msg __VA_OPT__(, ) __VA_ARGS__)
 
-}
-}
+#define LIEF_INFO(msg, ...)                                                    \
+    if (LIEF::logging::logger::get_current_log_level() <=                      \
+        LIEF::logging::LEVEL::INFO)                                            \
+    LIEF::logging::logger(LIEF::logging::LEVEL::INFO)                          \
+        << fmt::format(msg __VA_OPT__(, ) __VA_ARGS__)
+
+#define LIEF_WARN(msg, ...)                                                    \
+    if (LIEF::logging::logger::get_current_log_level() <=                      \
+        LIEF::logging::LEVEL::WARN)                                            \
+    LIEF::logging::logger(LIEF::logging::LEVEL::WARN)                          \
+        << fmt::format(msg __VA_OPT__(, ) __VA_ARGS__)
+
+#define LIEF_ERR(msg, ...)                                                     \
+    if (LIEF::logging::logger::get_current_log_level() <=                      \
+        LIEF::logging::LEVEL::ERR)                                             \
+    LIEF::logging::logger(LIEF::logging::LEVEL::ERR)                           \
+        << fmt::format(msg __VA_OPT__(, ) __VA_ARGS__)
 
 #endif

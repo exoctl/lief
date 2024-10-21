@@ -25,7 +25,7 @@
 #include "third-party/utfcpp.hpp"
 
 #include "LIEF/config.h"
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 #include "messages.hpp"
 
 namespace LIEF {

@@ -23,7 +23,7 @@
 #include "mbedtls/oid.h"
 #include "mbedtls/error.h"
 
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 #include "frozen.hpp"
 #include "internal_utils.hpp"
 

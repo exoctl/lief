@@ -17,7 +17,7 @@
 #include "LIEF/BinaryStream/BinaryStream.hpp"
 #include "LIEF/MachO/ExportInfo.hpp"
 
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 
 #include "MachO/exports_trie.hpp"
 #include "MachO/TrieNode.hpp"

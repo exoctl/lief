@@ -21,7 +21,7 @@
 #include <spdlog/fmt/fmt.h>
 
 #include "frozen.hpp"
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 
 namespace LIEF {
 namespace ELF {

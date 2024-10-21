@@ -16,7 +16,7 @@
 #include <cctype>
 #include <memory>
 #include <unordered_set>
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 
 #include "LIEF/utils.hpp"
 #include "LIEF/BinaryStream/VectorStream.hpp"

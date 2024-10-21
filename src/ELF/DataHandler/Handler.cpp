@@ -16,7 +16,7 @@
 #include <algorithm>
 #include <utility>
 
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 
 #include "LIEF/BinaryStream/MemoryStream.hpp"
 #include "LIEF/BinaryStream/VectorStream.hpp"

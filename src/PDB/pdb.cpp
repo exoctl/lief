@@ -29,7 +29,7 @@
 #include "LIEF/PDB/types/Union.hpp"
 #include "LIEF/PDB/types/Attribute.hpp"
 
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 #include "messages.hpp"
 #include "internal_utils.hpp"
 

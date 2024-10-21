@@ -17,7 +17,7 @@
 
 #include "LIEF/Visitor.hpp"
 
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 #include "frozen.hpp"
 
 #include "LIEF/Abstract/Section.hpp"

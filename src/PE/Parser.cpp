@@ -16,7 +16,7 @@
 #include <iterator>
 #include <string>
 #include <numeric>
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 
 
 #include "LIEF/BinaryStream/SpanStream.hpp"

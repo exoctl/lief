@@ -21,7 +21,7 @@
 #include "LIEF/MachO/IndirectBindingInfo.hpp"
 #include "LIEF/MachO/DyldChainedFixups.hpp"
 
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 
 namespace LIEF::MachO {
 

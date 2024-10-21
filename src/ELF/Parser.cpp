@@ -17,7 +17,7 @@
 #include <iterator>
 #include <algorithm>
 
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 
 #include "LIEF/BinaryStream/VectorStream.hpp"
 

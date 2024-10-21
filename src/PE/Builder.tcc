@@ -22,7 +22,7 @@
 #include "LIEF/PE/TLS.hpp"
 #include "PE/Structures.hpp"
 
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 
 namespace LIEF {
 namespace PE {

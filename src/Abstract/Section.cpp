@@ -22,7 +22,7 @@
 
 #include "LIEF/Visitor.hpp"
 
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 #include "LIEF/Abstract/hash.hpp"
 
 

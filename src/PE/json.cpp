@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 
 #include "PE/json_internal.hpp"
 #include "LIEF/PE.hpp"

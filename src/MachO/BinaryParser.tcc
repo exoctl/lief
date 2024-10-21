@@ -16,7 +16,7 @@
 
 #include <memory>
 
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 #include "internal_utils.hpp"
 
 #include "MachO/ChainedFixup.hpp"
@@ -1181,7 +1181,7 @@ ok_error_t BinaryParser::parse_relocations(Section& section) {
            */
           LIEF_INFO("Relocation #{:d} of {} seems corrupted: "
                     "r_symbolnum is {} sections.size(): {}",
-                    i, section.name(), reloc_info.r_symbolnum, sections.size());
+                    i, section.name(), static_cast<int>(reloc_info.r_symbolnum), sections.size());
         }
       }
     }

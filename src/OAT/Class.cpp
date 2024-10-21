@@ -24,7 +24,7 @@
 
 #include "LIEF/DEX/Class.hpp"
 
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 
 #if defined(_MSC_VER)
 #  include <intrin.h>

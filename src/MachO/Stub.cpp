@@ -18,7 +18,7 @@
 #include "LIEF/utils.hpp"
 
 #include "internal_utils.hpp"
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 
 namespace LIEF::MachO {
 

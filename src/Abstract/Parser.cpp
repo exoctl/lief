@@ -16,7 +16,7 @@
 
 #include <fstream>
 
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 #include "LIEF/Abstract/Parser.hpp"
 #include "LIEF/Abstract/Binary.hpp"
 #include "LIEF/BinaryStream/BinaryStream.hpp"

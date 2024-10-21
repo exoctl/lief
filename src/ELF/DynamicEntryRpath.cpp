@@ -15,7 +15,7 @@
  */
 #include "LIEF/ELF/DynamicEntryRpath.hpp"
 #include "LIEF/Visitor.hpp"
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 
 #include <algorithm>
 #include <iomanip>
