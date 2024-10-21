@@ -27,14 +27,12 @@
 #define CHECK(X, ...)                                                          \
     do {                                                                       \
         if (!(X)) {                                                            \
-            LIEF_ERR(X);                           \
         }                                                                      \
     } while (false)
 
 #define CHECK_FATAL(X, ...)                                                    \
     do {                                                                       \
         if ((X)) {                                                             \
-            LIEF_ERR(X);                           \
             std::abort();                                                      \
         }                                                                      \
     } while (false)
