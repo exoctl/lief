@@ -427,10 +427,6 @@ endif()
 
 add_subdirectory(api)
 
-if(LIEF_EXAMPLES)
-  add_subdirectory(examples)
-endif()
-
 if(LIEF_TESTS)
   enable_testing()
   add_subdirectory(tests)
