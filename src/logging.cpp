@@ -112,9 +112,6 @@ Logger& Logger::set_log_path(const std::string& path) {
 
 void Logger::set_logger(std::shared_ptr<spdlog::logger> logger) {
   sink_ = logger;
-  sink_->set_pattern("%v");
-  sink_->set_level(spdlog::level::warn);
-  sink_->flush_on(spdlog::level::warn);
 }
 
 const char* to_string(LEVEL e) {
