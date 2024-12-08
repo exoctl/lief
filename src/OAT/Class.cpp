@@ -26,15 +26,18 @@
 
 #include "LIEF/logging.hpp"
 
-#if defined(_M_X64) || defined(__x86_64__)
-#  include <intrin.h>
-#  define __builtin_popcount __popcnt
-#endif
+#if defined(_MSC_VER)
+    #if defined(_M_X64) || defined(__x86_64__)
+		#include <intrin.h>
+		#define __builtin_popcount __popcnt
+    #endif
+#else
+
 #if defined(_M_ARM64)
- //https://developercommunity.visualstudio.com/t/-popcnt-popcnt64-intrinsics-not-provided-for-aarch/344160#T-N370244
- //https://demo.gitea.com/Shuenhoy/vtk-m/commit/df5b5bf321d9aa5bb3ee7c3e430ddfca852fde90?style=split&whitespace=ignore-all&show-outdated=
-__n64 __popcnt(__n64 value)
-{
+//https://developercommunity.visualstudio.com/t/-popcnt-popcnt64-intrinsics-not-provided-for-aarch/344160#T-N370244
+//https://demo.gitea.com/Shuenhoy/vtk-m/commit/df5b5bf321d9aa5bb3ee7c3e430ddfca852fde90?style=split&whitespace=ignore-all&show-outdated=
+__n64 __popcnt(__n64 value) {
+	
     return neon_cnt(value);
 }
 #  define __builtin_popcount __popcnt
