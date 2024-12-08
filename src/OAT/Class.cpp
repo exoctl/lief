@@ -26,8 +26,17 @@
 
 #include "LIEF/logging.hpp"
 
-#if defined(_MSC_VER)
+#if defined(_M_X64) || defined(__x86_64__)
 #  include <intrin.h>
+#  define __builtin_popcount __popcnt
+#endif
+#if defined(_M_ARM64)
+ //https://developercommunity.visualstudio.com/t/-popcnt-popcnt64-intrinsics-not-provided-for-aarch/344160#T-N370244
+ //https://demo.gitea.com/Shuenhoy/vtk-m/commit/df5b5bf321d9aa5bb3ee7c3e430ddfca852fde90?style=split&whitespace=ignore-all&show-outdated=
+__n64 __popcnt(__n64 value)
+{
+    return neon_cnt(value);
+}
 #  define __builtin_popcount __popcnt
 #endif
 
@@ -183,11 +192,32 @@ uint32_t Class::method_offsets_index(uint32_t relative_index) const {
     const uint32_t partial_word_bits = relative_index & 0x1f;
     uint32_t count = 0;
     for (uint32_t word = 0; word < bitmap_end_idx; ++word) {
-      count += __builtin_popcount(method_bitmap_[word]);
+
+        #if defined(_M_X64) || defined(__x86_64__)
+          count += __builtin_popcount(method_bitmap_[word]);
+        #endif
+
+        #if defined(_M_ARM64)
+          __n64 a;
+          a.n64_u32[0] = method_bitmap_[word];
+          __n64 b = __builtin_popcount(a);
+          count += b.n64_u32[0];
+        #endif
+
     }
 
     if (partial_word_bits != 0) {
-      count += __builtin_popcount(method_bitmap_[bitmap_end_idx] & ~(0xffffffffu << partial_word_bits));
+      #if defined(_M_X64) || defined(__x86_64__)
+        count += __builtin_popcount(method_bitmap_[bitmap_end_idx] & ~(0xffffffffu << partial_word_bits));
+      #endif
+
+      #if defined(_M_ARM64)
+        __n64 a;
+        a.n64_u32[0] = method_bitmap_[bitmap_end_idx] & ~(0xffffffffu << partial_word_bits);
+        __n64 b = __builtin_popcount(a);
+
+        count += b.n64_u32[0];
+      #endif
     }
 
     return count;
