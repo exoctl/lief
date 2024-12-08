@@ -31,7 +31,7 @@
 		#include <intrin.h>
 		#define __builtin_popcount __popcnt
     #endif
-#else
+#endif
 
 #if defined(_M_ARM64)
 //https://developercommunity.visualstudio.com/t/-popcnt-popcnt64-intrinsics-not-provided-for-aarch/344160#T-N370244
