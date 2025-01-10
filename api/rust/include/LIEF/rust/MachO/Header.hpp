@@ -1,4 +1,4 @@
-/* Copyright 2024 R. Thomas
+/* Copyright 2024 - 2025 R. Thomas
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,4 +31,7 @@ class MachO_Header : private Mirror<LIEF::MachO::Header> {
   auto sizeof_cmds() const { return get().sizeof_cmds(); }
   auto flags() const { return get().flags(); }
   auto reserved() const { return get().reserved(); }
+
+  bool is_32bit() const { return get().is_32bit(); }
+  bool is_64bit() const { return get().is_64bit(); }
 };

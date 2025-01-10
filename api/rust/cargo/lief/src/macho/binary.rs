@@ -1,7 +1,10 @@
 use std::mem::size_of;
+use std::pin::Pin;
+use std::path::Path;
 use num_traits::{Num, cast};
 
 use crate::Error;
+use super::builder::Config;
 use super::commands::build_version::{BuildVersion, Platform};
 use super::commands::code_signature::CodeSignature;
 use super::commands::code_signature_dir::CodeSignatureDir;
@@ -16,6 +19,7 @@ use super::commands::dynamic_symbol_command::DynamicSymbolCommand;
 use super::commands::encryption_info::EncryptionInfo;
 use super::commands::functionstarts::FunctionStarts;
 use super::commands::linker_opt_hint::LinkerOptHint;
+use super::commands::atom_info::AtomInfo;
 use super::commands::main_cmd::Main;
 use super::commands::rpath::RPath;
 use super::commands::routine::Routine;
@@ -29,7 +33,7 @@ use super::commands::thread_command::ThreadCommand;
 use super::commands::two_level_hints::TwoLevelHints;
 use super::commands::uuid::UUID;
 use super::commands::version_min::VersionMin;
-use super::commands::CommandsIter;
+use super::commands::{CommandsIter, Dylib};
 use super::header::Header;
 use super::relocation::Relocations;
 use super::section::Sections;
@@ -220,6 +224,11 @@ impl Binary {
         into_optional(self.ptr.linker_opt_hint())
     }
 
+    /// Return the `LC_ATOM_INFO` command if present
+    pub fn atom_info(&self) -> Option<AtomInfo> {
+        into_optional(self.ptr.atom_info())
+    }
+
     /// Return the `LC_VERSION_MIN_MACOSX/VERSION_MIN_IPHONEOS` command if present
     pub fn version_min(&self) -> Option<VersionMin> {
         into_optional(self.ptr.version_min())
@@ -304,11 +313,37 @@ impl Binary {
 
         Err(Error::NotSupported)
     }
+
+    /// Write back the current MachO binary into the file specified in parameter
+    pub fn write(&mut self, output: &Path) {
+        self.ptr.as_mut().unwrap().write(output.to_str().unwrap());
+    }
+
+    /// Write back the current MachO binary into the file specified in parameter with the
+    /// configuration provided in the second parameter.
+    pub fn write_with_config(&mut self, output: &Path, config: Config) {
+        self.ptr.as_mut().unwrap().write_with_config(output.to_str().unwrap(), config.to_ffi());
+    }
+
+    /// Insert a new shared library through a `LC_LOAD_DYLIB` command
+    pub fn add_library<'a>(&'a mut self, libname: &str) -> Dylib<'a> {
+        Dylib::from_ffi(self.ptr.as_mut().unwrap().add_library(libname))
+    }
 }
 
 impl generic::Binary for Binary {
     fn as_generic(&self) -> &ffi::AbstractBinary {
         self.ptr.as_ref().unwrap().as_ref()
+    }
+
+    fn as_pin_mut_generic(&mut self) -> Pin<&mut ffi::AbstractBinary> {
+        unsafe {
+            Pin::new_unchecked({
+                (self.ptr.as_ref().unwrap().as_ref()
+                    as *const ffi::AbstractBinary
+                    as *mut ffi::AbstractBinary).as_mut().unwrap()
+            })
+        }
     }
 }
 

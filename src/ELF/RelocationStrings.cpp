@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 #include "LIEF/ELF/Relocation.hpp"
 #include "frozen.hpp"
-#include "LIEF/logging.hpp"
+#include "logging.hpp"
 
 #define ELF_RELOC(X, _) std::pair(Relocation::TYPE::X, #X),
 
@@ -174,6 +174,20 @@ const char* to_string<Relocation::R_RISCV>(Relocation::TYPE type) {
   return "UNKNOWN";
 }
 
+template<>
+const char* to_string<Relocation::R_BPF>(Relocation::TYPE type) {
+  #define ENTRY(X) std::pair(Relocation::TYPE::X, #X)
+  STRING_MAP enums2str {
+    #include "LIEF/ELF/Relocations/BPF.def"
+  };
+  #undef ENTRY
+
+  if (auto it = enums2str.find(type); it != enums2str.end()) {
+    return it->second;
+  }
+  return "UNKNOWN";
+}
+
 const char* to_string(Relocation::TYPE type) {
   auto raw_type = static_cast<uint64_t>(type);
 
@@ -225,6 +239,10 @@ const char* to_string(Relocation::TYPE type) {
 
   if (ID == Relocation::R_RISCV) {
     return to_string<Relocation::R_RISCV>(type);
+  }
+
+  if (ID == Relocation::R_BPF) {
+    return to_string<Relocation::R_BPF>(type);
   }
 
   return "UNKNOWN";

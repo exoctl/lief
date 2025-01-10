@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,6 @@
 #define LIEF_ABSTRACT_H
 
 #include <LIEF/Abstract/Binary.hpp>
-#include <LIEF/Abstract/enums.hpp>
-#include <LIEF/Abstract/EnumToString.hpp>
 #include <LIEF/Abstract/Parser.hpp>
 #include <LIEF/Abstract/Relocation.hpp>
 #include <LIEF/Abstract/Function.hpp>

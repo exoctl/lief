@@ -45,6 +45,11 @@ One can load a shared cache using the |lief-dsc-load| function:
 
         let dyld_cache = lief::dsc::load_from_path("macos-15.0.1/", "");
 
+.. warning::
+
+  |lief-dsc-load| takes as input either a directory for loading the **whole**
+  shared cache or a set of files to load a subset of the cache.
+
 From this |lief-dsc-dyldsharedcache| object, we can inspect the embedded
 |lief-dsc-dylib| as follows:
 
@@ -56,7 +61,7 @@ From this |lief-dsc-dyldsharedcache| object, we can inspect the embedded
 
         dyld_cache: lief.dsc.DylibSharedCache = ...
 
-        for dylib in dyld_cache.libraries():
+        for dylib in dyld_cache.libraries:
             print("0x{:016x}: {}".format(dylib.address, dylib.path))
 
     .. tab:: :fa:`regular fa-file-code` C++
@@ -255,7 +260,7 @@ and configured with:
 
   For all other situations, you should turn on |lief-dsc-enable_cache|.
 
-  **By default, the caching is not enabled.**
+  **By default, the cache mechanism is not enabled.**
 
 .. [1] https://en.cppreference.com/w/cpp/iterator/random_access_iterator
 

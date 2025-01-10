@@ -27,6 +27,12 @@ pub enum Langs {
     CPP,
     RUST,
     DART,
+    MODULA,
+    FORTRAN,
+    SWIFT,
+    D,
+    JAVA,
+    COBOL,
     UNKNOWN(u32),
 }
 
@@ -37,6 +43,12 @@ impl From<u32> for Langs {
             0x00000002 => Langs::CPP,
             0x00000003 => Langs::RUST,
             0x00000004 => Langs::DART,
+            0x00000005 => Langs::MODULA,
+            0x00000006 => Langs::FORTRAN,
+            0x00000007 => Langs::SWIFT,
+            0x00000008 => Langs::D,
+            0x00000009 => Langs::JAVA,
+            0x0000000A => Langs::COBOL,
             _ => Langs::UNKNOWN(value),
 
         }
@@ -49,6 +61,12 @@ impl From<Langs> for u32 {
             Langs::CPP => 0x00000002,
             Langs::RUST => 0x00000003,
             Langs::DART => 0x00000004,
+            Langs::MODULA => 0x00000005,
+            Langs::FORTRAN => 0x00000006,
+            Langs::SWIFT => 0x00000007,
+            Langs::D => 0x00000008,
+            Langs::JAVA => 0x00000009,
+            Langs::COBOL => 0x0000000A,
             Langs::UNKNOWN(_) => 0,
         }
     }
@@ -179,6 +197,27 @@ impl CompilationUnit<'_> {
     /// `main`.
     pub fn functions(&self) -> Functions {
         Functions::new(self.ptr.functions())
+    }
+
+    /// Return an iterator over the functions **imported** in this compilation
+    /// unit **but not** implemented.
+    ///
+    /// For instance with this code:
+    ///
+    /// ```cpp
+    /// #include <cstdio>
+    /// int main() {
+    ///   printf("Hello\n");
+    ///   return 0;
+    /// }
+    /// ```
+    ///
+    /// `printf` is imported from the standard libc so the function is returned by
+    /// the iterator. On the other hand, `main()` is implemented in this
+    /// compilation unit so it is not returned by [`CompilationUnit::imported_functions`] but
+    /// [`CompilationUnit::functions`].
+    pub fn imported_functions(&self) -> Functions {
+        Functions::new(self.ptr.imported_functions())
     }
 
     /// Return an iterator over the variables defined in the **global** scope

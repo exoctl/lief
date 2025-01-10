@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  * Copyright 2017 - 2021 K. Nakagawa
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -93,8 +93,8 @@ class Pogo;
 class PogoEntry;
 class Repro;
 
-//! Class which implements a visitor to compute
-//! a **deterministic** hash for LIEF PE objects
+/// Class which implements a visitor to compute
+/// a **deterministic** hash for LIEF PE objects
 class LIEF_API Hash : public LIEF::Hash {
   public:
   static LIEF::Hash::value_type hash(const Object& obj);

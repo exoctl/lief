@@ -1,4 +1,4 @@
-/* Copyright 2021 - 2024 R. Thomas
+/* Copyright 2021 - 2025 R. Thomas
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,7 +44,7 @@
    (((val) << 40) & 0x00FF000000000000) | (((val) << 56) & 0xFF00000000000000) )
 
 namespace LIEF {
-//! Namespace related to the LIEF's MachO module
+/// Namespace related to the LIEF's MachO module
 namespace MachO {
 
 namespace details {
@@ -584,6 +584,32 @@ struct arm_thread_state64_t {
   uint64_t pc;    // pc
   uint32_t cpsr;  // cpsr
 };
+
+struct ppc_thread_state_t {
+  uint32_t srr0; /* Instruction address register (PC) */
+  uint32_t srr1; /* Machine state register (supervisor) */
+  uint32_t r[32];
+
+  uint32_t cr;  /* Condition register */
+  uint32_t xer; /* User's integer exception register */
+  uint32_t lr;  /* Link register */
+  uint32_t ctr; /* Count register */
+  uint32_t mq;  /* MQ register (601 only) */
+
+  uint32_t vrsave; /* Vector Save Register */
+};
+
+struct ppc_thread_state64_t {
+  uint64_t srr0;
+  uint64_t srr1;
+  uint64_t r[32];
+  uint32_t cr;
+  uint64_t xer;
+  uint64_t lr;
+  uint64_t ctr;
+  uint32_t vrsave;
+};
+
 
 struct code_directory {
   uint32_t version;

@@ -1,4 +1,4 @@
-/* Copyright 2024 R. Thomas
+/* Copyright 2024 - 2025 R. Thomas
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 #include <memory>
 #include <LIEF/MachO.hpp>
 
+#include "LIEF/rust/MachO/AtomInfo.hpp"
 #include "LIEF/rust/MachO/BuildVersion.hpp"
 #include "LIEF/rust/MachO/CodeSignature.hpp"
 #include "LIEF/rust/MachO/CodeSignatureDir.hpp"
@@ -53,6 +54,11 @@
 #include "LIEF/rust/Abstract/Binary.hpp"
 
 #include "LIEF/rust/ObjC/Metadata.hpp"
+
+class MachO_Binary_write_config_t {
+  public:
+  bool linkedit;
+};
 
 class MachO_Binary : public AbstractBinary {
   public:
@@ -259,6 +265,10 @@ class MachO_Binary : public AbstractBinary {
     return details::try_unique<MachO_LinkerOptHint>(impl().linker_opt_hint());
   }
 
+  auto atom_info() const {
+    return details::try_unique<MachO_AtomInfo>(impl().atom_info());
+  }
+
   auto version_min() const {
     return details::try_unique<MachO_VersionMin>(impl().version_min());
   }
@@ -278,10 +288,22 @@ class MachO_Binary : public AbstractBinary {
   bool is_ios() const { return impl().is_ios(); }
   bool is_macos() const { return impl().is_macos(); }
 
+  void write(std::string output) { impl().write(output); }
+  void write_with_config(std::string output, MachO_Binary_write_config_t config) {
+    impl().write(output, {
+      config.linkedit
+    });
+  }
+
+  auto add_library(std::string name) {
+    return details::try_unique<MachO_Dylib>(impl().add_library(name)->cast<LIEF::MachO::DylibCommand>());
+  }
+
   static bool is_exported(const MachO_Symbol& symbol) {
     return lief_t::is_exported(static_cast<const LIEF::MachO::Symbol&>(symbol.get()));
   }
 
   private:
   const lief_t& impl() const { return as<lief_t>(this); }
+  lief_t& impl() { return as<lief_t>(this); }
 };

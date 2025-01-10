@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -74,7 +74,7 @@ void create<Section>(nb::module_& m) {
   #undef PY_ENUM
   ;
 
-  enum_<Section::FLAGS>(sec, "FLAGS", nb::is_arithmetic())
+  enum_<Section::FLAGS>(sec, "FLAGS", nb::is_flag())
   #define PY_ENUM(x) to_string(x), x
     .value(PY_ENUM(Section::FLAGS::PURE_INSTRUCTIONS))
     .value(PY_ENUM(Section::FLAGS::NO_TOC))

@@ -1,4 +1,4 @@
-/* Copyright 2022 - 2024 R. Thomas
+/* Copyright 2022 - 2025 R. Thomas
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,11 @@
 #include "LIEF/DyldSharedCache/Dylib.hpp"
 #include "LIEF/DyldSharedCache/MappingInfo.hpp"
 #include "LIEF/DyldSharedCache/SubCache.hpp"
+#include "LIEF/DyldSharedCache/caching.hpp"
 
 #include "LIEF/MachO/Binary.hpp"
 
-#include "LIEF/logging.hpp"
+#include "logging.hpp"
 #include "messages.hpp"
 #include "internal_utils.hpp"
 
@@ -115,8 +116,47 @@ bool DyldSharedCache::has_subcaches() const {
   return false;
 }
 
+DyldSharedCache::instructions_iterator DyldSharedCache::disassemble(uint64_t/*va*/) const {
+  return make_range<assembly::Instruction::Iterator>(
+      assembly::Instruction::Iterator(),
+      assembly::Instruction::Iterator()
+  );
+}
+
+std::vector<uint8_t> DyldSharedCache::get_content_from_va(uint64_t/*va*/, uint64_t/*size*/) const {
+  return {};
+}
+
+std::unique_ptr<DyldSharedCache> DyldSharedCache::cache_for_address(uint64_t/*va*/) const {
+  return nullptr;
+}
+
+std::unique_ptr<DyldSharedCache> DyldSharedCache::main_cache() const {
+  return nullptr;
+}
+
+std::unique_ptr<DyldSharedCache> DyldSharedCache::find_subcache(const std::string&/*filename*/) const {
+  return nullptr;
+}
+
+result<uint64_t> DyldSharedCache::va_to_offset(uint64_t/*va*/) const {
+  return make_error_code(lief_errors::not_implemented);
+}
+
 DyldSharedCache::dylib_iterator DyldSharedCache::libraries() const {
   return make_empty_iterator<Dylib>();
+}
+
+FileStream& DyldSharedCache::stream() const {
+  static FileStream* FS = nullptr;
+  // This null deref is **on purpose**
+  return *FS; // NOLINT(clang-analyzer-core.uninitialized.UndefReturn)
+}
+
+FileStream& DyldSharedCache::stream() {
+  static FileStream* FS = nullptr;
+  // This null deref is **on purpose**
+  return *FS; // NOLINT(clang-analyzer-core.uninitialized.UndefReturn)
 }
 
 DyldSharedCache::mapping_info_iterator DyldSharedCache::mapping_info() const {

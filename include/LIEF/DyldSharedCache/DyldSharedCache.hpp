@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,11 +21,15 @@
 #include "LIEF/DyldSharedCache/MappingInfo.hpp"
 #include "LIEF/DyldSharedCache/SubCache.hpp"
 
+#include "LIEF/asm/Instruction.hpp"
+
 #include <memory>
 #include <string>
 #include <vector>
 
 namespace LIEF {
+class FileStream;
+
 /// Namespace related to the dyld shared cache support
 namespace dsc {
 namespace details {
@@ -49,6 +53,7 @@ class LIEF_API DyldSharedCache {
     DYLD_832_7_1, ///< dyld-832.7.1 (2020-11-19)
     DYLD_940,     ///< dyld-940 (2021-02-09)
     DYLD_1042_1,  ///< dyld-1042.1 (2022-10-19)
+    DYLD_1231_3,  ///< dyld-1231.3 (2024-09-24)
 
     /// This value is used for versions of dyld not publicly released or not yet
     /// supported by LIEF
@@ -101,6 +106,8 @@ class LIEF_API DyldSharedCache {
 
   /// Iterator over the split/sub-cache in this **main** shared cache
   using subcache_iterator = iterator_range<SubCache::Iterator>;
+
+  using instructions_iterator = iterator_range<assembly::Instruction::Iterator>;
 
   DyldSharedCache(std::unique_ptr<details::DyldSharedCache> impl);
   ~DyldSharedCache();
@@ -194,6 +201,36 @@ class LIEF_API DyldSharedCache {
   /// }
   /// ```
   subcache_iterator subcaches() const;
+
+  /// Disassemble instructions at the provided virtual address.
+  /// This function returns an iterator over assembly::Instruction.
+  instructions_iterator disassemble(uint64_t va) const;
+
+  /// Return the content at the specified virtual address
+  std::vector<uint8_t> get_content_from_va(uint64_t va, uint64_t size) const;
+
+  /// Find the sub-DyldSharedCache that wraps the given virtual address
+  std::unique_ptr<DyldSharedCache> cache_for_address(uint64_t va) const;
+
+  /// Return the principal dyld shared cache in the case of multiple subcaches
+  std::unique_ptr<DyldSharedCache> main_cache() const;
+
+  /// Try to find the DyldSharedCache associated with the filename given
+  /// in the first parameter.
+  std::unique_ptr<DyldSharedCache> find_subcache(const std::string& filename) const;
+
+  /// Convert the given virtual address into an offset.
+  ///
+  /// \warning If the shared cache contains multiple subcaches,
+  ///          this function needs to be called on the targeted subcache.
+  ///          See cache_for_address() to find the associated subcache.
+  result<uint64_t> va_to_offset(uint64_t va) const;
+
+  /// Return the stream associated with this dyld shared cache
+  FileStream& stream() const;
+
+  /// Return the stream associated with this dyld shared cache
+  FileStream& stream();
 
   /// When enabled, this function allows to record and to keep in *cache*,
   /// dyld shared cache information that are costly to access.

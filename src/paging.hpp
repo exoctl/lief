@@ -1,4 +1,4 @@
-/* Copyright 2024 R. Thomas
+/* Copyright 2024 - 2025 R. Thomas
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
 #ifndef LIEF_INTERNAL_PAGING_
 #define LIEF_INTERNAL_PAGING_
 #include "LIEF/Abstract/Binary.hpp"
-#include "LIEF/Abstract/enums.hpp"
 #include <cstdint>
 namespace LIEF {
 uint32_t get_pagesize(const Binary& bin);

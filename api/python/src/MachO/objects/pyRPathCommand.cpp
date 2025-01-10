@@ -1,5 +1,5 @@
 /* Copyright 2017 - 2021 J.Rieck (based on R. Thomas's work)
- * Copyright 2017 - 2024 Quarkslab
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 #include <string>
 #include <sstream>
 #include <nanobind/stl/string.h>
+#include <nanobind/stl/unique_ptr.h>
 
 #include "LIEF/MachO/hash.hpp"
 #include "LIEF/MachO/RPathCommand.hpp"
@@ -27,6 +28,14 @@ namespace LIEF::MachO::py {
 template<>
 void create<RPathCommand>(nb::module_& m) {
   nb::class_<RPathCommand, LoadCommand>(m, "RPathCommand")
+
+    .def_static("create", &RPathCommand::create,
+      R"doc(Create a new RPathCommand for the provided ``path``)doc"_doc,
+      "path"_a
+    )
+
+    .def_prop_ro("path_offset", &RPathCommand::path_offset,
+                 "Original string offset of the path")
 
     .def_prop_rw("path",
         nb::overload_cast<>(&RPathCommand::path, nb::const_),

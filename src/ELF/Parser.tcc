@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,11 @@
 #include <cctype>
 #include <memory>
 #include <unordered_set>
-#include "LIEF/logging.hpp"
+#include "logging.hpp"
 
 #include "LIEF/utils.hpp"
 #include "LIEF/BinaryStream/VectorStream.hpp"
+#include "LIEF/BinaryStream/SpanStream.hpp"
 
 #include "LIEF/ELF/hash.hpp"
 #include "LIEF/ELF/Parser.hpp"
@@ -81,16 +82,62 @@ ok_error_t Parser::parse_binary() {
     }
   }
 
-  // Parse Dynamic elements
-  // ======================
-
-  // Find the dynamic Segment
+  // Parse the dynamic table. To process this table, we can either process
+  // the content of the PT_DYNAMIC segment or process the content of the PT_LOAD
+  // segment that wraps the dynamic table. The second approach should be
+  // preferred since it uses a more accurate representation.
+  // (c.f. samples `issue_dynamic_table.elf` provided by @lebr0nli)
   if (const Segment* seg_dyn = binary_->get(Segment::TYPE::DYNAMIC)) {
-    const Elf_Off offset = seg_dyn->file_offset();
-    const Elf_Off size   = seg_dyn->physical_size();
+    std::vector<Segment*> segments;
 
-    parse_dynamic_entries<ELF_T>(offset, size);
-    binary_->sizing_info_->dynamic = size;
+    // Find the PT_LOAD segment that wraps the PT_DYNAMIC table.
+    // As demonstrated in the library: ELF32_x86_library_libshellx.so
+    // we need to consider overlapping segments and take the "latest" one since
+    // this is what the loader would do.
+    for (const std::unique_ptr<Segment>& segment : binary_->segments_) {
+      if (!segment->is_load()) {
+        continue;
+      }
+      const uint64_t dyn_start = seg_dyn->virtual_address();
+      const uint64_t dyn_end = dyn_start + seg_dyn->virtual_size();
+      const uint64_t load_start = segment->virtual_address();
+      const uint64_t load_end = load_start + segment->virtual_size();
+      if (!(load_start <= dyn_start && dyn_start < load_end)) {
+        continue;
+      }
+
+      if (!(load_start < dyn_end && dyn_end <= load_end)) {
+        continue;
+      }
+      segments.push_back(segment.get());
+    }
+
+    binary_->sizing_info_->dynamic = seg_dyn->physical_size();
+
+    // Usually #segments is 1 but we might have > 1 for overlapping segments
+    LIEF_DEBUG("Nb segments: {}", segments.size());
+
+    if (!segments.empty()) {
+      const Segment& load_seg = *segments.back();
+      LIEF_DEBUG("Dynamic content wrapped by segment LOAD: [0x{:016x}, 0x{:016x}] "
+                 "[0x{:016x}, 0x{:016x}]", load_seg.virtual_address(),
+                 load_seg.virtual_address() + load_seg.virtual_size(),
+                 load_seg.file_offset(), load_seg.file_offset() + load_seg.physical_size());
+
+      int64_t rel_offset = seg_dyn->virtual_address() - load_seg.virtual_address();
+      assert(rel_offset >= 0);
+      span<const uint8_t> seg_content = load_seg.content();
+      if (!seg_content.empty()) {
+        span<const uint8_t> dynamic_content = seg_content.subspan(rel_offset);
+        SpanStream stream(dynamic_content);
+        stream.set_endian_swap(stream_->should_swap());
+        parse_dynamic_entries<ELF_T>(stream);
+      }
+    } else /* No PT_LOAD segment wrapping up the PT_DYNAMIC table */ {
+      const Elf_Off offset = seg_dyn->file_offset();
+      ScopedStream scoped(*stream_, offset);
+      parse_dynamic_entries<ELF_T>(*scoped);
+    }
   }
 
   process_dynamic_table<ELF_T>();
@@ -912,37 +959,38 @@ ok_error_t Parser::parse_segments() {
                                     DataHandler::Node::SEGMENT);
       segment->handler_size_ = read_size;
 
-      if (segment->file_offset() > stream_->size() || (segment->file_offset() + read_size) > stream_->size()) {
-        LIEF_WARN("Segment #{} has a corrupted file offset (0x{:x}) ", i, segment->file_offset());
-        break;
-      }
-      const Elf_Off offset_to_content = segment->file_offset();
-      auto alloc = binary_->datahandler_->reserve(segment->file_offset(), read_size);
-      if (!alloc) {
-        LIEF_ERR("Can't allocate memory");
-        break;
-      }
-      /* The DataHandlerStream interface references ELF data that are
-       * located in the ELF::DataHandler. Therefore, we can skip reading
-       * the data since they are already present in the data handler.
-       * This optimization saves memory (which is also performed in parse_sections<>(...))
-       */
-      if (stream_->type() != BinaryStream::STREAM_TYPE::ELF_DATA_HANDLER) {
-        std::vector<uint8_t> seg_content;
-        if (stream_->peek_data(seg_content, offset_to_content, read_size)) {
-          segment->content(std::move(seg_content));
-        } else {
-          LIEF_ERR("Unable to get the content of segment #{:d}", i);
-        }
-      }
+      const bool corrupted_offset = segment->file_offset() > stream_->size() ||
+                                    (segment->file_offset() + read_size) > stream_->size();
 
-      if (segment->is_interpreter()) {
-        auto interpreter = stream_->peek_string_at(offset_to_content, read_size);
-        if (!interpreter) {
-          LIEF_ERR("Can't read the interpreter string");
-        } else {
-          binary_->interpreter_ = *interpreter;
-          binary_->sizing_info_->interpreter = read_size;
+      if (!corrupted_offset) {
+        const Elf_Off offset_to_content = segment->file_offset();
+        auto alloc = binary_->datahandler_->reserve(segment->file_offset(), read_size);
+        if (!alloc) {
+          LIEF_ERR("Can't allocate memory");
+          break;
+        }
+        /* The DataHandlerStream interface references ELF data that are
+         * located in the ELF::DataHandler. Therefore, we can skip reading
+         * the data since they are already present in the data handler.
+         * This optimization saves memory (which is also performed in parse_sections<>(...))
+         */
+        if (stream_->type() != BinaryStream::STREAM_TYPE::ELF_DATA_HANDLER) {
+          std::vector<uint8_t> seg_content;
+          if (stream_->peek_data(seg_content, offset_to_content, read_size)) {
+            segment->content(std::move(seg_content));
+          } else {
+            LIEF_ERR("Unable to get the content of segment #{:d}", i);
+          }
+        }
+
+        if (segment->is_interpreter()) {
+          auto interpreter = stream_->peek_string_at(offset_to_content, read_size);
+          if (!interpreter) {
+            LIEF_ERR("Can't read the interpreter string");
+          } else {
+            binary_->interpreter_ = *interpreter;
+            binary_->sizing_info_->interpreter = read_size;
+          }
         }
       }
     } else {
@@ -1068,7 +1116,7 @@ ok_error_t Parser::parse_packed_relocations(uint64_t offset, uint64_t size) {
       auto reloc = std::unique_ptr<Relocation>(new Relocation(R, Relocation::PURPOSE::DYNAMIC,
         Relocation::ENCODING::ANDROID_SLEB, arch));
       bind_symbol(*reloc);
-      binary_->relocations_.push_back(std::move(reloc));
+      insert_relocation(std::move(reloc));
     }
   }
   return ok();
@@ -1115,7 +1163,7 @@ ok_error_t Parser::parse_relative_relocations(uint64_t offset, uint64_t size) {
       auto reloc = std::make_unique<Relocation>(r_offset, type,
                                                 Relocation::ENCODING::RELR);
       reloc->purpose(Relocation::PURPOSE::DYNAMIC);
-      binary_->relocations_.push_back(std::move(reloc));
+      insert_relocation(std::move(reloc));
       base = rel + sizeof(Elf_Addr);
     } else {
       for (Elf_Addr offset = base; (rel >>= 1) != 0; offset += sizeof(Elf_Addr)) {
@@ -1124,7 +1172,7 @@ ok_error_t Parser::parse_relative_relocations(uint64_t offset, uint64_t size) {
           auto reloc = std::make_unique<Relocation>(r_offset, type,
                                                     Relocation::ENCODING::RELR);
           reloc->purpose(Relocation::PURPOSE::DYNAMIC);
-          binary_->relocations_.push_back(std::move(reloc));
+          insert_relocation(std::move(reloc));
         }
       }
       base += (8 * sizeof(Elf_Relr) - 1) * sizeof(Elf_Addr);
@@ -1165,8 +1213,7 @@ ok_error_t Parser::parse_dynamic_relocations(uint64_t relocations_offset, uint64
     auto reloc = std::unique_ptr<Relocation>(new Relocation(
         std::move(*raw_reloc), Relocation::PURPOSE::DYNAMIC, enc, arch));
     bind_symbol(*reloc);
-
-    binary_->relocations_.push_back(std::move(reloc));
+    insert_relocation(std::move(reloc));
   }
   return ok();
 } // build_dynamic_reclocations
@@ -1263,29 +1310,26 @@ ok_error_t Parser::parse_dynamic_symbols(uint64_t offset) {
     binary_->sizing_info_->dynstr = dt_strsz->value();
   }
   return ok();
-} // build_dynamic_sybols
+}
 
 
 template<typename ELF_T>
-ok_error_t Parser::parse_dynamic_entries(uint64_t offset, uint64_t size) {
+ok_error_t Parser::parse_dynamic_entries(BinaryStream& stream) {
   using Elf_Dyn  = typename ELF_T::Elf_Dyn;
   using uint__   = typename ELF_T::uint;
   using Elf_Addr = typename ELF_T::Elf_Addr;
   using Elf_Off  = typename ELF_T::Elf_Off;
 
-  LIEF_DEBUG("== Parsing dynamic section ==");
+  LIEF_DEBUG("Parsing dynamic entries");
 
-  uint32_t nb_entries = size / sizeof(Elf_Dyn);
-  nb_entries = std::min<uint32_t>(nb_entries, Parser::NB_MAX_DYNAMIC_ENTRIES);
+  uint32_t max_nb_entries = stream.size() / sizeof(Elf_Dyn);
+  max_nb_entries = std::min<uint32_t>(max_nb_entries, Parser::NB_MAX_DYNAMIC_ENTRIES);
 
-  LIEF_DEBUG(".dynamic@0x{:x}:0x{:x} #", offset, size, nb_entries);
-
-  Elf_Off dynamic_string_offset = get_dynamic_string_table();
+  Elf_Off dynamic_string_offset = get_dynamic_string_table(&stream);
 
   bool end_of_dynamic = false;
-  stream_->setpos(offset);
-  for (size_t dynIdx = 0; dynIdx < nb_entries; ++dynIdx) {
-    const auto res_entry = stream_->read<Elf_Dyn>();
+  while (stream) {
+    const auto res_entry = stream.read<Elf_Dyn>();
     if (!res_entry) {
       break;
     }
@@ -1507,7 +1551,7 @@ ok_error_t Parser::parse_pltgot_relocations(uint64_t offset, uint64_t size) {
     auto reloc = std::unique_ptr<Relocation>(new Relocation(
         std::move(*rel_hdr), Relocation::PURPOSE::PLTGOT, enc, arch));
     bind_symbol(*reloc);
-    binary_->relocations_.push_back(std::move(reloc));
+    insert_relocation(std::move(reloc));
   }
   return ok();
 }
@@ -1571,12 +1615,11 @@ ok_error_t Parser::parse_section_relocations(const Section& section) {
     symbol_table = binary_->sections_[sh_link].get();
   }
 
-  const uint64_t offset_relocations = section.file_offset();
-  const uint8_t shift = std::is_same<ELF_T, details::ELF32>::value ? 8 : 32;
+  constexpr uint8_t shift = std::is_same_v<ELF_T, details::ELF32> ? 8 : 32;
 
   const ARCH arch = binary_->header_.machine_type();
 
-  const Relocation::ENCODING enc =
+  constexpr Relocation::ENCODING enc =
     std::is_same_v<REL_T, typename ELF_T::Elf_Rel> ? Relocation::ENCODING::REL :
                                                      Relocation::ENCODING::RELA;
 
@@ -1584,20 +1627,27 @@ ok_error_t Parser::parse_section_relocations(const Section& section) {
   nb_entries = std::min<uint32_t>(nb_entries, Parser::NB_MAX_RELOCATIONS);
 
   std::unordered_set<Relocation*, RelocationSetHash, RelocationSetEq> reloc_hash;
-  stream_->setpos(offset_relocations);
-  for (uint32_t i = 0; i < nb_entries; ++i) {
-    const auto rel_hdr = stream_->read<REL_T>();
+
+  SpanStream reloc_stream(section.content());
+  const bool is_object_file =
+    binary_->header().file_type() == Header::FILE_TYPE::REL &&
+    binary_->segments_.empty();
+
+  size_t count = 0;
+  while (reloc_stream) {
+    auto rel_hdr = reloc_stream.read<REL_T>();
     if (!rel_hdr) {
+      LIEF_WARN("Can't parse relocation at offset: 0x{:04x} in {}",
+                reloc_stream.pos(), section.name());
       break;
     }
-
     auto reloc = std::unique_ptr<Relocation>(new Relocation(
-        *rel_hdr, Relocation::PURPOSE::NONE, enc, arch));
+      *rel_hdr, Relocation::PURPOSE::NONE, enc, arch));
 
     reloc->section_      = applies_to;
     reloc->symbol_table_ = symbol_table;
-    if (binary_->header().file_type() == Header::FILE_TYPE::REL &&
-        binary_->segments().size() == 0) {
+
+    if (is_object_file) {
       reloc->purpose(Relocation::PURPOSE::OBJECT);
     }
 
@@ -1617,9 +1667,11 @@ ok_error_t Parser::parse_section_relocations(const Section& section) {
     }
 
     if (reloc_hash.insert(reloc.get()).second) {
-      binary_->relocations_.push_back(std::move(reloc));
+      ++count;
+      insert_relocation(std::move(reloc));
     }
   }
+  LIEF_DEBUG("#{} relocations found in {}", count, section.name());
   return ok();
 }
 

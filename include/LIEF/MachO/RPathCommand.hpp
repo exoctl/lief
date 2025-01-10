@@ -1,5 +1,5 @@
 /* Copyright 2017 - 2021 J. Rieck (based on R. Thomas's work)
- * Copyright 2017 - 2024 Quarkslab
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,13 +29,14 @@ namespace details {
 struct rpath_command;
 }
 
-//! Class that represents the LC_RPATH command.
-//!
-//! This command is used to add path for searching libraries
-//! associated with the ``@rpath`` prefix.
+/// Class that represents the LC_RPATH command.
+///
+/// This command is used to add path for searching libraries
+/// associated with the ``@rpath`` prefix.
 class LIEF_API RPathCommand : public LoadCommand {
   public:
   RPathCommand() = default;
+  RPathCommand(std::string path);
   RPathCommand(const details::rpath_command& rpathCmd);
 
   RPathCommand& operator=(const RPathCommand& copy) = default;
@@ -45,11 +46,21 @@ class LIEF_API RPathCommand : public LoadCommand {
     return std::unique_ptr<RPathCommand>(new RPathCommand(*this));
   }
 
+  /// Create a new RPath command for the provided `path`
+  static std::unique_ptr<RPathCommand> create(std::string path) {
+    return std::unique_ptr<RPathCommand>(new RPathCommand(std::move(path)));
+  }
+
   ~RPathCommand() override = default;
 
-  //! The rpath value as a string
+  /// The rpath value as a string
   const std::string& path() const {
     return path_;
+  }
+
+  /// Original string offset of the path
+  uint32_t path_offset() const {
+    return path_offset_;
   }
 
   void path(std::string path) {
@@ -65,6 +76,7 @@ class LIEF_API RPathCommand : public LoadCommand {
   }
 
   private:
+  uint32_t path_offset_ = 0;
   std::string path_;
 };
 

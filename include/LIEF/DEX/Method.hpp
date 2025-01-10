@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ class Parser;
 class Class;
 class Prototype;
 
-//! Class which represents a DEX::Method
+/// Class which represents a DEX::Method
 class LIEF_API Method : public Object {
   friend class Parser;
   public:
@@ -46,31 +46,31 @@ class LIEF_API Method : public Object {
   Method(const Method&);
   Method& operator=(const Method&);
 
-  //! Name of the Method
+  /// Name of the Method
   const std::string& name() const;
 
-  //! True if a class is associated with this method
+  /// True if a class is associated with this method
   bool has_class() const;
 
-  //! DEX::Class associated with this Method or a nullptr
-  //! if not resolved
+  /// DEX::Class associated with this Method or a nullptr
+  /// if not resolved
   const Class* cls() const;
   Class* cls();
 
-  //! Offset to the Dalvik Bytecode
+  /// Offset to the Dalvik Bytecode
   uint64_t code_offset() const;
 
-  //! Dalvik Bytecode as bytes
+  /// Dalvik Bytecode as bytes
   const bytecode_t& bytecode() const;
 
-  //! Index in the DEX Methods pool
+  /// Index in the DEX Methods pool
   size_t index() const;
 
-  //! True if this method is a virtual one.
-  //! i.e. not **static**, **private**, **finale** or constructor
+  /// True if this method is a virtual one.
+  /// i.e. not **static**, **private**, **finale** or constructor
   bool is_virtual() const;
 
-  //! Method's prototype or a nullptr if it is not resolved
+  /// Method's prototype or a nullptr if it is not resolved
   const Prototype* prototype() const;
   Prototype* prototype();
 
@@ -80,10 +80,10 @@ class LIEF_API Method : public Object {
 
   const dex2dex_method_info_t& dex2dex_info() const;
 
-  //! Check if the current method has the given ACCESS_FLAGS
+  /// Check if the current method has the given ACCESS_FLAGS
   bool has(ACCESS_FLAGS f) const;
 
-  //! ACCESS_FLAGS as an std::set
+  /// ACCESS_FLAGS as an std::set
   access_flags_list_t access_flags() const;
 
 

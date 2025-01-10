@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,11 +29,11 @@ namespace details {
 struct version_min_command;
 }
 
-//! Class that wraps the LC_VERSION_MIN_MACOSX, LC_VERSION_MIN_IPHONEOS, ... commands.
+/// Class that wraps the LC_VERSION_MIN_MACOSX, LC_VERSION_MIN_IPHONEOS, ... commands.
 class LIEF_API VersionMin : public LoadCommand {
 
   public:
-  //! Version is an array of **3** integers
+  /// Version is an array of **3** integers
   using version_t = std::array<uint32_t, 3>;
 
   VersionMin() = default;
@@ -48,7 +48,7 @@ class LIEF_API VersionMin : public LoadCommand {
 
   ~VersionMin() override = default;
 
-  //! Return the version as an array
+  /// Return the version as an array
   const version_t& version() const {
     return version_;
   }
@@ -56,7 +56,7 @@ class LIEF_API VersionMin : public LoadCommand {
     version_ = version;
   }
 
-  //! Return the sdk version as an array
+  /// Return the sdk version as an array
   const version_t& sdk() const {
     return sdk_;
   }
@@ -71,7 +71,9 @@ class LIEF_API VersionMin : public LoadCommand {
   static bool classof(const LoadCommand* cmd) {
     const LoadCommand::TYPE type = cmd->command();
     return type == LoadCommand::TYPE::VERSION_MIN_MACOSX ||
-           type == LoadCommand::TYPE::VERSION_MIN_IPHONEOS;
+           type == LoadCommand::TYPE::VERSION_MIN_IPHONEOS ||
+           type == LoadCommand::TYPE::VERSION_MIN_TVOS ||
+           type == LoadCommand::TYPE::VERSION_MIN_WATCHOS;
   }
 
   private:

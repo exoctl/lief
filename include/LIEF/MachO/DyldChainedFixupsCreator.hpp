@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -95,7 +95,7 @@ class LIEF_LOCAL DyldChainedFixupsCreator {
   DyldChainedFixups* create(Binary& target);
 
   private:
-  struct binding_rebase_t {
+  struct LIEF_LOCAL binding_rebase_t {
     enum TYPE {
       UNKNOWN = 0,
       FIXUP, BINDING,
@@ -147,17 +147,16 @@ class LIEF_LOCAL DyldChainedFixupsCreator {
     }
 
   };
-  result<size_t> lib2ord(const Binary& bin, const Symbol& sym,
-                         const std::string& lib);
-  const Symbol* find_symbol(const Binary& bin, const std::string& name);
+  LIEF_LOCAL result<size_t> lib2ord(const Binary& bin, const Symbol& sym,
+                                    const std::string& lib);
+  LIEF_LOCAL const Symbol* find_symbol(const Binary& bin, const std::string& name);
 
-  static DYLD_CHAINED_PTR_FORMAT pointer_format(const Binary& bin, size_t imp_count);
-  ok_error_t process_relocations(Binary& target, DYLD_CHAINED_PTR_FORMAT ptr_fmt);
-  ok_error_t process_bindings(Binary& target,
-                              strong_map_t& strong_map,
-                              std::unordered_map<std::string, size_t>& symbols_idx,
-                              DyldChainedFixups* cmd,
-                              DyldChainedFixups::binding_info_t& all_bindings);
+  LIEF_LOCAL static DYLD_CHAINED_PTR_FORMAT pointer_format(const Binary& bin, size_t imp_count);
+  LIEF_LOCAL ok_error_t process_relocations(Binary& target, DYLD_CHAINED_PTR_FORMAT ptr_fmt);
+  LIEF_LOCAL ok_error_t process_bindings(
+    Binary& target, strong_map_t& strong_map,
+    std::unordered_map<std::string, size_t>& symbols_idx, DyldChainedFixups* cmd,
+    DyldChainedFixups::binding_info_t& all_bindings);
 
   uint32_t fixups_version_ = 0;
   DYLD_CHAINED_FORMAT imports_format_;

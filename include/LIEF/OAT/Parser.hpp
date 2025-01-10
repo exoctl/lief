@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,10 +34,10 @@ namespace OAT {
 class Binary;
 class Class;
 
-//! Class to parse an OAT file to produce an OAT::Binary
+/// Class to parse an OAT file to produce an OAT::Binary
 class LIEF_API Parser : public ELF::Parser {
   public:
-  //! Parse an OAT file
+  /// Parse an OAT file
   static std::unique_ptr<Binary> parse(const std::string& oat_file);
   static std::unique_ptr<Binary> parse(const std::string& oat_file,
                                        const std::string& vdex_file);

@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,13 +27,13 @@ class BinaryStream;
 
 namespace ELF {
 
-//! @brief Check if given stream wraps an ELF file
+/// Check if given stream wraps an ELF file
 LIEF_API bool is_elf(BinaryStream& stream);
 
-//! @brief Check if the given file is an ELF one.
+/// Check if the given file is an ELF one.
 LIEF_API bool is_elf(const std::string& file);
 
-//! @brief check if the raw data is a ELF file
+/// check if the raw data is a ELF file
 LIEF_API bool is_elf(const std::vector<uint8_t>& raw);
 
 LIEF_API unsigned long hash32(const char* name);

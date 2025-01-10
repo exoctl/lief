@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 #include "PE/pyPE.hpp"
-#include "nanobind/extra/memoryview.hpp"
+#include "nanobind/extra/stl/lief_span.h"
 
 #include "LIEF/PE/resources/ResourceIcon.hpp"
 
@@ -22,6 +22,7 @@
 #include <string>
 #include <sstream>
 #include <nanobind/stl/string.h>
+#include <nanobind/stl/vector.h>
 
 namespace LIEF::PE::py {
 
@@ -74,10 +75,7 @@ void create<ResourceIcon>(nb::module_& m) {
         "Bits per pixel"_doc)
 
     .def_prop_rw("pixels",
-        [] (ResourceIcon& self) {
-          const span<const uint8_t> content = self.pixels();
-          return nb::memoryview::from_memory(content.data(), content.size());
-        },
+        nb::overload_cast<>(&ResourceIcon::pixels, nb::const_),
         nb::overload_cast<const std::vector<uint8_t>&>(&ResourceIcon::pixels))
 
     .def("save",

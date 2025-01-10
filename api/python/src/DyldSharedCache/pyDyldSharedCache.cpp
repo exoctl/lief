@@ -7,9 +7,11 @@
 #include <nanobind/make_iterator.h>
 
 #include "nanobind/extra/random_access_iterator.hpp"
+#include "nanobind/utils.hpp"
 
 #include "typing.hpp"
 #include "pyutils.hpp"
+#include "pyErr.hpp"
 
 struct PathLike : public nanobind::object {
   LIEF_PY_DEFAULT_CTOR(PathLike, nanobind::object);
@@ -49,6 +51,8 @@ void create<dsc::DyldSharedCache>(nb::module_& m) {
            "dyld-940 (2021-02-09)"_doc)
     .value("DYLD_1042_1", dsc::DyldSharedCache::VERSION::DYLD_1042_1,
            "dyld-1042.1 (2022-10-19)"_doc)
+    .value("DYLD_1231_3", dsc::DyldSharedCache::VERSION::DYLD_1231_3,
+           "dyld-1231.3 (2024-09-24)"_doc)
     .value("UNRELEASED", dsc::DyldSharedCache::VERSION::UNRELEASED,
            R"doc(
            This value is used for versions of dyld not publicly released or
@@ -187,6 +191,63 @@ void create<dsc::DyldSharedCache>(nb::module_& m) {
         R"doc(
         Return a list-like of :class:`~.SubCache` embedded in this (main)
         dyld shared cache
+        )doc"_doc
+    )
+
+    .def("get_content_from_va",
+        [] (const DyldSharedCache& self, uint64_t addr, size_t size) {
+          return nb::to_bytes(self.get_content_from_va(addr, size));
+        },
+        R"doc(
+        Return the content at the specified virtual address
+        )doc"_doc, "addr"_a, "size"_a
+    )
+
+    .def("cache_for_address", &DyldSharedCache::cache_for_address,
+        R"doc(
+        Find the sub-DyldSharedCache that wraps the given virtual address
+        )doc"_doc, "address"_a, nb::keep_alive<0, 1>()
+    )
+
+    .def_prop_ro("main_cache", &DyldSharedCache::main_cache,
+        R"doc(
+        Return the principal dyld shared cache in the case of multiple subcaches
+        )doc"_doc, nb::keep_alive<1, 0>()
+    )
+
+    .def("find_subcache", &DyldSharedCache::find_subcache,
+        R"doc(
+        Try to find the DyldSharedCache associated with the filename given
+        in the first parameter.
+        )doc"_doc, "filename"_a, nb::keep_alive<1, 0>()
+    )
+
+    .def("va_to_offset", [] (DyldSharedCache& self, uint64_t va) {
+          return LIEF::py::error_or(&DyldSharedCache::va_to_offset, self, va);
+        },
+        R"doc(
+        Convert the given virtual address into an offset.
+
+        .. warning::
+
+            If the shared cache contains multiple subcaches,
+            this function needs to be called on the targeted subcache.
+            See :func:`~.DyldSharedCache.cache_for_address` to find the
+            associated subcache.
+        )doc"_doc, "virtual_address"_a
+    )
+
+    .def("disassemble",
+        [] (const DyldSharedCache& self, uint64_t addr) {
+          auto insts = self.disassemble(addr);
+          return nb::make_iterator<nb::rv_policy::reference_internal>(
+            nb::type<DyldSharedCache>(), "instructions_iterator", insts
+          );
+        }, nb::keep_alive<0, 1>(),
+        R"doc(
+        Disassemble instructions at the provided virtual address.
+
+        This function returns an iterator over :class:`lief.assembly.Instruction`.
         )doc"_doc
     )
 

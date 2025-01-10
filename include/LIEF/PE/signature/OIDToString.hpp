@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@
 namespace LIEF {
 namespace PE {
 
-//! @brief Convert an OID to a human-readable string
+/// Convert an OID to a human-readable string
 LIEF_API const char* oid_to_string(const oid_t& oid);
 
 }

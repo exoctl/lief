@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
  */
 #include "pyLIEF.hpp"
 #include "Abstract/init.hpp"
-#include "Abstract/enums.hpp"
 
 #include "LIEF/Abstract/Header.hpp"
 #include "LIEF/Abstract/Binary.hpp"
@@ -41,7 +40,6 @@ void init_objects(nb::module_& m) {
   CREATE(DebugInfo, m);
 }
 void init_abstract(nb::module_& m) {
-  init_enums(m);
   init_objects(m);
 }
 }

@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,8 @@
 #include <string>
 #include <sstream>
 #include <nanobind/stl/string.h>
-#include "nanobind/extra/memoryview.hpp"
+#include <nanobind/stl/vector.h>
+#include "nanobind/extra/stl/lief_span.h"
 #include "nanobind/utils.hpp"
 
 #include "LIEF/MachO/LoadCommand.hpp"
@@ -32,32 +33,8 @@ void create<LoadCommand>(nb::module_& m) {
 
   nb::class_<LoadCommand, LIEF::Object> cls(m, "LoadCommand",
       "Based class for the Mach-O load commands"_doc);
-  cls
-    .def(nb::init<>())
 
-    .def_prop_rw("command",
-        nb::overload_cast<>(&LoadCommand::command, nb::const_),
-        nb::overload_cast<LoadCommand::TYPE>(&LoadCommand::command),
-        "Command type"_doc)
 
-    .def_prop_rw("size",
-        nb::overload_cast<>(&LoadCommand::size, nb::const_),
-        nb::overload_cast<uint32_t>(&LoadCommand::size),
-        "Size of the command (should be greather than ``sizeof(load_command)``)"_doc)
-
-    .def_prop_rw("data",
-        [] (const LoadCommand& cmd) {
-          return nb::to_memoryview(cmd.data());
-        },
-        nb::overload_cast<LoadCommand::raw_t>(&LoadCommand::data),
-        "Command's data"_doc)
-
-    .def_prop_rw("command_offset",
-        nb::overload_cast<>(&LoadCommand::command_offset, nb::const_),
-        nb::overload_cast<uint64_t>(&LoadCommand::command_offset),
-        "Offset of the command within the *Load Command Table*"_doc)
-
-    LIEF_DEFAULT_STR(LoadCommand);
 
   enum_<LoadCommand::TYPE>(cls, "TYPE")
   #define PY_ENUM(x) to_string(x), x
@@ -116,9 +93,35 @@ void create<LoadCommand>(nb::module_& m) {
     .value(PY_ENUM(LoadCommand::TYPE::DYLD_EXPORTS_TRIE))
     .value(PY_ENUM(LoadCommand::TYPE::DYLD_CHAINED_FIXUPS))
     .value(PY_ENUM(LoadCommand::TYPE::FILESET_ENTRY))
+    .value(PY_ENUM(LoadCommand::TYPE::ATOM_INFO))
     .value(PY_ENUM(LoadCommand::TYPE::LIEF_UNKNOWN))
   #undef PY_ENUM
   ;
+
+  cls
+    .def(nb::init<>())
+
+    .def_prop_rw("command",
+        nb::overload_cast<>(&LoadCommand::command, nb::const_),
+        nb::overload_cast<LoadCommand::TYPE>(&LoadCommand::command),
+        "Command type"_doc)
+
+    .def_prop_rw("size",
+        nb::overload_cast<>(&LoadCommand::size, nb::const_),
+        nb::overload_cast<uint32_t>(&LoadCommand::size),
+        "Size of the command (should be greather than ``sizeof(load_command)``)"_doc)
+
+    .def_prop_rw("data",
+        nb::overload_cast<>(&LoadCommand::data, nb::const_),
+        nb::overload_cast<LoadCommand::raw_t>(&LoadCommand::data),
+        "Command's data"_doc)
+
+    .def_prop_rw("command_offset",
+        nb::overload_cast<>(&LoadCommand::command_offset, nb::const_),
+        nb::overload_cast<uint64_t>(&LoadCommand::command_offset),
+        "Offset of the command within the *Load Command Table*"_doc)
+
+    LIEF_DEFAULT_STR(LoadCommand);
 
 
 }

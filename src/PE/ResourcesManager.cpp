@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  * Copyright 2017 - 2021 K. Nakagawa
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,7 +28,7 @@
 #include "LIEF/BinaryStream/SpanStream.hpp"
 
 #include "frozen.hpp"
-#include "LIEF/logging.hpp"
+#include "logging.hpp"
 #include "internal_utils.hpp"
 #include "fmt_formatter.hpp"
 

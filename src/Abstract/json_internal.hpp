@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,8 +24,8 @@
 
 namespace LIEF {
 
-//! Class that implements the Visitor pattern to serialize LIEF abstracted
-//! object in JSON
+/// Class that implements the Visitor pattern to serialize LIEF abstracted
+/// object in JSON
 class AbstractJsonVisitor : public LIEF::JsonVisitor {
   public:
   using LIEF::JsonVisitor::JsonVisitor;

@@ -1,12 +1,15 @@
 use std::mem::size_of;
+use std::pin::Pin;
+use std::path::Path;
 
 use num_traits::{Num, cast};
 
 use lief_ffi as ffi;
 
 use crate::Error;
+use super::builder::Config;
 use super::hash::{Sysv, Gnu};
-use super::dynamic::{self, DynamicEntries};
+use super::dynamic::{self, DynamicEntries, Library};
 use super::header::Header;
 use super::section::{Sections, Section};
 use super::segment::Segments;
@@ -66,9 +69,12 @@ impl FromFFI<ffi::ELF_Binary> for Binary {
 
 impl Binary {
     /// Create a [`Binary`] from the given file path
-    pub fn parse(path: &str) -> Self {
+    pub fn parse(path: &str) -> Option<Self> {
         let bin = ffi::ELF_Binary::parse(path);
-        Binary::from_ffi(bin)
+        if bin.is_null() {
+            return None;
+        }
+        Some(Binary::from_ffi(bin))
     }
 
     /// Return the main ELF header
@@ -240,6 +246,11 @@ impl Binary {
         Vec::from(self.ptr.get_relocated_dynamic_array(u64::from(tag)).as_slice())
     }
 
+    /// True if the current binary is targeting Android
+    pub fn is_targeting_android(&self) -> bool {
+        self.ptr.is_targeting_android()
+    }
+
     /// Get the integer value at the given virtual address
     pub fn get_int_from_virtual_address<T>(&self, addr: u64) -> Result<T, Error>
         where T: Num + cast::FromPrimitive + cast::ToPrimitive
@@ -278,11 +289,37 @@ impl Binary {
 
         Err(Error::NotSupported)
     }
+
+    /// Write back the current ELF binary into the file specified in parameter
+    pub fn write(&mut self, output: &Path) {
+        self.ptr.as_mut().unwrap().write(output.to_str().unwrap());
+    }
+
+    /// Write back the current ELF binary into the file specified in parameter with the
+    /// configuration provided in the second parameter.
+    pub fn write_with_config(&mut self, output: &Path, config: Config) {
+        self.ptr.as_mut().unwrap().write_with_config(output.to_str().unwrap(), config.to_ffi());
+    }
+
+    /// Add a library as dependency
+    pub fn add_library<'a>(&'a mut self, library: &str) -> Library<'a> {
+        Library::from_ffi(self.ptr.as_mut().unwrap().add_library(library))
+    }
 }
 
 impl generic::Binary for Binary {
     fn as_generic(&self) -> &ffi::AbstractBinary {
         self.ptr.as_ref().unwrap().as_ref()
+    }
+
+    fn as_pin_mut_generic(&mut self) -> Pin<&mut ffi::AbstractBinary> {
+        unsafe {
+            Pin::new_unchecked({
+                (self.ptr.as_ref().unwrap().as_ref()
+                    as *const ffi::AbstractBinary
+                    as *mut ffi::AbstractBinary).as_mut().unwrap()
+            })
+        }
     }
 }
 

@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,20 +45,20 @@ class LIEF_API SymbolVersionAuxRequirement : public SymbolVersionAux {
 
   ~SymbolVersionAuxRequirement() override = default;
 
-  //! Hash value of the dependency name (use ELF hashing function)
+  /// Hash value of the dependency name (use ELF hashing function)
   uint32_t hash() const {
     return hash_;
   }
 
-  //! Bitmask of flags
+  /// Bitmask of flags
   uint16_t flags() const {
     return flags_;
   }
 
-  //! It returns the unique version index for the file which is used in the
-  //! version symbol table. If the highest bit (bit 15) is set this
-  //! is a hidden symbol which cannot be referenced from outside the
-  //! object.
+  /// It returns the unique version index for the file which is used in the
+  /// version symbol table. If the highest bit (bit 15) is set this
+  /// is a hidden symbol which cannot be referenced from outside the
+  /// object.
   uint16_t other() const {
     return other_;
   }

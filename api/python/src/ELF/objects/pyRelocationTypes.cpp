@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,6 +40,7 @@ void init_relocation_types(nb::class_<Relocation, LIEF::Relocation>& m) {
     #include "LIEF/ELF/Relocations/Sparc.def"
     #include "LIEF/ELF/Relocations/SystemZ.def"
     #include "LIEF/ELF/Relocations/RISCV.def"
+    #include "LIEF/ELF/Relocations/BPF.def"
   ;
   #undef ELF_RELOC
 }

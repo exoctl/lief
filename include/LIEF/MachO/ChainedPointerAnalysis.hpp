@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -239,6 +239,7 @@ class LIEF_API ChainedPointerAnalysis {
         case DYLD_CHAINED_PTR_FORMAT::PTR_ARM64E:
         case DYLD_CHAINED_PTR_FORMAT::PTR_ARM64E_USERLAND:
         case DYLD_CHAINED_PTR_FORMAT::PTR_ARM64E_USERLAND24:
+        case DYLD_CHAINED_PTR_FORMAT::PTR_ARM64E_SHARED_CACHE:
           return 8;
 
         case DYLD_CHAINED_PTR_FORMAT::PTR_ARM64E_KERNEL:
@@ -270,6 +271,7 @@ class LIEF_API ChainedPointerAnalysis {
         case DYLD_CHAINED_PTR_FORMAT::PTR_64_OFFSET:
         case DYLD_CHAINED_PTR_FORMAT::PTR_64_KERNEL_CACHE:
         case DYLD_CHAINED_PTR_FORMAT::PTR_X86_64_KERNEL_CACHE:
+        case DYLD_CHAINED_PTR_FORMAT::PTR_ARM64E_SHARED_CACHE:
           return sizeof(uint64_t);
 
         case DYLD_CHAINED_PTR_FORMAT::PTR_32_FIRMWARE:

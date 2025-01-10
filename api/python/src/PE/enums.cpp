@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -356,7 +356,7 @@ void init_enums(nb::module_& m) {
     .value(PY_ENUM(CODE_PAGES::CP_UTF_7))
     .value(PY_ENUM(CODE_PAGES::CP_UTF_8));
 
-  enum_<ACCELERATOR_FLAGS>(m, "ACCELERATOR_FLAGS", nb::is_arithmetic())
+  enum_<ACCELERATOR_FLAGS>(m, "ACCELERATOR_FLAGS", nb::is_flag())
     .value(PY_ENUM(ACCELERATOR_FLAGS::FVIRTKEY))
     .value(PY_ENUM(ACCELERATOR_FLAGS::FNOINVERT))
     .value(PY_ENUM(ACCELERATOR_FLAGS::FSHIFT))

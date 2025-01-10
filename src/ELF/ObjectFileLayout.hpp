@@ -1,4 +1,4 @@
-/* Copyright 2021 - 2024 R. Thomas
+/* Copyright 2021 - 2025 R. Thomas
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,13 +24,13 @@
 
 #include "ELF/DataHandler/Handler.hpp"
 
-#include "LIEF/logging.hpp"
+#include "logging.hpp"
 #include "Layout.hpp"
 namespace LIEF {
 namespace ELF {
 
-//! Class used to compute the size and the offsets of the elements
-//! needed to rebuild the ELF file.
+/// Class used to compute the size and the offsets of the elements
+/// needed to rebuild the ELF file.
 class LIEF_LOCAL ObjectFileLayout : public Layout {
   public:
   using relocations_map_t    = std::unordered_map<Section*, std::vector<Relocation*>>; // Relocation associated with a section
@@ -45,8 +45,8 @@ class LIEF_LOCAL ObjectFileLayout : public Layout {
   ObjectFileLayout(ObjectFileLayout&&) = default;
   ObjectFileLayout& operator=(ObjectFileLayout&&) = default;
 
-  //! The given section should be relocated if the "needed" size
-  //! is greater than 0
+  /// The given section should be relocated if the "needed" size
+  /// is greater than 0
   bool should_relocate(const Section& sec) const {
     const auto it = sec_reloc_info_.find(&sec);
     if (it == std::end(sec_reloc_info_)) {

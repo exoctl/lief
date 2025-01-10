@@ -1,4 +1,4 @@
-/* Copyright 2024 R. Thomas
+/* Copyright 2024 - 2025 R. Thomas
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ struct load_command;
 }
 
 
-//! Generic class when the command is not recognized by LIEF
+/// Generic class when the command is not recognized by LIEF
 class LIEF_API UnknownCommand : public LoadCommand {
 
   public:

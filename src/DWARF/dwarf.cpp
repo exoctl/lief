@@ -1,4 +1,4 @@
-/* Copyright 2022 - 2024 R. Thomas
+/* Copyright 2022 - 2025 R. Thomas
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,13 +18,34 @@
 #include "LIEF/DWARF/Variable.hpp"
 #include "LIEF/DWARF/Type.hpp"
 #include "LIEF/DWARF/Scope.hpp"
+#include "LIEF/DWARF/Parameter.hpp"
+
 #include "LIEF/DWARF/types/ClassLike.hpp"
 #include "LIEF/DWARF/types/Pointer.hpp"
 #include "LIEF/DWARF/types/Const.hpp"
 #include "LIEF/DWARF/types/Base.hpp"
 #include "LIEF/DWARF/types/Array.hpp"
+#include "LIEF/DWARF/types/Typedef.hpp"
+#include "LIEF/DWARF/types/Atomic.hpp"
+#include "LIEF/DWARF/types/Coarray.hpp"
+#include "LIEF/DWARF/types/Dynamic.hpp"
+#include "LIEF/DWARF/types/Enum.hpp"
+#include "LIEF/DWARF/types/File.hpp"
+#include "LIEF/DWARF/types/Immutable.hpp"
+#include "LIEF/DWARF/types/Interface.hpp"
+#include "LIEF/DWARF/types/PointerToMember.hpp"
+#include "LIEF/DWARF/types/RValueRef.hpp"
+#include "LIEF/DWARF/types/Reference.hpp"
+#include "LIEF/DWARF/types/Restrict.hpp"
+#include "LIEF/DWARF/types/SetTy.hpp"
+#include "LIEF/DWARF/types/Shared.hpp"
+#include "LIEF/DWARF/types/StringTy.hpp"
+#include "LIEF/DWARF/types/Subroutine.hpp"
+#include "LIEF/DWARF/types/TemplateAlias.hpp"
+#include "LIEF/DWARF/types/Thrown.hpp"
+#include "LIEF/DWARF/types/Volatile.hpp"
 
-#include "LIEF/logging.hpp"
+#include "logging.hpp"
 #include "messages.hpp"
 #include "internal_utils.hpp"
 
@@ -129,9 +150,45 @@ std::unique_ptr<Variable> Variable::Iterator::operator*() const {
 }
 
 // ----------------------------------------------------------------------------
+// DWARF/Parameter.hpp
+// ----------------------------------------------------------------------------
+Parameter::~Parameter() = default;
+
+
+Parameter::Parameter(Parameter&& other) = default;
+Parameter& Parameter::operator=(Parameter&& other) = default;
+
+Parameter::Parameter(std::unique_ptr<details::Parameter>/*impl*/) :
+  impl_(nullptr)
+{}
+
+Parameter::KIND Parameter::kind() const {
+  return KIND::UNKNOWN;
+}
+
+std::string Parameter::name() const {
+  return "";
+}
+
+std::unique_ptr<Type> Parameter::type() const {
+  return nullptr;
+}
+
+std::unique_ptr<Parameter> Parameter::create(std::unique_ptr<details::Parameter>/*impl*/) {
+  return nullptr;
+}
+
+// ----------------------------------------------------------------------------
 // DWARF/Function.hpp
 // ----------------------------------------------------------------------------
 Function::~Function() = default;
+
+Function::instructions_it Function::instructions() const {
+  return make_range<assembly::Instruction::Iterator>(
+      assembly::Instruction::Iterator(),
+      assembly::Instruction::Iterator()
+  );
+}
 
 std::unique_ptr<Scope> Function::scope() const {
   return nullptr;
@@ -157,6 +214,10 @@ bool Function::is_artificial() const {
   return false;
 }
 
+bool Function::is_external() const {
+  return false;
+}
+
 uint64_t Function::size() const {
   return 0;
 }
@@ -173,7 +234,12 @@ std::unique_ptr<Type> Function::type() const {
   return nullptr;
 }
 
-std::vector<Function::Parameter> Function::parameters() const {
+Function::parameters_t Function::parameters() const {
+  return {};
+}
+
+
+Function::thrown_types_t Function::thrown_types() const {
   return {};
 }
 
@@ -208,22 +274,6 @@ Function::Iterator& Function::Iterator::operator--() {
 std::unique_ptr<Function> Function::Iterator::operator*() const {
   return nullptr;
 }
-
-Function::Parameter::Parameter(std::unique_ptr<details::Parameter>) :
-  impl_(nullptr)
-{}
-
-std::string Function::Parameter::name() const {
-  return "";
-}
-
-std::unique_ptr<Type> Function::Parameter::type() const {
-  return nullptr;
-}
-
-Function::Parameter::Parameter(Parameter&& other) noexcept = default;
-Function::Parameter& Function::Parameter::operator=(Parameter&& other) noexcept = default;
-Function::Parameter::~Parameter() = default;
 
 // ----------------------------------------------------------------------------
 // DWARF/DebugInfo.hpp
@@ -317,6 +367,10 @@ CompilationUnit::Language CompilationUnit::language() const {
 }
 
 CompilationUnit::functions_it CompilationUnit::functions() const {
+  return make_empty_iterator<Function>();
+}
+
+CompilationUnit::functions_it CompilationUnit::imported_functions() const {
   return make_empty_iterator<Function>();
 }
 
@@ -458,9 +512,14 @@ namespace types {
 // DWARF/types/ClassLike.hpp
 // ----------------------------------------------------------------------------
 ClassLike::~ClassLike() = default;
+
 Class::~Class() = default;
+
 Structure::~Structure() = default;
+
 Union::~Union() = default;
+
+Packed::~Packed() = default;
 
 ClassLike::Member::~Member() = default;
 ClassLike::Member::Member(std::unique_ptr<details::Member> impl) :
@@ -496,6 +555,10 @@ std::string ClassLike::Member::name() const {
 
 std::vector<ClassLike::Member> ClassLike::members() const {
   return {};
+}
+
+ClassLike::functions_it ClassLike::functions() const {
+  return make_empty_iterator<Function>();
 }
 
 std::unique_ptr<ClassLike::Member> ClassLike::find_member(uint64_t/*offset*/) const {
@@ -536,6 +599,165 @@ Base::ENCODING Base::encoding() const {
 Array::~Array() = default;
 
 const Type* Array::underlying_type() const {
+  return nullptr;
+}
+
+Array::size_info_t Array::size_info() const {
+  return {};
+}
+
+// ----------------------------------------------------------------------------
+// DWARF/types/Typedef.hpp
+// ----------------------------------------------------------------------------
+Typedef::~Typedef() = default;
+
+const Type* Typedef::underlying_type() const {
+  return nullptr;
+}
+
+// ----------------------------------------------------------------------------
+// DWARF/types/Atomic.hpp
+// ----------------------------------------------------------------------------
+Atomic::~Atomic() = default;
+
+const Type* Atomic::underlying_type() const {
+  return nullptr;
+}
+
+// ----------------------------------------------------------------------------
+// DWARF/types/Coarray.hpp
+// ----------------------------------------------------------------------------
+Coarray::~Coarray()= default;
+
+// ----------------------------------------------------------------------------
+// DWARF/types/Dynamic.hpp
+// ----------------------------------------------------------------------------
+Dynamic::~Dynamic()= default;
+
+// ----------------------------------------------------------------------------
+// DWARF/types/Enum.hpp
+// ----------------------------------------------------------------------------
+Enum::~Enum()= default;
+
+// ----------------------------------------------------------------------------
+// DWARF/types/File.hpp
+// ----------------------------------------------------------------------------
+File::~File()= default;
+
+// ----------------------------------------------------------------------------
+// DWARF/types/Immutable.hpp
+// ----------------------------------------------------------------------------
+Immutable::~Immutable()= default;
+
+const Type* Immutable::underlying_type() const {
+  return nullptr;
+}
+
+// ----------------------------------------------------------------------------
+// DWARF/types/Interface.hpp
+// ----------------------------------------------------------------------------
+Interface::~Interface()= default;
+
+// ----------------------------------------------------------------------------
+// DWARF/types/PointerToMember.hpp
+// ----------------------------------------------------------------------------
+PointerToMember::~PointerToMember()= default;
+
+const Type* PointerToMember::underlying_type() const {
+  return nullptr;
+}
+
+std::unique_ptr<Type> PointerToMember::containing_type() const {
+  return nullptr;
+}
+
+// ----------------------------------------------------------------------------
+// DWARF/types/RValueReference.hpp
+// ----------------------------------------------------------------------------
+RValueReference::~RValueReference()= default;
+
+const Type* RValueReference::underlying_type() const {
+  return nullptr;
+}
+
+// ----------------------------------------------------------------------------
+// DWARF/types/Reference.hpp
+// ----------------------------------------------------------------------------
+Reference::~Reference()= default;
+
+const Type* Reference::underlying_type() const {
+  return nullptr;
+}
+
+// ----------------------------------------------------------------------------
+// DWARF/types/Restrict.hpp
+// ----------------------------------------------------------------------------
+Restrict::~Restrict()= default;
+
+const Type* Restrict::underlying_type() const {
+  return nullptr;
+}
+
+// ----------------------------------------------------------------------------
+// DWARF/types/SetTy.hpp
+// ----------------------------------------------------------------------------
+SetTy::~SetTy()= default;
+
+const Type* SetTy::underlying_type() const {
+  return nullptr;
+}
+
+// ----------------------------------------------------------------------------
+// DWARF/types/Shared.hpp
+// ----------------------------------------------------------------------------
+Shared::~Shared()= default;
+
+const Type* Shared::underlying_type() const {
+  return nullptr;
+}
+
+// ----------------------------------------------------------------------------
+// DWARF/types/StringTy.hpp
+// ----------------------------------------------------------------------------
+StringTy::~StringTy()= default;
+
+// ----------------------------------------------------------------------------
+// DWARF/types/Subroutine.hpp
+// ----------------------------------------------------------------------------
+Subroutine::~Subroutine()= default;
+
+Subroutine::parameters_t Subroutine::parameters() const {
+  return {};
+}
+
+// ----------------------------------------------------------------------------
+// DWARF/types/TemplateAlias.hpp
+// ----------------------------------------------------------------------------
+TemplateAlias::~TemplateAlias()= default;
+
+const Type* TemplateAlias::underlying_type() const {
+  return nullptr;
+}
+
+TemplateAlias::parameters_t TemplateAlias::parameters() const {
+  return {};
+}
+
+// ----------------------------------------------------------------------------
+// DWARF/types/Thrown.hpp
+// ----------------------------------------------------------------------------
+Thrown::~Thrown()= default;
+
+const Type* Thrown::underlying_type() const {
+  return nullptr;
+}
+
+// ----------------------------------------------------------------------------
+// DWARF/types/Volatile.hpp
+// ----------------------------------------------------------------------------
+Volatile::~Volatile()= default;
+
+const Type* Volatile::underlying_type() const {
   return nullptr;
 }
 

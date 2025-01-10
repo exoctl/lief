@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,10 +28,10 @@ namespace details {
 struct encryption_info_command;
 }
 
-//! Class that represents the LC_ENCRYPTION_INFO / LC_ENCRYPTION_INFO_64 commands
-//!
-//! The encryption info is usually present in Mach-O executables that
-//! target iOS to encrypt some sections of the binary
+/// Class that represents the LC_ENCRYPTION_INFO / LC_ENCRYPTION_INFO_64 commands
+///
+/// The encryption info is usually present in Mach-O executables that
+/// target iOS to encrypt some sections of the binary
 class LIEF_API EncryptionInfo : public LoadCommand {
   public:
   EncryptionInfo() = default;
@@ -46,17 +46,17 @@ class LIEF_API EncryptionInfo : public LoadCommand {
     return std::unique_ptr<EncryptionInfo>(new EncryptionInfo(*this));
   }
 
-  //! The beginning of the encrypted area
+  /// The beginning of the encrypted area
   uint32_t crypt_offset() const {
     return coff_;
   }
 
-  //! The size of the encrypted area
+  /// The size of the encrypted area
   uint32_t crypt_size() const {
     return csize_;
   }
 
-  //! The encryption system. 0 means no encrypted
+  /// The encryption system. 0 means no encrypted
   uint32_t crypt_id() const {
     return cid_;
   }

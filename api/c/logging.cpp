@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,6 @@
 #include "LIEF/logging.hpp"
 #include "LIEF/logging.h"
 
-using namespace LIEF::logging;
-
 void lief_logging_disable(void) {
 }
 
@@ -25,4 +23,5 @@ void lief_logging_enable(void) {
 }
 
 void lief_logging_set_level(uint32_t level) {
+
 }

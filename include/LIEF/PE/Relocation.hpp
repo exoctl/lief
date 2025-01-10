@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,8 +32,8 @@ namespace details {
 struct pe_base_relocation_block;
 }
 
-//! Class which represents the *Base Relocation Block*
-//! We usually find this structure in the ``.reloc`` section
+/// Class which represents the *Base Relocation Block*
+/// We usually find this structure in the ``.reloc`` section
 class LIEF_API Relocation : public Object {
   friend class Parser;
   friend class Builder;
@@ -51,18 +51,18 @@ class LIEF_API Relocation : public Object {
 
   void swap(Relocation& other);
 
-  //! The RVA for which the offset of the relocation entries (RelocationEntry) is added
+  /// The RVA for which the offset of the relocation entries (RelocationEntry) is added
   uint32_t virtual_address() const {
     return virtual_address_;
   }
 
-  //! The total number of bytes in the base relocation block.
-  //! ``block_size = sizeof(BaseRelocationBlock) + nb_of_relocs * sizeof(uint16_t = RelocationEntry)``
+  /// The total number of bytes in the base relocation block.
+  /// ``block_size = sizeof(BaseRelocationBlock) + nb_of_relocs * sizeof(uint16_t = RelocationEntry)``
   uint32_t block_size() const {
     return block_size_;
   }
 
-  //! Iterator over the RelocationEntry
+  /// Iterator over the RelocationEntry
   it_const_entries entries() const {
     return entries_;
   }

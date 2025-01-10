@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,6 +39,7 @@
 #include <LIEF/MachO/FatBinary.hpp>
 #include <LIEF/MachO/FilesetCommand.hpp>
 #include <LIEF/MachO/FunctionStarts.hpp>
+#include <LIEF/MachO/AtomInfo.hpp>
 #include <LIEF/MachO/Header.hpp>
 #include <LIEF/MachO/IndirectBindingInfo.hpp>
 #include <LIEF/MachO/LinkerOptHint.hpp>
@@ -103,6 +104,7 @@ void init_objects(nb::module_& m) {
   CREATE(DyldBindingInfo, m);
   CREATE(ExportInfo, m);
   CREATE(FunctionStarts, m);
+  CREATE(AtomInfo, m);
   CREATE(CodeSignature, m);
   CREATE(CodeSignatureDir, m);
   CREATE(DataInCode, m);

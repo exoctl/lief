@@ -1,4 +1,4 @@
-/* Copyright 2024 R. Thomas
+/* Copyright 2024 - 2025 R. Thomas
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,8 @@ class MachO_RPathCommand : public MachO_Command {
   using lief_t = LIEF::MachO::RPathCommand;
   MachO_RPathCommand(const lief_t& base) : MachO_Command(base) {}
   std::string path() const { return impl().path(); };
+
+  auto path_offset() const { return impl().path_offset(); }
 
   static bool classof(const MachO_Command& cmd) {
     return lief_t::classof(&cmd.get());

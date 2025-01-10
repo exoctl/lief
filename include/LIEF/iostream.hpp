@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,12 +47,17 @@ class vector_iostream {
   }
 
   vector_iostream& write(std::vector<uint8_t> s) {
+    if (s.empty()) {
+      return *this;
+    }
     return write(s.data(), s.size());
   }
 
   vector_iostream& write(const std::string& s) {
     return write(reinterpret_cast<const uint8_t*>(s.c_str()), s.size() + 1);
   }
+
+  vector_iostream& write(const std::u16string& s, bool with_null_char);
 
   vector_iostream& write(size_t count, uint8_t value) {
     raw_.insert(std::end(raw_), count, value);
@@ -94,7 +99,6 @@ class vector_iostream {
     }
     return *this;
   }
-
 
   template<typename T>
   vector_iostream& write(const std::vector<T>& elements) {

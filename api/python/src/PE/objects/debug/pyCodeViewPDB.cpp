@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,7 +43,7 @@ void create<CodeViewPDB>(nb::module_& m) {
         R"delim(
         Return a reference to the parent :class:`lief.PE.CodeView`
         )delim"_doc,
-        "parent(self) -> lief.PE.CodeView"_p,
+        nb::sig("def parent(self) -> lief.PE.CodeView"),
         nb::rv_policy::reference_internal)
 
     .def_prop_ro("guid", &CodeViewPDB::guid,

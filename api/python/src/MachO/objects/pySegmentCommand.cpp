@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 #include "MachO/pyMachO.hpp"
 #include "pyIterator.hpp"
 #include "pySafeString.hpp"
-#include "nanobind/extra/memoryview.hpp"
+#include "nanobind/extra/stl/lief_span.h"
 
 #include "LIEF/MachO/SegmentCommand.hpp"
 #include "LIEF/MachO/Section.hpp"
@@ -130,10 +130,7 @@ void create<SegmentCommand>(nb::module_& m) {
         "Relative index of the segment in the segment table"_doc)
 
     .def_prop_rw("content",
-        [] (const SegmentCommand& self) {
-          const span<const uint8_t> content = self.content();
-          return nb::memoryview::from_memory(content.data(), content.size());
-        },
+        nb::overload_cast<>(&SegmentCommand::content, nb::const_),
         nb::overload_cast<SegmentCommand::content_t>(&SegmentCommand::content),
         "Segment's content"_doc)
 

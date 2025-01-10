@@ -1,8 +1,11 @@
 use lief_ffi as ffi;
 
+use crate::Error;
 use crate::common::{FromFFI, into_optional};
-use crate::declare_iterator;
+use crate::{declare_iterator, declare_fwd_iterator, to_result};
 use super::{SubCache, Dylib, MappingInfo};
+
+use crate::assembly;
 
 #[allow(non_camel_case_types)]
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
@@ -25,6 +28,8 @@ pub enum Version {
     DYLD_940,
     /// dyld-1042.1 (2022-10-19)
     DYLD_1042_1,
+    /// dyld-1231.3 (2024-09-24)
+    DYLD_1231_3,
     /// This value is used for versions of dyld not publicly released or not yet
     /// supported by LIEF
     UNRELEASED,
@@ -42,7 +47,8 @@ impl From<u32> for Version {
             0x00000006 => Version::DYLD_832_7_1,
             0x00000007 => Version::DYLD_940,
             0x00000008 => Version::DYLD_1042_1,
-            0x00000009 => Version::UNRELEASED,
+            0x00000009 => Version::DYLD_1231_3,
+            0x0000000A => Version::UNRELEASED,
             _ => Version::UNKNOWN(value),
 
         }
@@ -59,7 +65,8 @@ impl From<Version> for u32 {
             Version::DYLD_832_7_1 => 0x00000006,
             Version::DYLD_940     => 0x00000007,
             Version::DYLD_1042_1  => 0x00000008,
-            Version::UNRELEASED   => 0x00000009,
+            Version::DYLD_1231_3  => 0x00000009,
+            Version::UNRELEASED   => 0x0000000A,
             Version::UNKNOWN(_) => 0,
 
         }
@@ -277,6 +284,45 @@ impl DyldSharedCache {
         SubCacheIt::new(self.ptr.subcaches())
     }
 
+    /// Disassemble instructions at the provided virtual address.
+    ///
+    /// This function returns an iterator over [`assembly::Instructions`].
+    pub fn disassemble(&self, address: u64) -> Instructions {
+        Instructions::new(self.ptr.disassemble(address))
+    }
+
+    /// Return the content at the specified virtual address
+    pub fn get_content_from_va(&self, address: u64, size: u64) -> Vec<u8> {
+        Vec::from(self.ptr.get_content_from_va(address, size).as_slice())
+    }
+
+    /// Find the sub-DyldSharedCache that wraps the given virtual address
+    pub fn cache_for_address(&self, address: u64) -> Option<DyldSharedCache> {
+        into_optional(self.ptr.cache_for_address(address))
+    }
+
+    /// Return the principal dyld shared cache in the case of multiple subcaches
+    pub fn main_cache(&self) -> Option<DyldSharedCache> {
+        into_optional(self.ptr.main_cache())
+    }
+
+    /// Try to find the [`DyldSharedCache`] associated with the filename given
+    /// in the first parameter.
+    pub fn find_subcache(&self, filename: &str) -> Option<DyldSharedCache> {
+        into_optional(self.ptr.find_subcache(filename))
+    }
+
+    /// Convert the given virtual address into an offset.
+    /// <div class="warning">
+    /// If the shared cache contains multiple subcaches,
+    /// this function needs to be called on the targeted subcache.
+    /// </div>
+    ///
+    /// See: [`DyldSharedCache::cache_for_address`]
+    pub fn va_to_offset(&self, address: u64) -> Result<u64, Error> {
+        to_result!(ffi::dsc_DyldSharedCache::va_to_offset, &self, address);
+    }
+
     /// When enabled, this function allows to record and to keep in *cache*,
     /// dyld shared cache information that are costly to access.
     ///
@@ -328,4 +374,12 @@ declare_iterator!(
     ffi::dsc_SubCache,
     ffi::dsc_DyldSharedCache,
     ffi::dsc_DyldSharedCache_it_subcaches
+);
+
+declare_fwd_iterator!(
+    Instructions,
+    assembly::Instructions,
+    ffi::asm_Instruction,
+    ffi::dsc_DyldSharedCache,
+    ffi::dsc_DyldSharedCache_it_instructions
 );

@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ namespace details {
 struct pe_symbol;
 }
 
-//! Class that represents a PE symbol.
+/// Class that represents a PE symbol.
 class LIEF_API Symbol : public LIEF::Symbol {
 
   friend class Parser;
@@ -62,7 +62,7 @@ class LIEF_API Symbol : public LIEF::Symbol {
   Section*             section();
   const Section*       section() const;
 
-  //! @brief ``True`` if symbols are located in a section
+  /// ``True`` if symbols are located in a section
   bool has_section() const;
 
   void accept(Visitor& visitor) const override;

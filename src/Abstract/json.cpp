@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -81,11 +81,6 @@ void AbstractJsonVisitor::visit(const Binary& binary) {
 
 
 void AbstractJsonVisitor::visit(const Header& header) {
-  std::vector<std::string> modes;
-  modes.reserve(header.modes().size());
-  for (MODES m : header.modes()) {
-    modes.emplace_back(to_string(m));
-  }
   node_["architecture"] = to_string(header.architecture());
   node_["object_type"]  = to_string(header.object_type());
   node_["entrypoint"]   = header.entrypoint();
@@ -114,7 +109,7 @@ void AbstractJsonVisitor::visit(const Relocation& relocation) {
 void AbstractJsonVisitor::visit(const Function& function) {
 
   std::vector<std::string> flags_str;
-  Function::flags_list_t flags = function.flags();
+  std::vector<Function::FLAGS> flags = function.flags_list();
   flags_str.reserve(flags.size());
   for (Function::FLAGS f : flags) {
     flags_str.emplace_back(to_string(f));

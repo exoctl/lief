@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,13 +24,13 @@
 namespace LIEF {
 namespace MachO {
 
-//! This class represents a symbol binding operation associated with
-//! the LC_DYLD_INFO bytecode.
-//!
-//! It does not represent a structure that exists in the Mach-O format
-//! specifications but it provides a *view* on an entry of the Dyld binding opcodes.
-//!
-//! @see: BindingInfo
+/// This class represents a symbol binding operation associated with
+/// the LC_DYLD_INFO bytecode.
+///
+/// It does not represent a structure that exists in the Mach-O format
+/// specifications but it provides a *view* on an entry of the Dyld binding opcodes.
+///
+/// @see: BindingInfo
 class LIEF_API DyldBindingInfo : public BindingInfo {
   friend class BinaryParser;
 
@@ -62,7 +62,7 @@ class LIEF_API DyldBindingInfo : public BindingInfo {
 
   void swap(DyldBindingInfo& other) noexcept;
 
-  //! Class of the binding (weak, lazy, ...)
+  /// Class of the binding (weak, lazy, ...)
   CLASS binding_class() const {
     return class_;
   }
@@ -70,7 +70,7 @@ class LIEF_API DyldBindingInfo : public BindingInfo {
     class_ = bind_class;
   }
 
-  //! Type of the binding. Most of the times it's TYPE::POINTER
+  /// Type of the binding. Most of the times it's TYPE::POINTER
   TYPE binding_type() const {
     return binding_type_;
   }
@@ -87,7 +87,7 @@ class LIEF_API DyldBindingInfo : public BindingInfo {
     this->is_non_weak_definition_ = val;
   }
 
-  //! Original relative offset of the binding opcodes
+  /// Original relative offset of the binding opcodes
   uint64_t original_offset() const {
     return offset_;
   }

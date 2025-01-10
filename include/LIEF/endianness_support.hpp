@@ -1,5 +1,5 @@
-/* Copyright 2021 - 2024 R. Thomas
- * Copyright 2021 - 2024 Quarkslab
+/* Copyright 2021 - 2025 R. Thomas
+ * Copyright 2021 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -107,6 +107,8 @@ struct uuid_command;
 struct version_min_command;
 struct x86_thread_state64_t;
 struct x86_thread_state_t;
+struct ppc_thread_state_t;
+struct ppc_thread_state64_t;
 }
 }
 
@@ -214,6 +216,8 @@ LIEF_ENDIAN_SUPPORT(MachO::details::uuid_command);
 LIEF_ENDIAN_SUPPORT(MachO::details::version_min_command);
 LIEF_ENDIAN_SUPPORT(MachO::details::x86_thread_state64_t);
 LIEF_ENDIAN_SUPPORT(MachO::details::x86_thread_state_t);
+LIEF_ENDIAN_SUPPORT(MachO::details::ppc_thread_state64_t);
+LIEF_ENDIAN_SUPPORT(MachO::details::ppc_thread_state_t);
 #endif
 
 }

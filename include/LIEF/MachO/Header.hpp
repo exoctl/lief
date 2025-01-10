@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,14 +17,11 @@
 #define LIEF_MACHO_HEADER_H
 
 #include <ostream>
-#include <set>
 #include <vector>
 
 #include "LIEF/Object.hpp"
 #include "LIEF/visibility.h"
 #include "LIEF/enums.hpp"
-
-#include "LIEF/Abstract/enums.hpp"
 
 #include "LIEF/MachO/enums.hpp"
 
@@ -37,7 +34,7 @@ struct mach_header_64;
 struct mach_header;
 }
 
-//! Class that represents the Mach-O header
+/// Class that represents the Mach-O header
 class LIEF_API Header : public Object {
   friend class BinaryParser;
   public:
@@ -100,9 +97,13 @@ class LIEF_API Header : public Object {
     X86_64    = 7 | ABI64,
     MIPS      = 8,
     MC98000   = 10,
+    HPPA      = 11,
     ARM       = 12,
     ARM64     = 12 | ABI64,
+    MC88000   = 13,
     SPARC     = 14,
+    I860      = 15,
+    ALPHA	    = 16,
     POWERPC   = 18,
     POWERPC64 = 18 | ABI64,
   };
@@ -112,66 +113,58 @@ class LIEF_API Header : public Object {
 
   static constexpr auto CPU_SUBTYPE_ARM64_ARM64E = 2;
 
-  //! The Mach-O magic bytes. These bytes determine whether it is
-  //! a 32 bits Mach-O, a 64 bits Mach-O files etc.
+  /// The Mach-O magic bytes. These bytes determine whether it is
+  /// a 32 bits Mach-O, a 64 bits Mach-O files etc.
   MACHO_TYPES magic() const {
     return magic_;
   }
 
-  //! The CPU architecture targeted by this binary
+  /// The CPU architecture targeted by this binary
   CPU_TYPE cpu_type() const {
     return cputype_;
   }
 
-  //! Return the CPU subtype supported by the Mach-O binary.
-  //! For ARM architectures, this value could represent the minimum version
-  //! for which the Mach-O binary has been compiled for.
+  /// Return the CPU subtype supported by the Mach-O binary.
+  /// For ARM architectures, this value could represent the minimum version
+  /// for which the Mach-O binary has been compiled for.
   uint32_t cpu_subtype() const {
     return cpusubtype_;
   }
 
-  //! Return the type of the Mach-O file (executable, object, shared library, ...)
+  /// Return the type of the Mach-O file (executable, object, shared library, ...)
   FILE_TYPE file_type() const {
     return filetype_;
   }
 
-  //! Return the FLAGS as a list
+  /// Return the FLAGS as a list
   std::vector<FLAGS> flags_list() const;
 
-  //! Check if the given HEADER_FLAGS is present in the header's flags
+  /// Check if the given HEADER_FLAGS is present in the header's flags
   bool has(FLAGS flag) const;
 
-  //! Number of LoadCommand present in the Mach-O binary
+  /// Number of LoadCommand present in the Mach-O binary
   uint32_t nb_cmds() const {
     return ncmds_;
   }
 
-  //! The size of **all** the LoadCommand
+  /// The size of **all** the LoadCommand
   uint32_t sizeof_cmds() const {
     return sizeofcmds_;
   }
 
-  //! Header flags (cf. HEADER_FLAGS)
-  //!
-  //! @see flags_list
+  /// Header flags (cf. HEADER_FLAGS)
+  ///
+  /// @see flags_list
   uint32_t flags() const {
     return flags_;
   }
 
-  //! According to the official documentation, a reserved value
+  /// According to the official documentation, a reserved value
   uint32_t reserved() const {
     return reserved_;
   }
 
   void add(FLAGS flag);
-
-  //! LIEF abstract object type
-  OBJECT_TYPES abstract_object_type() const;
-
-  std::pair<ARCHITECTURES, std::set<MODES>> abstract_architecture() const;
-
-  //! LIEF abstract endiannes
-  ENDIANNESS abstract_endianness() const;
 
   void magic(MACHO_TYPES magic) {
     magic_ = magic;
@@ -198,6 +191,18 @@ class LIEF_API Header : public Object {
 
   void flags(uint32_t flags) {
     flags_ = flags;
+  }
+
+  /// True if the binary is 32-bit
+  bool is_32bit() const {
+    return magic_ == MACHO_TYPES::MH_MAGIC ||
+           magic_ == MACHO_TYPES::MH_CIGAM;
+  }
+
+  /// True if the binary is 64-bit
+  bool is_64bit() const {
+    return magic_ == MACHO_TYPES::MH_MAGIC_64 ||
+           magic_ == MACHO_TYPES::MH_CIGAM_64;
   }
 
   void remove(FLAGS flag);

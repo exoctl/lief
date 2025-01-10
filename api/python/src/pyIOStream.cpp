@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ result<PyIOStream> PyIOStream::from_python(nb::object object) {
   const nb::module_ mod_io = nb::module_::import_("io");
   const nb::object IOBase = mod_io.attr("IOBase");
 
-  if (!isinstance(object, IOBase)) {
+  if (!nb::isinstance(object, IOBase)) {
     logging::log(logging::LEVEL::ERR,
         "The provided io object does not sub-class io.IOBase");
     return make_error_code(lief_errors::read_error);
@@ -45,6 +45,11 @@ result<PyIOStream> PyIOStream::from_python(nb::object object) {
   seek(0, PY_SEEK_SET);
   seek(0, PY_SEEK_END);
   const auto size = nb::cast<size_t>(object.attr("tell")());
+
+  if (size == 0) {
+    return PyIOStream(std::move(object), {});
+  }
+
   std::vector<uint8_t> data;
   data.resize(size);
 

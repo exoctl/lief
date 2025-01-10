@@ -1,5 +1,5 @@
 /* opyright 2017 - 2023 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@
 #include "ELF/pyELF.hpp"
 #include "pyErr.hpp"
 #include "pyIterator.hpp"
-#include "nanobind/extra/memoryview.hpp"
+#include "nanobind/extra/stl/lief_span.h"
 
 #include "enums_wrapper.hpp"
 
@@ -71,7 +71,7 @@ void create<Segment>(nb::module_& m) {
   #undef ENTRY
 
   #define ENTRY(X) .value(to_string(Segment::FLAGS::X), Segment::FLAGS::X)
-  enum_<Segment::FLAGS>(seg, "FLAGS", nb::is_arithmetic())
+  enum_<Segment::FLAGS>(seg, "FLAGS", nb::is_flag())
     ENTRY(R)
     ENTRY(W)
     ENTRY(X)
@@ -149,10 +149,7 @@ void create<Segment>(nb::module_& m) {
         "The offset alignment of the segment"_doc)
 
     .def_prop_rw("content",
-        [] (const Segment& self) {
-          const span<const uint8_t> content = self.content();
-          return nb::memoryview::from_memory(content.data(), content.size());
-        },
+        nb::overload_cast<>(&Segment::content, nb::const_),
         nb::overload_cast<std::vector<uint8_t>>(&Segment::content),
         "The raw data associated with this segment."_doc)
 

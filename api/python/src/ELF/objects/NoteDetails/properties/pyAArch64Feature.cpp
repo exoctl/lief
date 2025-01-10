@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ void create<AArch64Feature>(nb::module_& m) {
   nb::class_<AArch64Feature, NoteGnuProperty::Property>
     Class(m, "AArch64Feature",
       R"doc(
-      This class represents the `GNU_PROPERTY_AARCH64_FEATURE_1_AND` note.
+      This class represents the ``GNU_PROPERTY_AARCH64_FEATURE_1_AND`` note.
       )doc"_doc);
 
   Class

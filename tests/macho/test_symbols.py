@@ -3,7 +3,7 @@ import pytest
 import lief
 import pathlib
 import re
-from utils import is_osx, get_sample
+from utils import is_aarch64, is_osx, get_sample
 
 from .test_builder import run_program
 
@@ -130,3 +130,57 @@ def test_demangling():
 
     assert macho.symbols[1].demangled_name == "void __cxxabiv1::(anonymous namespace)::demangle<__cxxabiv1::(anonymous namespace)::Db>(char const*, char const*, __cxxabiv1::(anonymous namespace)::Db&, int&)"
     assert macho.symbols[486].demangled_name == "___cxa_deleted_virtual"
+
+def test_symbol_shift():
+    bin_path = pathlib.Path(get_sample("MachO/MachO64_x86-64_binary_sym2remove.bin"))
+    macho = lief.MachO.parse(bin_path.as_posix()).at(0)
+
+    shift = 0x4000
+    loadcommands_end = macho.imagebase + 32 + macho.header.sizeof_cmds # sizeof(mach_header_64) + size of load command table
+    def get_shifted_symbol(sym):
+        value = sym.value
+        if value > loadcommands_end:
+            value += shift
+        return (sym.name, value)
+
+    check_symbols = {get_shifted_symbol(sym) for sym in macho.symbols if sym.raw_type & 0x0E == lief.MachO.Symbol.TYPE.SECTION}
+    macho.shift(shift)
+    shifted_symbols = {(sym.name, sym.value) for sym in macho.symbols if sym.raw_type & 0x0E == lief.MachO.Symbol.TYPE.SECTION}
+
+    assert shifted_symbols == check_symbols
+
+def test_exports_after_shift(tmp_path):
+    bin_path = pathlib.Path(get_sample("MachO/MachO64_AArch64_weak-sym.bin"))
+    macho = lief.MachO.parse(bin_path.as_posix()).at(0)
+    assert macho.dyld_info
+
+    shift = 0x10000
+    loadcommands_end = 32 + macho.header.sizeof_cmds # sizeof(mach_header_64) + size of load command table
+    def get_shifted_export(e):
+        address = e.address
+        if address > loadcommands_end:
+            address += shift
+        return address
+
+    expected_exports_addrs = [get_shifted_export(e) for e in macho.dyld_info.exports]
+    macho.shift(shift)
+    new_exports_addrs = [e.address for e in macho.dyld_info.exports]
+    assert new_exports_addrs == expected_exports_addrs
+
+def test_chained_exports_after_shift(tmp_path):
+    bin_path = pathlib.Path(get_sample("MachO/MachO64_AArch64_weak-sym-fc.bin"))
+    macho = lief.MachO.parse(bin_path.as_posix()).at(0)
+    assert macho.dyld_exports_trie
+
+    shift = 0x10000
+    loadcommands_end = 32 + macho.header.sizeof_cmds # sizeof(mach_header_64) + size of load command table
+    def get_shifted_export(e):
+        address = e.address
+        if address > loadcommands_end:
+            address += shift
+        return address
+
+    expected_exports_addrs = [get_shifted_export(e) for e in macho.dyld_exports_trie.exports]
+    macho.shift(shift)
+    new_exports_addrs = [e.address for e in macho.dyld_exports_trie.exports]
+    assert new_exports_addrs == expected_exports_addrs

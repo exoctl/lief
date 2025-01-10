@@ -1,13 +1,14 @@
 use lief_ffi as ffi;
 
 use super::variable::Variables;
-use super::{Scope, Type};
+use super::{Scope, Type, Parameters};
 use crate::common::{into_optional, into_ranges, FromFFI};
 use crate::declare_fwd_iterator;
 use crate::to_result;
 use crate::DebugLocation;
 use crate::Error;
 use crate::Range;
+use crate::assembly;
 use std::marker::PhantomData;
 
 /// This structure represents a DWARF function which can be associated with either:
@@ -58,6 +59,11 @@ impl Function<'_> {
         self.ptr.is_artificial()
     }
 
+    /// Whether the function is defined **outside** the compilation unit (`DW_AT_external`)
+    pub fn is_external(&self) -> bool {
+        self.ptr.is_external()
+    }
+
     /// Return the size taken by this function in the binary
     pub fn size(&self) -> u64 {
         self.ptr.size()
@@ -78,41 +84,36 @@ impl Function<'_> {
         into_optional(self.ptr.get_type())
     }
 
-    /// Return an iterator over the [`Parameter`] of this function
-    pub fn parameters(&self) -> Parameters {
-        Parameters::new(self.ptr.parameters())
+    /// Return an iterator over the [`Parameters`] of this function
+    pub fn parameters(&self) -> ParametersIt {
+        ParametersIt::new(self.ptr.parameters())
+    }
+
+    /// List of exceptions (types) that can be thrown by the function.
+    ///
+    /// For instance, given this Swift code:
+    ///
+    /// ```swift
+    /// func summarize(_ ratings: [Int]) throws(StatisticsError) {
+    ///   // ...
+    /// }
+    /// ```
+    ///
+    /// [`Function::thrown_types`] returns one element associated with the [`Type`]:
+    /// `StatisticsError`.
+    pub fn thrown_types(&self) -> ThrownTypes {
+        ThrownTypes::new(self.ptr.thrown_types())
     }
 
     /// The scope in which this function is defined
     pub fn scope(&self) -> Option<Scope> {
         into_optional(self.ptr.scope())
     }
-}
 
-/// This structure represents a DWARF function parameter.
-pub struct Parameter<'a> {
-    ptr: cxx::UniquePtr<ffi::DWARF_Function_Parameter>,
-    _owner: PhantomData<&'a ()>,
-}
-
-impl FromFFI<ffi::DWARF_Function_Parameter> for Parameter<'_> {
-    fn from_ffi(ptr: cxx::UniquePtr<ffi::DWARF_Function_Parameter>) -> Self {
-        Self {
-            ptr,
-            _owner: PhantomData,
-        }
-    }
-}
-
-impl Parameter<'_> {
-    /// The name of the parameter
-    pub fn name(&self) -> String {
-        self.ptr.name().to_string()
-    }
-
-    /// Return the type of the parameter
-    pub fn get_type(&self) -> Option<Type> {
-        into_optional(self.ptr.get_type())
+    /// Disassemble the current function by returning an iterator over
+    /// the [`assembly::Instructions`]
+    pub fn instructions(&self) -> Instructions {
+        Instructions::new(self.ptr.instructions())
     }
 }
 
@@ -125,9 +126,26 @@ declare_fwd_iterator!(
 );
 
 declare_fwd_iterator!(
-    Parameters,
-    Parameter<'a>,
-    ffi::DWARF_Function_Parameter,
+    ParametersIt,
+    Parameters<'a>,
+    ffi::DWARF_Parameter,
     ffi::DWARF_Function,
     ffi::DWARF_Function_it_parameters
+);
+
+declare_fwd_iterator!(
+    ThrownTypes,
+    Type<'a>,
+    ffi::DWARF_Type,
+    ffi::DWARF_Function,
+    ffi::DWARF_Function_it_thrown_types
+);
+
+
+declare_fwd_iterator!(
+    Instructions,
+    assembly::Instructions,
+    ffi::asm_Instruction,
+    ffi::DWARF_Function,
+    ffi::DWARF_Function_it_instructions
 );

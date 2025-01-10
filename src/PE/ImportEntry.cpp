@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 #include <iomanip>
 
-#include "LIEF/logging.hpp"
+#include "logging.hpp"
 
 #include "LIEF/config.h"
 #include "LIEF/utils.hpp"
@@ -67,7 +67,7 @@ bool ImportEntry::is_ordinal() const {
     return false;
   }
   // Check that bits 30-15 / 62-15 are set to 0.
-  uint64_t val = (data_ & ~ORDINAL_MASK) >> 15;
+  uint64_t val = (data_ & ~ORDINAL_MASK) >> 16;
   return val == 0;
 }
 

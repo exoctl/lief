@@ -62,6 +62,25 @@
     :py:attr:`lief.Binary.debug_info`
     :cpp:func:`LIEF::Binary::debug_info`
 
+.. |lief-dwarf-function| lief-api:: lief.dwarf.Function
+
+    :rust:struct:`lief::dwarf::Function`
+    :py:class:`lief.dwarf.Function`
+    :cpp:class:`LIEF::dwarf::Function`
+
+
+.. |lief-dwarf-function-is-external| lief-api:: lief.dwarf.Function.is_external()
+
+    :rust:method:`lief::dwarf::Function::is_external [struct]`
+    :py:attr:`lief.dwarf.Function.is_external`
+    :cpp:func:`LIEF::dwarf::Function::is_external`
+
+.. |lief-dwarf-cu-imported-functions| lief-api:: lief.dwarf.CompilationUnit.imported_functions()
+
+    :rust:method:`lief::dwarf::CompilationUnit::imported_functions [struct]`
+    :py:attr:`lief.dwarf.CompilationUnit.imported_functions`
+    :cpp:func:`LIEF::dwarf::CompilationUnit::imported_functions`
+
 .. |lief-dwarf-debug-info| lief-api:: lief.dwarf.DebugInfo
 
     :rust:struct:`lief::dwarf::DebugInfo`
@@ -73,6 +92,12 @@
     :rust:func:`lief::dwarf::load`
     :py:func:`lief.dwarf.load`
     :cpp:func:`LIEF::dwarf::load`
+
+.. |lief-dwarf-function-instructions| lief-api:: lief.dwarf.Function.instructions()
+
+    :rust:method:`lief::dwarf::Function::instructions [struct]`
+    :cpp:func:`LIEF::dwarf::Function::instructions`
+    :py:attr:`lief.dwarf.Function.instructions`
 
 .. PDB =========================================================================
 
@@ -96,6 +121,15 @@
 
 .. PE ==========================================================================
 
+.. |lief-pe-parser-config| lief-api:: lief.PE.ParserConfig
+
+    :py:class:`lief.PE.ParserConfig`
+    :cpp:class:`LIEF::PE::ParserConfig`
+
+.. |lief-pe-builder| lief-api:: lief.PE.Builder
+
+    :py:class:`lief.PE.Builder`
+    :cpp:class:`LIEF::PE::Builder`
 
 .. |lief-pe-parse| lief-api:: lief.PE.parse()
 
@@ -127,7 +161,7 @@
     :py:attr:`lief.PE.ImportEntry.demangled_name`
     :cpp:func:`LIEF::PE::ImportEntry::demangled_name`
 
-.. |lief-pe-exportentry-demangled_name| lief-api:: lief.PE.exportentry.demangled_name()
+.. |lief-pe-exportentry-demangled_name| lief-api:: lief.PE.ExportEntry.demangled_name()
 
     :rust:method:`lief::pe::export::Entry::demangled_name [struct]`
     :py:attr:`lief.PE.ExportEntry.demangled_name`
@@ -135,6 +169,7 @@
 
 .. |lief-pe-binary-write| lief-api:: lief.PE.Binary.write()
 
+    :rust:method:`lief::pe::Binary::write [struct]`
     :py:meth:`lief.PE.Binary.write`
     :cpp:func:`LIEF::PE::Binary::write`
 
@@ -175,15 +210,26 @@
     :py:func:`lief.parse`
     :cpp:func:`LIEF::Parser::parse`
 
-.. |lief-pe-parser-config| lief-api:: lief.PE.ParserConfig
+.. |lief-header-architectures| lief-api:: lief.Header.ARCHITECTURES
 
-    :py:class:`lief.PE.ParserConfig`
-    :cpp:class:`LIEF::PE::ParserConfig`
+    :py:class:`lief.Header.ARCHITECTURES`
+    :cpp:enum:`LIEF::Header::ARCHITECTURES`
 
-.. |lief-pe-builder| lief-api:: lief.PE.Builder
+.. |lief-header-modes| lief-api:: lief.Header.MODES
 
-    :py:class:`lief.PE.Builder`
-    :cpp:class:`LIEF::PE::Builder`
+    :py:class:`lief.Header.MODES`
+    :cpp:enum:`LIEF::Header::MODES`
+
+.. |lief-header-object-types| lief-api:: lief.Header.OBJECT_TYPES
+
+    :py:class:`lief.Header.OBJECT_TYPES`
+    :cpp:enum:`LIEF::Header::OBJECT_TYPES`
+
+.. |lief-header-endianness| lief-api:: lief.Header.ENDIANNESS
+
+    :py:class:`lief.Header.ENDIANNESS`
+    :cpp:enum:`LIEF::Header::ENDIANNESS`
+
 
 .. ELF =========================================================================
 
@@ -215,10 +261,31 @@
     :py:class:`lief.ELF.Binary`
     :cpp:class:`LIEF::ELF::Binary`
 
+.. |lief-elf-binary-target-android| lief-api:: lief.ELF.Binary.is_targeting_android
+
+    :rust:method:`lief::elf::Binary::is_targeting_android [struct]`
+    :py:attr:`lief.ELF.Binary.is_targeting_android`
+    :cpp:func:`LIEF::ELF::Binary::is_targeting_android`
+
 .. |lief-elf-binary-write| lief-api:: lief.ELF.Binary.write()
 
+    :rust:method:`lief::elf::Binary::write [struct]`
+    :rust:method:`lief::elf::Binary::write_with_config [struct]`
     :py:meth:`lief.ELF.Binary.write`
     :cpp:func:`LIEF::ELF::Binary::write`
+
+.. |lief-elf-aarch64pauth| lief-api:: lief.ELF.AArch64PAuth
+
+    :py:class:`lief.ELF.AArch64PAuth`
+    :cpp:class:`LIEF::ELF::AArch64PAuth`
+
+.. |lief-elf-relocation-resolve| lief-api:: lief.ELF.Relocation.resolve()
+
+    :rust:method:`lief::elf::Relocation::resolve [struct]`
+    :rust:method:`lief::elf::Relocation::resolve_with_base_address [struct]`
+    :py:func:`lief.ELF.Relocation.resolve`
+    :cpp:func:`LIEF::ELF::Relocation::resolve`
+
 
 .. Mach-O ======================================================================
 
@@ -326,6 +393,8 @@
 
 .. |lief-macho-binary-write| lief-api:: lief.MachO.Binary.write()
 
+    :rust:method:`lief::macho::Binary::write [struct]`
+    :rust:method:`lief::macho::Binary::write_with_config [struct]`
     :py:meth:`lief.MachO.Binary.write`
     :cpp:func:`LIEF::MachO::Binary::write`
 
@@ -344,6 +413,12 @@
     :py:class:`lief.MachO.Builder.config_t`
     :cpp:class:`LIEF::MachO::Builder::config_t`
 
+.. |lief-macho-atom-info| lief-api:: lief.MachO.AtomInfo
+
+    :rust:struct:`lief::macho::commands::AtomInfo`
+    :py:class:`lief.MachO.AtomInfo`
+    :cpp:class:`LIEF::MachO::AtomInfo`
+
 .. dyld shared cache ===========================================================
 
 .. |lief-dsc-load| lief-api:: lief.dsc.load()
@@ -358,6 +433,12 @@
     :rust:struct:`lief::dsc::DyldSharedCache`
     :py:class:`lief.dsc.DyldSharedCache`
     :cpp:class:`LIEF::dsc::DyldSharedCache`
+
+.. |lief-dsc-dyldsharedcache-disassemble| lief-api:: lief.dsc.DyldSharedCache.disassemble()
+
+    :rust:method:`lief::dsc::DyldSharedCache::disassemble [struct]`
+    :py:meth:`lief.dsc.DyldSharedCache.disassemble`
+    :cpp:func:`LIEF::dsc::DyldSharedCache::disassemble`
 
 .. |lief-dsc-dyldsharedcache-libraries| lief-api:: lief.dsc.DyldSharedCache.libraries()
 
@@ -401,3 +482,75 @@
     :py:meth:`lief.dsc.DyldSharedCache.enable_caching`
     :cpp:func:`LIEF::dsc::DyldSharedCache::enable_caching`
 
+.. extended utils =============================================================
+
+.. |lief-extended-version-info| lief-api:: lief.extended_version_info()
+
+    :rust:func:`lief::extended_version_info`
+    :cpp:func:`LIEF::extended_version_info`
+
+.. assembly ====================================================================
+
+.. |lief-disassemble| lief-api:: lief.Binary.disassemble()
+
+    :rust:method:`lief::generic::Binary::disassemble [trait]`
+    :rust:method:`lief::generic::Binary::disassemble_symbol [trait]`
+    :rust:method:`lief::generic::Binary::disassemble_address [trait]`
+    :rust:method:`lief::generic::Binary::disassemble_slice [trait]`
+    :cpp:func:`LIEF::Binary::disassemble`
+    :py:meth:`lief.Binary.disassemble`
+    :py:meth:`lief.Binary.disassemble_from_bytes`
+
+.. |lief-assemble| lief-api:: lief.Binary.assemble()
+
+    :rust:method:`lief::generic::Binary::assemble [trait]`
+    :cpp:func:`LIEF::Binary::assemble`
+    :py:meth:`lief.Binary.assemble`
+
+.. |lief-asm-instruction| lief-api:: lief.assembly.Instruction
+
+    :rust:enum:`lief::assembly::Instructions`
+    :cpp:class:`LIEF::assembly::Instruction`
+    :py:class:`lief.assembly.Instruction`
+
+.. |lief-asm-x86-instruction| lief-api:: lief.assembly.x86.Instruction
+
+    :rust:struct:`lief::assembly::x86::Instruction`
+    :cpp:class:`LIEF::assembly::x86::Instruction`
+    :py:class:`lief.assembly.x86.Instruction`
+
+.. |lief-asm-arm-instruction| lief-api:: lief.assembly.arm.Instruction
+
+    :rust:struct:`lief::assembly::arm::Instruction`
+    :cpp:class:`LIEF::assembly::arm::Instruction`
+    :py:class:`lief.assembly.arm.Instruction`
+
+.. |lief-asm-aarch64-instruction| lief-api:: lief.assembly.aarch64.Instruction
+
+    :rust:struct:`lief::assembly::aarch64::Instruction`
+    :cpp:class:`LIEF::assembly::aarch64::Instruction`
+    :py:class:`lief.assembly.aarch64.Instruction`
+
+.. |lief-asm-powerpc-instruction| lief-api:: lief.assembly.powerpc.Instruction
+
+    :rust:struct:`lief::assembly::powerpc::Instruction`
+    :cpp:class:`LIEF::assembly::powerpc::Instruction`
+    :py:class:`lief.assembly.powerpc.Instruction`
+
+.. |lief-asm-mips-instruction| lief-api:: lief.assembly.mips.Instruction
+
+    :rust:struct:`lief::assembly::mips::Instruction`
+    :cpp:class:`LIEF::assembly::mips::Instruction`
+    :py:class:`lief.assembly.mips.Instruction`
+
+.. |lief-asm-riscv-instruction| lief-api:: lief.assembly.riscv.Instruction
+
+    :rust:struct:`lief::assembly::riscv::Instruction`
+    :cpp:class:`LIEF::assembly::riscv::Instruction`
+    :py:class:`lief.assembly.riscv.Instruction`
+
+.. |lief-asm-ebpf-instruction| lief-api:: lief.assembly.ebpf.Instruction
+
+    :rust:struct:`lief::assembly::ebpf::Instruction`
+    :cpp:class:`LIEF::assembly::ebpf::Instruction`
+    :py:class:`lief.assembly.ebpf.Instruction`

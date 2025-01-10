@@ -1,4 +1,4 @@
-/* Copyright 2021 - 2024 R. Thomas
+/* Copyright 2021 - 2025 R. Thomas
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,14 +23,14 @@
 
 namespace LIEF {
 
-//! Namespace related to the LIEF's PE module
-//!
-//! Some parts come from llvm/Support/COFF.h
+/// Namespace related to the LIEF's PE module
+///
+/// Some parts come from llvm/Support/COFF.h
 namespace PE {
 
 namespace details {
 
-//! Sizes in bytes of various things in the COFF format.
+/// Sizes in bytes of various things in the COFF format.
 namespace sizes {
   static constexpr size_t HEADER_16                    = 20;
   static constexpr size_t HEADER_32                    = 56;

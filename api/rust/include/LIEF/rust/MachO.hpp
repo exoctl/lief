@@ -1,4 +1,4 @@
-/* Copyright 2024 R. Thomas
+/* Copyright 2024 - 2025 R. Thomas
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 #pragma once
+#include "LIEF/rust/MachO/AtomInfo.hpp"
 #include "LIEF/rust/MachO/Binary.hpp"
 #include "LIEF/rust/MachO/BindingInfo.hpp"
 #include "LIEF/rust/MachO/BuildToolVersion.hpp"

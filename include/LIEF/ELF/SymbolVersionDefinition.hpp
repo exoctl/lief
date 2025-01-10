@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ struct Elf64_Verdef;
 struct Elf32_Verdef;
 }
 
-//! Class which represents an entry defined in `DT_VERDEF` or `.gnu.version_d`
+/// Class which represents an entry defined in `DT_VERDEF` or `.gnu.version_d`
 class LIEF_API SymbolVersionDefinition : public Object {
   friend class Parser;
   public:
@@ -50,32 +50,32 @@ class LIEF_API SymbolVersionDefinition : public Object {
   SymbolVersionDefinition(const SymbolVersionDefinition& other);
   void swap(SymbolVersionDefinition& other);
 
-  //! Version revision
-  //!
-  //! This field should always have the value ``1``. It will be changed
-  //! if the versioning implementation has to be changed in an incompatible way.
+  /// Version revision
+  ///
+  /// This field should always have the value ``1``. It will be changed
+  /// if the versioning implementation has to be changed in an incompatible way.
   uint16_t version() const {
     return version_;
   }
 
-  //! Version information
+  /// Version information
   uint16_t flags() const {
     return flags_;
   }
 
-  //! Version index
-  //!
-  //! Numeric value used as an index in the LIEF::ELF::SymbolVersion table
+  /// Version index
+  ///
+  /// Numeric value used as an index in the LIEF::ELF::SymbolVersion table
   uint16_t ndx() const {
     return ndx_;
   }
 
-  //! Hash value of the symbol's name (using ELF hash function)
+  /// Hash value of the symbol's name (using ELF hash function)
   uint32_t hash() const {
     return hash_;
   }
 
-  //! SymbolVersionAux entries
+  /// SymbolVersionAux entries
   it_version_aux symbols_aux() {
     return symbol_version_aux_;
   }

@@ -10,7 +10,7 @@
 //!
 //! The bindings require at least Rust version **1.74.0** with the 2021 edition and support:
 //! - Windows x86-64 (support `/MT` and `/MD` linking)
-//! - Linux x86-64/aarch64  (Ubuntu 20.04, Almalinux 9, Debian 11.5, Fedora 29)
+//! - Linux x86-64/aarch64/musl (Ubuntu 19.10, Almalinux 8, Debian 10, Fedora 29)
 //! - macOS (`x86-64` and `aarch64` with at least OSX Big Sur: 11.0)
 //! - iOS (`aarch64`)
 //!
@@ -26,7 +26,7 @@
 //! # For nightly
 //! lief = { git = "https://github.com/lief-project/LIEF", branch = "main" }
 //! # For releases
-//! lief = 0.15.0
+//! lief = 0.17.0
 //! ```
 //!
 //! ```rust
@@ -61,22 +61,17 @@
 
 #![doc(html_no_source)]
 
-/// Module for the ELF format
 pub mod elf;
 
 /// Executable formats generic traits (LIEF's abstract layer)
 pub mod generic;
 
-/// Module for the Mach-O format
 pub mod macho;
 
-/// Module for the PE format
 pub mod pe;
 
-/// Module for PDB debug info
 pub mod pdb;
 
-/// Module for DWARF debug info
 pub mod dwarf;
 
 pub mod objc;
@@ -84,6 +79,8 @@ pub mod objc;
 pub mod dsc;
 
 pub mod debug_info;
+
+pub mod assembly;
 mod range;
 
 /// Module for LIEF's error
@@ -117,6 +114,11 @@ pub use debug_location::DebugLocation;
 /// Whether it is an extended version of LIEF
 pub fn is_extended() -> bool {
     lief_ffi::is_extended()
+}
+
+/// Return details about the extended version
+pub fn extended_version_info() -> String {
+    lief_ffi::extended_version_info().to_string()
 }
 
 /// Try to demangle the given input.

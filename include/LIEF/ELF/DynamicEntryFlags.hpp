@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@
 
 #include <vector>
 #include <ostream>
+#include <numeric>
 
 #include "LIEF/visibility.h"
 #include "LIEF/ELF/DynamicEntry.hpp"
@@ -89,16 +90,25 @@ class LIEF_API DynamicEntryFlags : public DynamicEntry {
     return std::unique_ptr<DynamicEntryFlags>(new DynamicEntryFlags(*this));
   }
 
-  //! If the current entry has the given FLAG
+  /// If the current entry has the given FLAG
   bool has(FLAG f) const;
 
-  //! Return flags as a list of integers
+  /// Return flags as a list of integers
   flags_list_t flags() const;
 
-  //! Add the given FLAG
+  uint64_t raw_flags() const {
+    flags_list_t flags = this->flags();
+    return std::accumulate(flags.begin(), flags.end(), uint64_t(0),
+      [] (uint64_t value, FLAG f) {
+        return value + (uint64_t)f;
+      }
+    );
+  }
+
+  /// Add the given FLAG
   void add(FLAG f);
 
-  //! Remove the given FLAG
+  /// Remove the given FLAG
   void remove(FLAG f);
 
   DynamicEntryFlags& operator+=(FLAG f) {

@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -63,8 +63,7 @@ void AbstractHash::visit(const Relocation& relocation) {
 
 void AbstractHash::visit(const Function& function) {
   visit(*function.as<LIEF::Symbol>());
-  Function::flags_list_t flags = function.flags();
-  process(std::begin(flags), std::end(flags));
+  process(function.flags());
 }
 
 

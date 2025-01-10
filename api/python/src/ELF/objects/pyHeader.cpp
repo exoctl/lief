@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -80,7 +80,7 @@ void create<Header>(nb::module_& m) {
     ENTRY(SYSTEMV)
     ENTRY(HPUX)
     ENTRY(NETBSD)
-    ENTRY(GNU)
+    /* ENTRY(GNU) */
     ENTRY(LINUX)
     ENTRY(HURD)
     ENTRY(SOLARIS)
@@ -95,7 +95,7 @@ void create<Header>(nb::module_& m) {
     ENTRY(AROS)
     ENTRY(FENIXOS)
     ENTRY(CLOUDABI)
-    ENTRY(C6000_ELFABI)
+    /*ENTRY(C6000_ELFABI)*/
     ENTRY(AMDGPU_HSA)
     ENTRY(C6000_LINUX)
     ENTRY(ARM)

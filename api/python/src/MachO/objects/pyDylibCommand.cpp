@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +33,9 @@ void create<DylibCommand>(nb::module_& m) {
         nb::overload_cast<std::string>(&DylibCommand::name),
         "Library's name"_doc,
         nb::rv_policy::reference_internal)
+
+    .def_prop_ro("name_offset", &DylibCommand::name_offset,
+                 "Original string offset of the name")
 
     .def_prop_rw("timestamp",
         nb::overload_cast<>(&DylibCommand::timestamp, nb::const_),

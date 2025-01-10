@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  * Copyright 2017 - 2021 K. Nakagawa
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -98,8 +98,8 @@ class Pogo;
 class PogoEntry;
 class Repro;
 
-//! Class that implements the Visitor pattern to output
-//! a JSON representation of a PE object
+/// Class that implements the Visitor pattern to output
+/// a JSON representation of a PE object
 class JsonVisitor : public LIEF::JsonVisitor {
   public:
   using LIEF::JsonVisitor::JsonVisitor;

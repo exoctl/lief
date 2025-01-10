@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 #ifndef LIEF_ELF_CORE_SIGINFO_H
 #define LIEF_ELF_CORE_SIGINFO_H
 
-#include <vector>
 #include <ostream>
 #include <memory>
 
@@ -27,7 +26,7 @@
 namespace LIEF {
 namespace ELF {
 
-//! Class representing a core siginfo object
+/// Class representing a core siginfo object
 class LIEF_API CoreSigInfo : public Note {
   public:
   std::unique_ptr<Note> clone() const override {

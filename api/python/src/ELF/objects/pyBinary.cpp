@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@
 #include <nanobind/stl/unique_ptr.h>
 #include <nanobind/stl/string.h>
 #include <nanobind/stl/vector.h>
-#include "nanobind/extra/memoryview.hpp"
+#include "nanobind/extra/stl/lief_span.h"
 
 #include "ELF/pyELF.hpp"
 
@@ -730,11 +730,12 @@ void create<Binary>(nb::module_& m) {
         &Binary::has_overlay,
         "True if data are appended to the end of the binary"_doc)
 
+    .def_prop_ro("is_targeting_android", &Binary::is_targeting_android,
+      R"doc(True if the current is targeting Android)doc"_doc
+    )
+
     .def_prop_rw("overlay",
-        [] (const Binary& self) {
-          const span<const uint8_t> overlay = self.overlay();
-          return nb::memoryview::from_memory(overlay.data(), overlay.size());
-        },
+        nb::overload_cast<>(&Binary::overlay, nb::const_),
         [] (Binary& self, nb::bytes& bytes) {
           const auto* ptr = reinterpret_cast<const uint8_t*>(bytes.c_str());
           std::vector<uint8_t> buffer(ptr, ptr + bytes.size());

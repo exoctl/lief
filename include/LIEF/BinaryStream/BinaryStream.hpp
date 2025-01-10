@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@
 namespace LIEF {
 class ASN1Reader;
 
-//! Class that is used to a read stream of data from different sources
+/// Class that is used to a read stream of data from different sources
 class LIEF_API BinaryStream {
   public:
   friend class ASN1Reader;

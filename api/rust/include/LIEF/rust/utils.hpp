@@ -1,4 +1,4 @@
-/* Copyright 2022 - 2024 R. Thomas
+/* Copyright 2022 - 2025 R. Thomas
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,5 +22,9 @@ inline bool is_extended() {
 
 inline std::string demangle(std::string mangled, uint32_t& err) {
   return details::make_error<std::string>(LIEF::demangle(mangled), err);
+}
+
+inline std::string extended_version_info() {
+  return LIEF::extended_version_info();
 }
 

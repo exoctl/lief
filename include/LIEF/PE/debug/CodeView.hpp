@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,14 +22,14 @@ namespace PE {
 class Parser;
 class Builder;
 
-//! Interface for the (generic) Debug CodeView (``IMAGE_DEBUG_TYPE_CODEVIEW``)
+/// Interface for the (generic) Debug CodeView (``IMAGE_DEBUG_TYPE_CODEVIEW``)
 class LIEF_API CodeView : public Debug {
   friend class Parser;
   friend class Builder;
 
   public:
-  //! Code view signatures
-  //! @see: http://llvm.org/doxygen/CVDebugRecord_8h_source.html
+  /// Code view signatures
+  /// @see: http://llvm.org/doxygen/CVDebugRecord_8h_source.html
   enum class SIGNATURES {
     UNKNOWN = 0,
 
@@ -54,7 +54,7 @@ class LIEF_API CodeView : public Debug {
 
   ~CodeView() override = default;
 
-  //! The signature that defines the underlying type of the payload
+  /// The signature that defines the underlying type of the payload
   SIGNATURES signature() const {
     return sig_;
   }

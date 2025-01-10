@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,8 +23,9 @@
 #include "pyLIEF.hpp"
 #include "pyErr.hpp"
 #include "pySafeString.hpp"
-#include "nanobind/extra/memoryview.hpp"
+#include "nanobind/extra/stl/lief_span.h"
 #include "pyIterator.hpp"
+#include "nanobind/utils.hpp"
 
 #include "LIEF/logging.hpp"
 
@@ -33,9 +34,11 @@
 #include "LIEF/Abstract/Symbol.hpp"
 #include "LIEF/Abstract/Section.hpp"
 #include "LIEF/Abstract/Header.hpp"
-#include "LIEF/Abstract/EnumToString.hpp"
 
 #include "LIEF/Abstract/DebugInfo.hpp"
+
+#include "LIEF/asm/Engine.hpp"
+#include "LIEF/asm/Instruction.hpp"
 
 namespace LIEF::py {
 template<>
@@ -148,7 +151,7 @@ void create<Binary>(nb::module_& m) {
           return imported_libraries_encoded;
         },
         "Return binary's imported libraries (name)"_doc,
-        "(self) -> list[Union[str,bytes]]"_p)
+        nb::sig("def libraries(self) -> list[Union[str,bytes]]"))
 
     .def_prop_ro("symbols",
         nb::overload_cast<>(&Binary::symbols),
@@ -200,11 +203,7 @@ void create<Binary>(nb::module_& m) {
         "address"_a, "patch_value"_a, "size"_a = 8, "va_type"_a = Binary::VA_TYPES::AUTO)
 
 
-    .def("get_content_from_virtual_address",
-        [] (const Binary& self, uint64_t va, size_t size, Binary::VA_TYPES type) {
-        const span<const uint8_t> content = self.get_content_from_virtual_address(va, size, type);
-        return nb::memoryview::from_memory(content.data(), content.size());
-       },
+    .def("get_content_from_virtual_address", &Binary::get_content_from_virtual_address,
        R"delim(
        Return the content located at the provided virtual address.
        The virtual address is specified in the first argument and size to read (in bytes) in the second.
@@ -249,7 +248,7 @@ void create<Binary>(nb::module_& m) {
         R"delim(
         Return the abstract representation of the current binary (:class:`lief.Binary`)
         )delim"_doc,
-        "abstract(self) -> lief.Binary"_p,
+        nb::sig("def abstract(self) -> lief.Binary"),
         nb::rv_policy::reference_internal)
 
     .def_prop_ro("concrete",
@@ -262,7 +261,7 @@ void create<Binary>(nb::module_& m) {
 
         See also: :attr:`lief.Binary.abstract`
         )delim"_doc,
-        "concrete(self) -> lief.ELF.Binary | lief.PE.Binary | lief.MachO.Binary"_p,
+        nb::sig("def concrete(self) -> lief.ELF.Binary | lief.PE.Binary | lief.MachO.Binary"),
         nb::rv_policy::reference)
 
     .def_prop_ro("ctor_functions",
@@ -288,6 +287,104 @@ void create<Binary>(nb::module_& m) {
     .def_prop_ro("original_size",
         nb::overload_cast<>(&LIEF::Binary::original_size, nb::const_),
         "Original size of the binary"_doc)
+
+    .def("disassemble", [] (const Binary& self, uint64_t address) {
+          auto insts = self.disassemble(address);
+          return nb::make_iterator<nb::rv_policy::reference_internal>(
+            nb::type<Binary>(), "instructions_it", insts
+          );
+      }, "address"_a, nb::keep_alive<0, 1>(),
+      R"doc(
+      Disassemble code starting a the given virtual address.
+
+      .. code-block:: python
+
+        insts = binary.disassemble(0xacde, 100);
+        for inst in insts:
+            print(inst)
+
+      .. seealso:: :class:`lief.assembly.Instruction`
+      )doc"_doc
+    )
+
+    .def("disassemble", [] (const Binary& self, uint64_t address, size_t size) {
+          auto insts = self.disassemble(address, size);
+          return nb::make_iterator<nb::rv_policy::reference_internal>(
+              nb::type<Binary>(), "instructions_it", insts);
+      }, "address"_a, "size"_a, nb::keep_alive<0, 1>(),
+      R"doc(
+      Disassemble code starting a the given virtual address and with the given
+      size.
+
+      .. code-block:: python
+
+        insts = binary.disassemble(0xacde, 100);
+        for inst in insts:
+            print(inst)
+
+      .. seealso:: :class:`lief.assembly.Instruction`
+      )doc"_doc
+    )
+
+    .def("disassemble", [] (const Binary& self, const std::string& function) {
+          auto insts = self.disassemble(function);
+          return nb::make_iterator<nb::rv_policy::reference_internal>(
+              nb::type<Binary>(), "instructions_it", insts);
+      }, "function_name"_a, nb::keep_alive<0, 1>(),
+      R"doc(
+      Disassemble code for the given symbol name
+
+      .. code-block:: python
+
+        insts = binary.disassemble("__libc_start_main");
+        for inst in insts:
+            print(inst)
+
+      .. seealso:: :class:`lief.assembly.Instruction`
+      )doc"_doc
+    )
+
+    .def("disassemble_from_bytes",
+         [] (const Binary& self, const nb::bytes& buffer, uint64_t address) {
+          auto insts = self.disassemble(
+            reinterpret_cast<const uint8_t*>(buffer.c_str()),
+            buffer.size(), address
+          );
+          return nb::make_iterator<nb::rv_policy::reference_internal>(
+              nb::type<Binary>(), "instructions_it", insts);
+      }, "buffer"_a, "address"_a = 0, nb::keep_alive<0, 1>(), nb::keep_alive<0, 2>(),
+      R"doc(
+      Disassemble code from the provided bytes
+
+      .. code-block:: python
+
+        raw = bytes(binary.get_section(".text").content)
+        insts = binary.disassemble_from_bytes(raw);
+        for inst in insts:
+            print(inst)
+
+      .. seealso:: :class:`lief.assembly.Instruction`
+      )doc"_doc
+    )
+
+    .def("assemble", [] (Binary& self, uint64_t address, const std::string& Asm) {
+        return nb::to_bytes(self.assemble(address, Asm));
+      }, "address"_a, "assembly"_a,
+      R"doc(
+      Assemble **and patch** the provided assembly code at the specified address.
+
+      The function returns the generated assembly bytes.
+
+      Example:
+
+      .. code-block:: python
+
+         bin.assemble(0x12000440, """
+         xor rax, rbx;
+         mov rcx, rax;
+         """)
+      )doc"_doc
+    )
 
     LIEF_DEFAULT_STR(Binary);
 

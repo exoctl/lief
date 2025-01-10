@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@
 #include "LIEF/ELF/EnumToString.hpp"
 #include "ELF/Structures.hpp"
 
-#include "LIEF/logging.hpp"
+#include "logging.hpp"
 
 namespace LIEF {
 namespace ELF {
@@ -35,6 +35,7 @@ static constexpr uint64_t MIPS_ABI_MASK      = 0x0000f000U;
 static constexpr uint64_t MIPS_MACH_MASK     = 0x00ff0000U;
 static constexpr uint64_t MIPS_ARCH_ASE_MASK = 0x0f000000U;
 static constexpr uint64_t MIPS_ARCH_MASK     = 0xf0000000U;
+static constexpr uint64_t RISCV_FLOAT_ABI_MASK = 0x0006; // EF_RISCV_FLOAT_ABI
 
 static constexpr auto PFLAGS_LIST = {
   PROCESSOR_FLAGS::ARM_EABI_UNKNOWN, PROCESSOR_FLAGS::ARM_SOFT_FLOAT,
@@ -69,6 +70,14 @@ static constexpr auto PFLAGS_LIST = {
   PROCESSOR_FLAGS::MIPS_ARCH_64, PROCESSOR_FLAGS::MIPS_ARCH_32R2,
   PROCESSOR_FLAGS::MIPS_ARCH_64R2, PROCESSOR_FLAGS::MIPS_ARCH_32R6,
   PROCESSOR_FLAGS::MIPS_ARCH_64R6,
+  PROCESSOR_FLAGS::RISCV_RVC,
+  PROCESSOR_FLAGS::RISCV_FLOAT_ABI_SOFT,
+  PROCESSOR_FLAGS::RISCV_FLOAT_ABI_SINGLE,
+  PROCESSOR_FLAGS::RISCV_FLOAT_ABI_DOUBLE,
+  PROCESSOR_FLAGS::RISCV_FLOAT_ABI_QUAD,
+  PROCESSOR_FLAGS::RISCV_FLOAT_ABI_RVE,
+  PROCESSOR_FLAGS::RISCV_FLOAT_ABI_TSO,
+
 };
 
 template<class T>
@@ -93,60 +102,6 @@ Header::Header(const T& header):
 
 template Header::Header(const details::Elf32_Ehdr& header);
 template Header::Header(const details::Elf64_Ehdr& header);
-
-OBJECT_TYPES Header::abstract_object_type() const {
-  switch (file_type()) {
-    case FILE_TYPE::EXEC:
-      return OBJECT_TYPES::TYPE_EXECUTABLE;
-    case FILE_TYPE::DYN:
-      return OBJECT_TYPES::TYPE_LIBRARY;
-    case FILE_TYPE::REL:
-      return OBJECT_TYPES::TYPE_OBJECT;
-    case FILE_TYPE::CORE:
-    case FILE_TYPE::NONE:
-      return OBJECT_TYPES::TYPE_NONE;
-  }
-  return OBJECT_TYPES::TYPE_NONE;
-}
-
-Header::abstract_architecture_t Header::abstract_architecture() const {
-  switch (machine_type()) {
-    case ARCH::X86_64:
-      return {ARCH_X86, {MODE_64}};
-    case ARCH::ARM:
-      return {ARCH_ARM, {MODE_32}};
-    case ARCH::AARCH64:
-      return {ARCH_ARM64, {MODE_64}};
-    case ARCH::I386:
-      return {ARCH_X86, {MODE_32}};
-    case ARCH::IA_64:
-      return {ARCH_INTEL, {MODE_64}};
-    case ARCH::MIPS:
-      return {ARCH_MIPS, {MODE_32}};
-    case ARCH::PPC:
-      return {ARCH_PPC, {MODE_32}};
-    case ARCH::PPC64:
-      return {ARCH_PPC, {MODE_64}};
-    case ARCH::RISCV:
-      return {ARCH_RISCV, {MODE_64}};
-    case ARCH::LOONGARCH:
-      return {ARCH_LOONGARCH, {MODE_64}};
-    case ARCH::NONE:
-    default:
-      return {ARCH_NONE,  {}};
-  }
-  return {ARCH_NONE,  {}};
-}
-
-
-ENDIANNESS Header::abstract_endianness() const {
-  switch (identity_data()) {
-    case ELF_DATA::LSB: return ENDIAN_LITTLE;
-    case ELF_DATA::MSB: return ENDIAN_BIG;
-    case ELF_DATA::NONE: return ENDIAN_NONE;
-  }
-  return ENDIAN_NONE;
-}
 
 void Header::identity(const std::string& identity) {
   std::copy(std::begin(identity), std::end(identity),
@@ -184,6 +139,25 @@ bool Header::has(PROCESSOR_FLAGS flag) const {
     }
 
     return false;
+  }
+
+
+  if (ID == PF_RISCV_ID) {
+    if (arch != ARCH::RISCV) {
+      return false;
+    }
+
+    switch (flag) {
+      case PROCESSOR_FLAGS::RISCV_FLOAT_ABI_SOFT:
+      case PROCESSOR_FLAGS::RISCV_FLOAT_ABI_SINGLE:
+      case PROCESSOR_FLAGS::RISCV_FLOAT_ABI_DOUBLE:
+      case PROCESSOR_FLAGS::RISCV_FLOAT_ABI_QUAD:
+      case PROCESSOR_FLAGS::ARM_EABI_VER5:
+        return (processor_flag() & RISCV_FLOAT_ABI_MASK) == raw_flag;
+      default:
+        return (processor_flag() & raw_flag) != 0;
+    }
+
   }
 
   if (ID == PF_HEX_ID) {

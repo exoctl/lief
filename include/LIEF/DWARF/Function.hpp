@@ -1,4 +1,4 @@
-/* Copyright 2022 - 2024 R. Thomas
+/* Copyright 2022 - 2025 R. Thomas
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,15 +24,16 @@
 #include "LIEF/range.hpp"
 #include "LIEF/DWARF/Variable.hpp"
 #include "LIEF/DWARF/Type.hpp"
+#include "LIEF/asm/Instruction.hpp"
 
 namespace LIEF {
 namespace dwarf {
 
 class Scope;
+class Parameter;
 
 namespace details {
 class Function;
-class Parameter;
 class FunctionIt;
 }
 
@@ -98,25 +99,12 @@ class LIEF_API Function {
     std::unique_ptr<details::FunctionIt> impl_;
   };
 
-  /// This class wraps a DWARF function's parameter
-  class Parameter {
-    public:
-    Parameter(std::unique_ptr<details::Parameter> impl);
-    Parameter(Parameter&& other) noexcept;
-    Parameter& operator=(Parameter&& other) noexcept;
-
-    /// Name of the parameter
-    std::string name() const;
-
-    /// Type of the parameter
-    std::unique_ptr<Type> type() const;
-
-    ~Parameter();
-    private:
-    std::unique_ptr<details::Parameter> impl_;
-  };
-
+  /// Iterator over the variables defined in the scope of this function
   using vars_it = iterator_range<Variable::Iterator>;
+  using parameters_t = std::vector<std::unique_ptr<Parameter>>;
+  using thrown_types_t = std::vector<std::unique_ptr<Type>>;
+
+  using instructions_it = iterator_range<assembly::Instruction::Iterator>;
 
   Function(std::unique_ptr<details::Function> impl);
 
@@ -141,6 +129,10 @@ class LIEF_API Function {
   /// present in the original source code
   bool is_artificial() const;
 
+  /// Whether the function is defined **outside** the current compilation unit
+  /// (`DW_AT_external`).
+  bool is_external() const;
+
   /// Return the size taken by this function in the binary
   uint64_t size() const;
 
@@ -154,11 +146,29 @@ class LIEF_API Function {
   /// function
   std::unique_ptr<Type> type() const;
 
-  /// Return the function's parameters
-  std::vector<Parameter> parameters() const;
+  /// Return the function's parameters (including any template parameter)
+  parameters_t parameters() const;
+
+  /// List of exceptions (types) that can be thrown by the function.
+  ///
+  /// For instance, given this Swift code:
+  ///
+  /// ```swift
+  /// func summarize(_ ratings: [Int]) throws(StatisticsError) {
+  ///   // ...
+  /// }
+  /// ```
+  ///
+  /// thrown_types() returns one element associated with the Type:
+  /// `StatisticsError`.
+  thrown_types_t thrown_types() const;
 
   /// Return the scope in which this function is defined
   std::unique_ptr<Scope> scope() const;
+
+  /// Disassemble the current function by returning an iterator over
+  /// the assembly::Instruction
+  instructions_it instructions() const;
 
   ~Function();
   private:

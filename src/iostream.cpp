@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -106,6 +106,20 @@ vector_iostream& vector_iostream::seekp(vector_iostream::off_type p, std::ios_ba
     default: return *this;
   }
 
+  return *this;
+}
+
+vector_iostream& vector_iostream::write(const std::u16string& s, bool with_null_char) {
+  const size_t nullchar = with_null_char ? 1 : 0;
+  const auto pos = static_cast<size_t>(tellp());
+  if (raw_.size() < (pos + s.size() + nullchar)) {
+    raw_.resize(pos + (s.size() + nullchar) * sizeof(char16_t));
+  }
+
+  std::copy(reinterpret_cast<const char16_t*>(s.data()),
+            reinterpret_cast<const char16_t*>(s.data()) + s.size(),
+            reinterpret_cast<char16_t*>(raw_.data() + current_pos_));
+  current_pos_ += (s.size() + nullchar) * sizeof(char16_t);
   return *this;
 }
 

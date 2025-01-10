@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@
 #include "third-party/utfcpp.hpp"
 
 #include "LIEF/config.h"
-#include "LIEF/logging.hpp"
+#include "logging.hpp"
 #include "messages.hpp"
 
 namespace LIEF {
@@ -96,6 +96,12 @@ bool is_extended() {
 result<std::string> demangle(const std::string&/*mangled*/) {
   logging::needs_lief_extended();
   return make_error_code(lief_errors::require_extended_version);
+}
+#endif
+
+#if !defined(LIEF_EXTENDED)
+std::string extended_version_info() {
+  return "";
 }
 #endif
 

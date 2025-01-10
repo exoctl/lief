@@ -1,4 +1,4 @@
-/* Copyright 2022 - 2024 R. Thomas
+/* Copyright 2022 - 2025 R. Thomas
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@
 #include <memory>
 
 namespace LIEF {
+/// Namespace related to ObjC metadata
 namespace objc {
 
 namespace details {

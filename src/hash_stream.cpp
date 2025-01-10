@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include "LIEF/logging.hpp"
+#include "logging.hpp"
 #include "hash_stream.hpp"
 #include "mbedtls/md.h"
 
@@ -101,7 +101,8 @@ hashstream& hashstream::flush() {
 }
 
 hashstream::~hashstream() {
-  mbedtls_md_free(cast(this->ctx_));
+  mbedtls_md_free(cast(ctx_));
+  delete reinterpret_cast<mbedtls_md_context_t*>(ctx_.release());
 }
 
 

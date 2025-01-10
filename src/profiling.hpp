@@ -1,4 +1,4 @@
-/* Copyright 2024 R. Thomas
+/* Copyright 2024 - 2025 R. Thomas
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 #define LIEF_PROFILING_UTILS_H
 #include <spdlog/stopwatch.h>
 #include <spdlog/fmt/chrono.h>
-#include "LIEF/logging.hpp"
+#include "logging.hpp"
 #include <chrono>
 
 using std::chrono::duration_cast;

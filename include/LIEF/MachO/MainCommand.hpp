@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,8 +28,8 @@ namespace details {
 struct entry_point_command;
 }
 
-//! Class that represent the LC_MAIN command. This kind
-//! of command can be used to determine the entrypoint of an executable
+/// Class that represent the LC_MAIN command. This kind
+/// of command can be used to determine the entrypoint of an executable
 class LIEF_API MainCommand : public LoadCommand {
   public:
   MainCommand() = default;
@@ -45,13 +45,13 @@ class LIEF_API MainCommand : public LoadCommand {
 
   ~MainCommand() override = default;
 
-  //! Offset of the *main* function relative to the ``__TEXT``
-  //! segment
+  /// Offset of the *main* function relative to the ``__TEXT``
+  /// segment
   uint64_t entrypoint() const {
     return entrypoint_;
   }
 
-  //! The initial stack size
+  /// The initial stack size
   uint64_t stack_size() const {
     return stack_size_;
   }

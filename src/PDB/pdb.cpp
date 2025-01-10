@@ -1,4 +1,4 @@
-/* Copyright 2022 - 2024 R. Thomas
+/* Copyright 2022 - 2025 R. Thomas
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@
 #include "LIEF/PDB/types/Union.hpp"
 #include "LIEF/PDB/types/Attribute.hpp"
 
-#include "LIEF/logging.hpp"
+#include "logging.hpp"
 #include "messages.hpp"
 #include "internal_utils.hpp"
 

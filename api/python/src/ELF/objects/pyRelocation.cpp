@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@
 
 #include "ELF/pyELF.hpp"
 #include "enums_wrapper.hpp"
+#include "pyErr.hpp"
 
 #include "LIEF/ELF/Relocation.hpp"
 #include "LIEF/ELF/Symbol.hpp"
@@ -145,6 +146,15 @@ void create<Relocation>(nb::module_& m) {
 
     .def_prop_ro("encoding", &Relocation::encoding,
                  "The encoding of the relocation")
+
+    .def("resolve", [] (const Relocation& self, uint64_t base_address) {
+        return LIEF::py::error_or(&Relocation::resolve, self, base_address);
+      }, "base_address"_a = 0,
+      R"doc(
+      Try to resolve the value of the relocation such as
+      ``*address() = resolve()``
+      )doc"_doc
+    )
 
     LIEF_DEFAULT_STR(Relocation);
 }

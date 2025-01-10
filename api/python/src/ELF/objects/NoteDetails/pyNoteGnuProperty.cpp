@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@
 
 #include "LIEF/ELF/NoteDetails/NoteGnuProperty.hpp"
 #include "LIEF/ELF/NoteDetails/properties/AArch64Feature.hpp"
+#include "LIEF/ELF/NoteDetails/properties/AArch64PAuth.hpp"
 #include "LIEF/ELF/NoteDetails/properties/X86Feature.hpp"
 #include "LIEF/ELF/NoteDetails/properties/X86ISA.hpp"
 #include "LIEF/ELF/NoteDetails/properties/StackSize.hpp"
@@ -56,6 +57,7 @@ void create<NoteGnuProperty>(nb::module_& m) {
     ENTRY(UNKNOWN)
     ENTRY(GENERIC)
     ENTRY(AARCH64_FEATURES)
+    ENTRY(AARCH64_PAUTH)
     ENTRY(STACK_SIZE)
     ENTRY(NO_COPY_ON_PROTECTED)
     ENTRY(X86_ISA)
@@ -65,6 +67,7 @@ void create<NoteGnuProperty>(nb::module_& m) {
 # undef ENTRY
 
   create<AArch64Feature>(m);
+  create<AArch64PAuth>(m);
   create<X86Features>(m);
   create<X86ISA>(m);
   create<StackSize>(m);

@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,6 +50,7 @@ const char* to_string(DYLD_CHAINED_PTR_FORMAT e) {
     ENTRY(PTR_ARM64E_FIRMWARE),
     ENTRY(PTR_X86_64_KERNEL_CACHE),
     ENTRY(PTR_ARM64E_USERLAND24),
+    ENTRY(PTR_ARM64E_SHARED_CACHE),
   };
   #undef ENTRY
 

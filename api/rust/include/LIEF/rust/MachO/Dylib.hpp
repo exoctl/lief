@@ -1,4 +1,4 @@
-/* Copyright 2024 R. Thomas
+/* Copyright 2024 - 2025 R. Thomas
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,8 @@ class MachO_Dylib : public MachO_Command {
 
   std::string name() const { return impl().name(); }
   uint32_t timestamp() const { return impl().timestamp(); }
+
+  auto name_offset() const { return impl().name_offset(); }
 
   auto current_version() const {
     return details::make_vector(impl().current_version());

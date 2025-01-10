@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -83,6 +83,13 @@ const char* to_string(PROCESSOR_FLAGS flag) {
     ENTRY(MIPS_ARCH_64R2),
     ENTRY(MIPS_ARCH_32R6),
     ENTRY(MIPS_ARCH_64R6),
+    ENTRY(RISCV_RVC),
+    ENTRY(RISCV_FLOAT_ABI_SOFT),
+    ENTRY(RISCV_FLOAT_ABI_SINGLE),
+    ENTRY(RISCV_FLOAT_ABI_DOUBLE),
+    ENTRY(RISCV_FLOAT_ABI_QUAD),
+    ENTRY(RISCV_FLOAT_ABI_RVE),
+    ENTRY(RISCV_FLOAT_ABI_TSO),
   };
   #undef ENTRY
 

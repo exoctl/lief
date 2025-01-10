@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ namespace details {
 struct load_command;
 }
 
-//! Based class for the Mach-O load commands
+/// Based class for the Mach-O load commands
 class LIEF_API LoadCommand : public Object {
   friend class Builder;
   friend class BinaryParser;
@@ -97,6 +97,7 @@ class LIEF_API LoadCommand : public Object {
     DYLD_EXPORTS_TRIE        = 0x80000033u,
     DYLD_CHAINED_FIXUPS      = 0x80000034u,
     FILESET_ENTRY            = 0x80000035u,
+    ATOM_INFO                = 0x00000036u,
 
     LIEF_UNKNOWN             = 0xffee0001u
   };
@@ -120,22 +121,22 @@ class LIEF_API LoadCommand : public Object {
 
   ~LoadCommand() override = default;
 
-  //! Command type
+  /// Command type
   LoadCommand::TYPE command() const {
     return command_;
   }
 
-  //! Size of the command (should be greather than ``sizeof(load_command)``)
+  /// Size of the command (should be greather than ``sizeof(load_command)``)
   uint32_t size() const {
     return size_;
   }
 
-  //! Raw command
+  /// Raw command
   span<const uint8_t> data() const {
     return original_data_;
   }
 
-  //! Offset of the command within the *Load Command Table*
+  /// Offset of the command within the *Load Command Table*
   uint64_t command_offset() const {
     return command_offset_;
   }

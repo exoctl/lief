@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +35,7 @@ namespace details {
 struct twolevel_hints_command;
 }
 
-//! Class which represents the `LC_TWOLEVEL_HINTS` command
+/// Class which represents the `LC_TWOLEVEL_HINTS` command
 class LIEF_API TwoLevelHints : public LoadCommand {
   friend class BinaryParser;
   friend class LinkEdit;
@@ -56,16 +56,16 @@ class LIEF_API TwoLevelHints : public LoadCommand {
     return std::unique_ptr<TwoLevelHints>(new TwoLevelHints(*this));
   }
 
-  //! Original payload of the command
+  /// Original payload of the command
   span<const uint8_t> content() const { return content_; }
   span<uint8_t> content() { return content_; }
 
-  //! Iterator over the hints (`uint32_t` integers)
+  /// Iterator over the hints (`uint32_t` integers)
   it_hints_t hints() { return hints_; }
   it_const_hints_t hints() const { return hints_; }
 
-  //! Original offset of the command. It should point in the
-  //! `__LINKEDIT` segment
+  /// Original offset of the command. It should point in the
+  /// `__LINKEDIT` segment
   uint32_t offset() const { return offset_; }
   void offset(uint32_t offset)  { offset_ = offset; }
 

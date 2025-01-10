@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -159,7 +159,7 @@ class LIEF_API Stub {
   private:
   target_info_t target_info_;
   uint64_t address_ = 0;
-  mutable uint64_t target_addr_ = 0;
+  [[maybe_unused]] mutable uint64_t target_addr_ = 0;
   std::vector<uint8_t> raw_;
 };
 

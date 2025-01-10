@@ -1,4 +1,4 @@
-/* Copyright 2024 R. Thomas
+/* Copyright 2024 - 2025 R. Thomas
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,7 +40,9 @@ class ForwardIterator {
   using lief_t = V;
   std::unique_ptr<T> next() {
     if (begin_ == end_) return nullptr;
-    return std::make_unique<T>(*begin_++);
+    auto&& value = *begin_;
+    ++begin_;
+    return std::make_unique<T>(std::move(value));
   }
   protected:
   ForwardIterator(LIEF::iterator_range<V> range) :
@@ -93,7 +95,7 @@ class ContainerIterator {
   public:
   std::unique_ptr<T> next() {
     if (begin_ == end_) return nullptr;
-    return std::make_unique<T>(*begin_++);
+    return std::make_unique<T>(std::move(*begin_++));
   }
   protected:
   ContainerIterator(ContainerT&& C) :

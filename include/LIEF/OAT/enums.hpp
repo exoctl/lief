@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,9 +20,9 @@ namespace LIEF {
 namespace OAT {
 
 enum OAT_CLASS_TYPES {
-  OAT_CLASS_ALL_COMPILED  = 0, //! OatClass is followed by an OatMethodOffsets for each method.
-  OAT_CLASS_SOME_COMPILED = 1, //! A bitmap of which OatMethodOffsets are present follows the OatClass.
-  OAT_CLASS_NONE_COMPILED = 2, //! All methods are interpreted so no OatMethodOffsets are necessary.
+  OAT_CLASS_ALL_COMPILED  = 0, /// OatClass is followed by an OatMethodOffsets for each method.
+  OAT_CLASS_SOME_COMPILED = 1, /// A bitmap of which OatMethodOffsets are present follows the OatClass.
+  OAT_CLASS_NONE_COMPILED = 2, /// All methods are interpreted so no OatMethodOffsets are necessary.
 };
 
 // From art/runtime/mirror/class.h

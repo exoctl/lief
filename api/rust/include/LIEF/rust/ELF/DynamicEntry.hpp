@@ -1,4 +1,4 @@
-/* Copyright 2024 R. Thomas
+/* Copyright 2024 - 2025 R. Thomas
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 #include "LIEF/rust/Mirror.hpp"
 #include "LIEF/rust/helpers.hpp"
 
-class ELF_DynamicEntry : public Mirror<LIEF::ELF::DynamicEntry>{
+class ELF_DynamicEntry : public Mirror<LIEF::ELF::DynamicEntry> {
   friend class ELF_DynamicEntryRpath;
   friend class ELF_DynamicEntryArray;
   friend class ELF_DynamicEntryFlags;

@@ -1,4 +1,6 @@
 cmake_minimum_required(VERSION 3.24)
+project(LIEF LANGUAGES C CXX)
+
 enable_language(C)
 enable_language(CXX)
 
@@ -34,8 +36,16 @@ elseif(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/.git"
   include(LIEFGit)
 else()
   set(LIEF_VERSION_MAJOR "0")
-  set(LIEF_VERSION_MINOR "16")
+  set(LIEF_VERSION_MINOR "17")
   set(LIEF_VERSION_PATCH "0")
+endif()
+
+if (DEFINED ENV{LIEF_COMMIT})
+  set(LIEF_COMMIT_HASH "$ENV{LIEF_COMMIT}")
+endif()
+
+if (DEFINED ENV{LIEF_BRANCH})
+  set(LIEF_GIT_BRANCH "$ENV{LIEF_BRANCH}")
 endif()
 
 # LIEF Project
@@ -142,6 +152,10 @@ else()
   target_link_libraries(LIB_LIEF PRIVATE
                         MbedTLS::mbedcrypto MbedTLS::mbedx509)
 endif()
+
+target_compile_definitions(LIB_LIEF PRIVATE
+  -DMBEDTLS_CONFIG_FILE="${CMAKE_CURRENT_SOURCE_DIR}/config/mbedtls/config.h"
+)
 
 if(WIN32 AND BUILD_SHARED_LIBS)
   target_link_libraries(LIB_LIEF PRIVATE ws2_32)

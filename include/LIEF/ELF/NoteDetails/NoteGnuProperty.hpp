@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ class LIEF_API NoteGnuProperty : public Note {
 
   /// This class wraps the different properties that can be used in a
   /// `NT_GNU_PROPERTY_TYPE_0` note
-  class Property {
+  class LIEF_API Property {
     public:
 
     /// LIEF's mirror types of the original `GNU_PROPERTY_` values
@@ -40,6 +40,7 @@ class LIEF_API NoteGnuProperty : public Note {
       UNKNOWN = 0,
       GENERIC,              ///< Property that dont' have special implementation
       AARCH64_FEATURES,     ///< Mirror of `GNU_PROPERTY_AARCH64_FEATURE_1_AND`
+      AARCH64_PAUTH,        ///< Mirror of `GNU_PROPERTY_AARCH64_FEATURE_PAUTH`
       STACK_SIZE,           ///< Mirror of `GNU_PROPERTY_STACK_SIZE`
       NO_COPY_ON_PROTECTED, ///< Mirror of `GNU_PROPERTY_NO_COPY_ON_PROTECTED`
       X86_ISA,              ///< Mirror of `GNU_PROPERTY_X86_ISA_1_*` and `GNU_PROPERTY_X86_COMPAT_*`

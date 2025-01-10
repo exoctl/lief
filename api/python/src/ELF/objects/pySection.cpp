@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,7 +44,7 @@ void create<Section>(nb::module_& m) {
   init_ref_iterator<Section::it_segments>(sec, "it_segments");
 
   #define ENTRY(X) .value(to_string(Section::FLAGS::X), Section::FLAGS::X)
-  enum_<Section::FLAGS>(sec, "FLAGS", nb::is_arithmetic())
+  enum_<Section::FLAGS>(sec, "FLAGS", nb::is_flag())
     ENTRY(NONE)
     ENTRY(WRITE)
     ENTRY(ALLOC)

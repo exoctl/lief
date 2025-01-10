@@ -3,10 +3,72 @@
 :fa:`solid fa-code-compare` Changelog
 =====================================
 
-0.16.0 - Not Released Yet
+0.17.0 - Not Released Yet
 -------------------------
 
-:Abstract:
+:DSC:
+
+  * Add enum for the latest dyld shared cache version introducing
+    changes in the header layout (``dyld-1231.3 - 2024-09-24``)
+
+    .. code-block:: diff
+
+         uint64_t    dynamicDataOffset;
+         uint64_t    dynamicDataMaxSize;
+      +  uint32_t    tproMappingsOffset;
+      +  uint32_t    tproMappingsCount;
+      };
+
+  * Fix symbol resolution issue: :issue:`1127`
+
+:Mach-O:
+
+  * Add support for |lief-macho-atom-info| command (``LC_ATOM_INFO``)
+
+:ELF:
+
+  * Fix issue when parsing the dynamic table with an invalid offset (bug found
+    by :github_user:`lebr0nli`)
+
+:Extended:
+
+  * Fix issue in the Python bindings while trying to access ``lief.__LIEF_MAIN_COMMIT__``
+
+:Build System:
+
+  * LIEF is now available in `vcpkg <https://github.com/microsoft/vcpkg/tree/master/ports/lief>`_.
+    Many thanks to :github_user:`luadebug` for this support.
+
+0.16.2 - January 1st, 2025
+----------------------------
+
+:Compilation:
+
+  * Fix broken ``aarch64`` Python wheel which is related to a toolchain issue
+    (:issue:`1146`)
+
+0.16.1 - December 26th, 2024
+----------------------------
+
+:MachO:
+
+  * Various fixes from :github_user:`DzenIsRich` & :github_user:`peledins-zimperium`
+    Thanks to them, Mach-O modification is more reliable.
+
+  * Fix issue when building with ``-DLIEF_MACHO=ON`` (see: :issue:`1138`)
+
+:Rust:
+
+  * Fix min-rustc version issue (see: :commit:`75a27f0e`)
+
+:Compilation:
+
+  * Fix missing ``LIEF_API`` visibility (:commit:`e01f92a0`, :pr:`1140`)
+
+0.16.0 - December 10th, 2024
+----------------------------
+
+:Abstraction:
 
   * Add |get_int_from_virtual_address| to read an **integer** value
     at a specific virtual address
@@ -34,6 +96,13 @@
 
       elf: &lief::elf::Binary
       let value: i16 = elf.get_int_from_virtual_address::<i16>(0x401126).unwrap();
+
+  * Global code cleaning (especially, |lief-header-architectures| and
+    |lief-header-modes| is now more meaningful)
+  * Re-scope ``lief.ARCHITECTURES`` into |lief-header-architectures|
+  * Re-scope ``lief.MODES`` into |lief-header-modes|
+  * Re-scope ``lief.OBJECT_TYPES`` into |lief-header-object-types|
+  * Re-scope ``lief.ENDIANNESS`` into |lief-header-endianness|
 
 
 :MachO:
@@ -67,6 +136,13 @@
 
 :ELF:
 
+  * Fix issue when multiple empty strings are present in the ``.symtab`` section
+    (:pr:`1124`)
+  * Add |lief-elf-relocation-resolve| to resolve the value of relocations
+  * Add support for eBPF relocations.
+  * Add support for ``GNU_PROPERTY_AARCH64_FEATURE_PAUTH`` GNU property note:
+    |lief-elf-aarch64pauth|.
+  * Add |lief-elf-binary-target-android| to check if an ELF targets Android
   * Fix a critical error when rewriting ELF file with ``DT_RELR`` relocations.
     This error leads to a crash of the modified binary.
   * Fix error while (re)generating ELF's RELR relocations (:issue:`1097`)
@@ -76,7 +152,31 @@
 
 :Rust:
 
+  * Mutable API are progressively introduced:
+
+    - ELF:
+
+      - :rust:method:`lief::elf::Binary::write [struct]`
+      - :rust:method:`lief::elf::Binary::write_with_config [struct]`
+      - :rust:method:`lief::elf::Binary::add_library [struct]`
+
+    - PE:
+
+      - :rust:method:`lief::pe::Binary::write [struct]`
+
+    - MachO:
+
+      - :rust:method:`lief::macho::Binary::write [struct]`
+      - :rust:method:`lief::macho::Binary::write_with_config [struct]`
+      - :rust:method:`lief::macho::Binary::add_library [struct]`
+
   * Thanks to :github_user:`Huntragon` Rust bindings can be used without openssl (see: :pr:`1105`)
+  * Rust precompiled Linux packages are now supported for Debian 10 & Ubuntu 19.10.
+    Before, they require at least Debian 11 & Ubuntu 20.04
+  * Add support for the ``x86_64-unknown-linux-musl`` target which allows to
+    generate full static executable.
+  * Add :rust:enum:`lief::elf::header::Arch`
+  * Add :rust:struct:`lief::elf::dynamic::Flags`
 
 :ObjC:
 
@@ -114,7 +214,22 @@
   * The output of |lief-objc-metadata-to_decl_opt| can now be configured with
     |lief-objc-declopt|.
 
+:DWARF:
+
+  * Add |lief-dwarf-function-is-external|
+  * Add |lief-dwarf-cu-imported-functions|
+  * Add ``DW_TAG_typedef`` support
+
 :Extended:
+
+  .. note::
+
+    * `LIEF extended <https://extended.lief.re>`_ is now open to everyone
+    * C++ SDK is now available
+    * Rust package is now available
+
+  * Initial assembler support: :ref:`Assembler <extended-assembler>`
+  * Initial disassembler support: :ref:`Disassembler <extended-disassembler>`
   * Linux Python wheels are now ``manylinux_2_27`` compliants. In other words,
     they are working with a glibc from at least 2018.
   * Support for :ref:`Dyld shared cache <extended-dsc>`
@@ -143,13 +258,18 @@
   * Add |demangle| to demangle symbols (c.f. :issue:`1054`)
   * The extended version is now using a versioning matching LIEF regular version
 
+:Python Bindings:
+
+  * Upgrade nanobind from ``1.8.0`` to ``2.4.0``
+  * ``*.pyi`` stubs are now generated by nanobind (replacing mypy's stugen)
+
 :Dependencies:
 
   * Upgrade MbedTLS from ``3.2.1`` to ``3.6.1``
 
 :doc:
 
-  * Global restructing of the documentation
+  * Global restructuring of the documentation
 
   * Add Sphinx cross-reference support for Rust. For instance, this link:
     :rust:method:`lief::elf::Binary::debug_info [struct]` references the

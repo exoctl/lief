@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ namespace PE {
 class Builder;
 class Parser;
 
-//! Class which represents a PE Export entry (cf. PE::Export)
+/// Class which represents a PE Export entry (cf. PE::Export)
 class LIEF_API ExportEntry : public LIEF::Symbol {
 
   friend class Builder;
@@ -64,8 +64,8 @@ class LIEF_API ExportEntry : public LIEF::Symbol {
   ExportEntry& operator=(const ExportEntry&) = default;
   ~ExportEntry() override = default;
 
-  //! Demangled representation of the symbol or an empty string if it can't
-  //! be demangled
+  /// Demangled representation of the symbol or an empty string if it can't
+  /// be demangled
   std::string demangled_name() const;
 
   uint16_t ordinal() const {

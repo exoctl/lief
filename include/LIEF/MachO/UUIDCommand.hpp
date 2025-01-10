@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ struct uuid_command;
 
 using uuid_t = std::array<uint8_t, 16>;
 
-//! Class that represents the UUID command
+/// Class that represents the UUID command
 class LIEF_API UUIDCommand : public LoadCommand {
   public:
   UUIDCommand() = default;
@@ -46,7 +46,7 @@ class LIEF_API UUIDCommand : public LoadCommand {
 
   ~UUIDCommand() override = default;
 
-  //! The UUID as a 16-bytes array
+  /// The UUID as a 16-bytes array
   const uuid_t& uuid() const {
     return uuid_;
   }

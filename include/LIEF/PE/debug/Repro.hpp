@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,11 +28,11 @@ namespace PE {
 class Builder;
 class Parser;
 
-//! This class represents a reproducible build entry from the debug directory.
-//! (``IMAGE_DEBUG_TYPE_REPRO``).
-//! This entry is usually generated with the undocumented `/Brepro` linker flag.
-//!
-//! See: https://nikhilism.com/post/2020/windows-deterministic-builds/
+/// This class represents a reproducible build entry from the debug directory.
+/// (``IMAGE_DEBUG_TYPE_REPRO``).
+/// This entry is usually generated with the undocumented `/Brepro` linker flag.
+///
+/// See: https://nikhilism.com/post/2020/windows-deterministic-builds/
 class LIEF_API Repro : public Debug {
 
   friend class Builder;
@@ -56,7 +56,7 @@ class LIEF_API Repro : public Debug {
   Repro(const Repro& other) = default;
   Repro& operator=(const Repro& other) = default;
 
-  //! The hash associated with the reproducible build
+  /// The hash associated with the reproducible build
   span<const uint8_t> hash() const {
     return hash_;
   }

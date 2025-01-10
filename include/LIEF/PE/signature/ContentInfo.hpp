@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -124,8 +124,8 @@ class LIEF_API ContentInfo : public Object {
 
   void swap(ContentInfo& other) noexcept;
 
-  //! Return the OID that describes the content wrapped by this object.
-  //! It should match SPC_INDIRECT_DATA_OBJID (1.3.6.1.4.1.311.2.1.4)
+  /// Return the OID that describes the content wrapped by this object.
+  /// It should match SPC_INDIRECT_DATA_OBJID (1.3.6.1.4.1.311.2.1.4)
   oid_t content_type() const {
     return value_->content_type();
   }

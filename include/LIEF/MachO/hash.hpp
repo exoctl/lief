@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -64,8 +64,8 @@ class UUIDCommand;
 class VersionMin;
 class UnknownCommand;
 
-//! Class which implements a visitor to compute
-//! a **deterministic** hash for LIEF MachO objects
+/// Class which implements a visitor to compute
+/// a **deterministic** hash for LIEF MachO objects
 class LIEF_API Hash : public LIEF::Hash {
   public:
   static LIEF::Hash::value_type hash(const Object& obj);

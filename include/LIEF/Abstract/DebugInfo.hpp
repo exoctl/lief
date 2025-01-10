@@ -1,4 +1,4 @@
-/* Copyright 2022 - 2024 R. Thomas
+/* Copyright 2022 - 2025 R. Thomas
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,10 +29,29 @@ class LIEF_API DebugInfo {
     DWARF, PDB,
   };
   DebugInfo(std::unique_ptr<details::DebugInfo> impl);
+
   virtual ~DebugInfo();
 
   virtual FORMAT format() const {
     return FORMAT::UNKNOWN;
+  }
+
+  /// This function can be used to **down cast** a DebugInfo instance:
+  ///
+  /// ```cpp
+  /// std::unique_ptr<LIEF::Instruction> dbg = bin->debug_info();
+  /// if (const auto* dwarf = inst->as<LIEF::dwarf::DebugInfo>()) {
+  ///   dwarf->find_function("main");
+  /// }
+  /// ```
+  template<class T>
+  const T* as() const {
+    static_assert(std::is_base_of<DebugInfo, T>::value,
+                  "Require Instruction inheritance");
+    if (T::classof(this)) {
+      return static_cast<const T*>(this);
+    }
+    return nullptr;
   }
 
   protected:

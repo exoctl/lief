@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 #include "spdlog/fmt/fmt.h"
+#include "spdlog/fmt/ranges.h"
 #include "LIEF/utils.hpp"
 #include "LIEF/Visitor.hpp"
 
@@ -25,6 +26,7 @@ namespace MachO {
 
 DylibCommand::DylibCommand(const details::dylib_command& cmd) :
   LoadCommand::LoadCommand{static_cast<LoadCommand::TYPE>(cmd.cmd), cmd.cmdsize},
+  name_offset_{cmd.name},
   timestamp_{cmd.timestamp},
   current_version_{cmd.current_version},
   compatibility_version_{cmd.compatibility_version}

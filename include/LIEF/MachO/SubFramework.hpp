@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,18 +31,18 @@ namespace details {
 struct sub_framework_command;
 }
 
-//! Class that represents the SubFramework command.
-//! Accodring to the Mach-O ``loader.h`` documentation:
-//!
-//!
-//! > A dynamically linked shared library may be a subframework of an umbrella
-//! > framework.  If so it will be linked with "-umbrella umbrella_name" where
-//! > Where "umbrella_name" is the name of the umbrella framework. A subframework
-//! > can only be linked against by its umbrella framework or other subframeworks
-//! > that are part of the same umbrella framework.  Otherwise the static link
-//! > editor produces an error and states to link against the umbrella framework.
-//! > The name of the umbrella framework for subframeworks is recorded in the
-//! > following structure.
+/// Class that represents the SubFramework command.
+/// Accodring to the Mach-O ``loader.h`` documentation:
+///
+///
+/// > A dynamically linked shared library may be a subframework of an umbrella
+/// > framework.  If so it will be linked with "-umbrella umbrella_name" where
+/// > Where "umbrella_name" is the name of the umbrella framework. A subframework
+/// > can only be linked against by its umbrella framework or other subframeworks
+/// > that are part of the same umbrella framework.  Otherwise the static link
+/// > editor produces an error and states to link against the umbrella framework.
+/// > The name of the umbrella framework for subframeworks is recorded in the
+/// > following structure.
 class LIEF_API SubFramework : public LoadCommand {
   friend class BinaryParser;
   public:
@@ -56,7 +56,7 @@ class LIEF_API SubFramework : public LoadCommand {
     return std::unique_ptr<SubFramework>(new SubFramework(*this));
   }
 
-  //! Name of the umbrella framework
+  /// Name of the umbrella framework
   const std::string& umbrella() const {
     return umbrella_;
   }

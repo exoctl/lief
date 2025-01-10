@@ -146,7 +146,7 @@ def test_975():
 def test_1058():
     elf = lief.ELF.parse(get_sample("private/ELF/cn-105.elf"))
 
-    original_init = elf.get(lief.ELF.DynamicEntry.TAG.INIT_ARRAY).array
+    original_init = elf.get(lief.ELF.DynamicEntry.TAG.INIT_ARRAY).array # type: ignore
     relocated_init = elf.get_relocated_dynamic_array(lief.ELF.DynamicEntry.TAG.INIT_ARRAY)
 
     assert original_init == [
@@ -161,8 +161,55 @@ def test_1058():
         0xebfc68, 0xec0898, 0xec0b98, 0xf52db0, 0xf8fb20, 0x0
     ]
 
-    original_fini = elf.get(lief.ELF.DynamicEntry.TAG.FINI_ARRAY).array
+    original_fini = elf.get(lief.ELF.DynamicEntry.TAG.FINI_ARRAY).array # type: ignore
     relocated_fini = elf.get_relocated_dynamic_array(lief.ELF.DynamicEntry.TAG.FINI_ARRAY)
 
     assert original_fini == [0xffffffffffffffff, 0x0]
     assert relocated_fini == [0xffffffffffffffff, 0x0]
+
+def test_is_android():
+    elf = lief.ELF.parse(get_sample('ELF/ELF64_AArch64_piebinary_ndkr16.bin'))
+    assert elf.is_targeting_android
+
+    elf = lief.ELF.parse(get_sample('ELF/ELF64_x86-64_binary_empty-gnu-hash.bin'))
+    assert not elf.is_targeting_android
+
+    elf = lief.ELF.parse(get_sample('ELF/libmonochrome-armv7.so'))
+    assert elf.is_targeting_android
+
+def test_ebpf_relocations():
+    elf = lief.ELF.parse(get_sample('ELF/hello.bpf.o'))
+    relocations = list(elf.relocations)
+
+    assert len(relocations) == 9
+
+    assert relocations[0].symbol.name == "pid_filter"
+    assert relocations[0].section.name == ".BTF"
+    assert relocations[0].address == 0x0000d4
+    assert relocations[0].addend == 0
+    assert relocations[0].info == 3
+    assert relocations[0].purpose == lief.ELF.Relocation.PURPOSE.OBJECT
+    assert relocations[0].type == lief.ELF.Relocation.TYPE.BPF_64_ABS32
+
+    assert relocations[1].symbol.name == "LICENSE"
+    assert relocations[1].section.name == ".BTF"
+    assert relocations[1].address == 0x0000ec
+    assert relocations[1].addend == 0
+    assert relocations[1].info == 4
+    assert relocations[1].purpose == lief.ELF.Relocation.PURPOSE.OBJECT
+    assert relocations[1].type == lief.ELF.Relocation.TYPE.BPF_64_NODYLD32
+
+    assert relocations[8].symbol.name == ""
+    assert relocations[8].section.name == ".BTF.ext"
+    assert relocations[8].address == 0x000090
+    assert relocations[8].addend == 0
+    assert relocations[8].info == 1
+    assert relocations[8].purpose == lief.ELF.Relocation.PURPOSE.OBJECT
+    assert relocations[8].type == lief.ELF.Relocation.TYPE.BPF_64_NODYLD32
+
+
+def test_issue_dynamic_table():
+    elf = lief.ELF.parse(get_sample("ELF/issue_dynamic_table.elf"))
+    dyn_entries = list(elf.dynamic_entries)
+    assert len(dyn_entries) == 28
+    assert dyn_entries[0].name == "libselinux.so.1"

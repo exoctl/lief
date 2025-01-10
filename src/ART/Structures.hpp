@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,7 +39,7 @@
 // ======================
 
 namespace LIEF {
-//! @brief Namespace related to the LIEF's ART module
+/// Namespace related to the LIEF's ART module
 namespace ART {
 
 namespace details {

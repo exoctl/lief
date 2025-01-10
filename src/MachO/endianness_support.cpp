@@ -1,4 +1,4 @@
-/* Copyright 2021 - 2024 R. Thomas
+/* Copyright 2021 - 2025 R. Thomas
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -521,5 +521,34 @@ void swap_endian<MachO::details::arm_thread_state64_t>(MachO::details::arm_threa
   swap_endian(&hdr->sp);
   swap_endian(&hdr->pc);
   swap_endian(&hdr->cpsr);
+}
+
+template<>
+void swap_endian<MachO::details::ppc_thread_state64_t>(MachO::details::ppc_thread_state64_t* hdr) {
+  swap_endian(&hdr->srr0);
+  swap_endian(&hdr->srr1);
+  for (size_t i = 0; i < 32; ++i) {
+    swap_endian(&hdr->r[i]);
+  }
+  swap_endian(&hdr->cr);
+  swap_endian(&hdr->xer);
+  swap_endian(&hdr->lr);
+  swap_endian(&hdr->ctr);
+  swap_endian(&hdr->vrsave);
+}
+
+template<>
+void swap_endian<MachO::details::ppc_thread_state_t>(MachO::details::ppc_thread_state_t* hdr) {
+  swap_endian(&hdr->srr0);
+  swap_endian(&hdr->srr1);
+  for (size_t i = 0; i < 32; ++i) {
+    swap_endian(&hdr->r[i]);
+  }
+  swap_endian(&hdr->cr);
+  swap_endian(&hdr->xer);
+  swap_endian(&hdr->lr);
+  swap_endian(&hdr->ctr);
+  swap_endian(&hdr->mq);
+  swap_endian(&hdr->vrsave);
 }
 }

@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 #include "PE/pyPE.hpp"
 
-#include "nanobind/extra/memoryview.hpp"
+#include "nanobind/extra/stl/lief_span.h"
 
 #include "LIEF/PE/TLS.hpp"
 #include "LIEF/PE/Section.hpp"
@@ -104,10 +104,7 @@ void create<TLS>(nb::module_& m) {
         )delim"_doc)
 
     .def_prop_rw("data_template",
-        [] (const TLS& self) {
-          const span<const uint8_t> content = self.data_template();
-          return nb::memoryview::from_memory(content.data(), content.size());
-        },
+        nb::overload_cast<>(&TLS::data_template, nb::const_),
         nb::overload_cast<std::vector<uint8_t>>(&TLS::data_template),
         "The initial content used to initialize TLS data."_doc)
 

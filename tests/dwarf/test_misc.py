@@ -97,7 +97,7 @@ def test_lief():
     assert f2.scope.name == "/workdir/branches/main/src/PE/Parser.cpp"
 
     params = f2.parameters
-    assert len(params) == 3
+    assert len(params) == 4
 
     assert params[0].name == "this"
     assert isinstance(params[0].type, lief.dwarf.types.Pointer)
@@ -106,10 +106,26 @@ def test_lief():
     assert len(params[0].type.underlying_type.members) == 5
 
     assert params[1].name == "import"
-    assert params[1].type.kind == lief.dwarf.Type.KIND.UNKNOWN
+    assert params[1].type.kind == lief.dwarf.Type.KIND.REF
 
     assert params[2].name == "names_offset"
-    assert params[2].type.kind == lief.dwarf.Type.KIND.UNKNOWN
+    p2_type = params[2].type
+    assert p2_type.kind == lief.dwarf.Type.KIND.TYPEDEF
+    assert p2_type.name == "uint32_t"
+
+    assert isinstance(p2_type, lief.dwarf.types.Typedef)
+    assert p2_type.underlying_type.kind == lief.dwarf.Type.KIND.TYPEDEF
+    assert p2_type.underlying_type.name == "__uint32_t"
+
+    assert params[3].name == "PE_T"
+    assert isinstance(params[3], lief.dwarf.parameters.TemplateType)
+
+    CUS = list(dbg_info.compilation_units)
+    assert len(CUS) == 366
+    imported_functions = list(CUS[0].imported_functions)
+    assert len(imported_functions) == 177
+
+    assert imported_functions[0].name == "btowc"
 
 def test_scope():
     elf = lief.ELF.parse(get_sample("DWARF/scope_3"))
@@ -124,3 +140,38 @@ def test_scope():
     assert ty.find_member(0).name == "value_"
     assert ty.find_member(1).name == "value_"
     assert ty.find_member(8) is None
+
+def test_imported_functions():
+    elf = lief.ELF.parse(get_sample("ELF/simple-gcc-c.bin"))
+
+    dbg_info: lief.dwarf.DebugInfo = elf.debug_info
+    assert isinstance(dbg_info, lief.dwarf.DebugInfo)
+
+    units = list(dbg_info.compilation_units)
+    assert len(units) == 1
+    cu = units[0]
+    functions = list(cu.imported_functions)
+    assert len(functions) == 0
+
+def test_disassembler():
+    elf = lief.ELF.parse(get_sample("private/DWARF/libLIEF.so"))
+
+    dbg_info: lief.dwarf.DebugInfo = elf.debug_info
+    mbedtls_aes_free = dbg_info.find_function(0x2e6b40)
+
+    assert mbedtls_aes_free is not None
+    insts = list(mbedtls_aes_free.instructions)
+    assert len(insts) == 5
+
+def test_addr():
+    elf = lief.ELF.parse(get_sample("DWARF/vars_1.elf"))
+
+    dbg_info: lief.dwarf.DebugInfo = elf.debug_info
+    assert isinstance(dbg_info, lief.dwarf.DebugInfo)
+
+    main = dbg_info.find_function("main")
+    assert main is not None
+    assert main.address == 0x1180
+
+    insts = list(main.instructions)
+    assert len(insts) == 79

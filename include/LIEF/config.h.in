@@ -1,5 +1,5 @@
 /* Copyright 2017 - 2021 A. Guinet
- * Copyright 2017 - 2024 Quarkslab
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +32,7 @@
 #cmakedefine LIEF_DEBUG_INFO        @LIEF_DEBUG_INFO_SUPPORT@
 #cmakedefine LIEF_OBJC              @LIEF_OBJC_SUPPORT@
 #cmakedefine LIEF_DYLD_SHARED_CACHE @LIEF_DYLD_SHARED_CACHE_SUPPORT@
+#cmakedefine LIEF_ASM_SUPPORT       @LIEF_ASM_SUPPORT@
 #cmakedefine LIEF_EXTENDED          @LIEF_EXTENDED@
 
 // LIEF options

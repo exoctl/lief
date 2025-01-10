@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ class Binary;
 namespace VDEX {
 class Parser;
 
-//! Main class for the VDEX module which represents a VDEX file
+/// Main class for the VDEX module which represents a VDEX file
 class LIEF_API File : public Object {
   friend class Parser;
   friend class OAT::Binary;
@@ -51,11 +51,11 @@ class LIEF_API File : public Object {
   File& operator=(const File& copy) = delete;
   File(const File& copy)            = delete;
 
-  //! VDEX Header
+  /// VDEX Header
   const Header& header() const;
   Header& header();
 
-  //! Iterator over LIEF::DEX::Files registered
+  /// Iterator over LIEF::DEX::Files registered
   it_dex_files       dex_files();
   it_const_dex_files dex_files() const;
 

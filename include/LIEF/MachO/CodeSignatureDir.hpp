@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,12 +49,12 @@ class LIEF_API CodeSignatureDir : public LoadCommand {
     return std::unique_ptr<CodeSignatureDir>(new CodeSignatureDir(*this));
   }
 
-  //! Offset in the binary where the signature starts
+  /// Offset in the binary where the signature starts
   uint32_t data_offset() const {
     return data_offset_;
   }
 
-  //! Size of the raw signature
+  /// Size of the raw signature
   uint32_t data_size() const {
     return data_size_;
   }

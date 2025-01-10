@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2023 R. Thomas
- * Copyright 2017 - 2023 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,26 +21,26 @@
 
 namespace LIEF {
 namespace PE {
-//! SigningCertificateV2 ::= SEQUENCE {
-//!   certs    SEQUENCE OF ESSCertIDv2,
-//!   policies SEQUENCE OF PolicyInformation OPTIONAL
-//! }
-//!
-//! ESSCertIDv2 ::= SEQUENCE {
-//!   hashAlgorithm AlgorithmIdentifier DEFAULT {algorithm id-sha256},
-//!   certHash      OCTET STRING,
-//!   issuerSerial  IssuerSerial OPTIONAL
-//! }
-//!
-//! IssuerSerial ::= SEQUENCE {
-//!   issuer       GeneralNames,
-//!   serialNumber CertificateSerialNumber
-//! }
-//!
-//! PolicyInformation ::= SEQUENCE {
-//!   policyIdentifier   OBJECT IDENTIFIER,
-//!   policyQualifiers   SEQUENCE SIZE (1..MAX) OF PolicyQualifierInfo OPTIONAL
-//! }
+/// SigningCertificateV2 ::= SEQUENCE {
+///   certs    SEQUENCE OF ESSCertIDv2,
+///   policies SEQUENCE OF PolicyInformation OPTIONAL
+/// }
+///
+/// ESSCertIDv2 ::= SEQUENCE {
+///   hashAlgorithm AlgorithmIdentifier DEFAULT {algorithm id-sha256},
+///   certHash      OCTET STRING,
+///   issuerSerial  IssuerSerial OPTIONAL
+/// }
+///
+/// IssuerSerial ::= SEQUENCE {
+///   issuer       GeneralNames,
+///   serialNumber CertificateSerialNumber
+/// }
+///
+/// PolicyInformation ::= SEQUENCE {
+///   policyIdentifier   OBJECT IDENTIFIER,
+///   policyQualifiers   SEQUENCE SIZE (1..MAX) OF PolicyQualifierInfo OPTIONAL
+/// }
 class LIEF_API SigningCertificateV2 : public Attribute {
   friend class Parser;
   friend class SignatureParser;

@@ -36,7 +36,14 @@ void create<dw::CompilationUnit>(nb::module_& m) {
     .value("C", dw::CompilationUnit::Language::LANG::C)
     .value("CPP", dw::CompilationUnit::Language::LANG::CPP)
     .value("RUST", dw::CompilationUnit::Language::LANG::RUST)
-    .value("DART", dw::CompilationUnit::Language::LANG::DART);
+    .value("DART", dw::CompilationUnit::Language::LANG::DART)
+    .value("MODULA", dw::CompilationUnit::Language::LANG::MODULA)
+    .value("FORTRAN", dw::CompilationUnit::Language::LANG::FORTRAN)
+    .value("SWIFT", dw::CompilationUnit::Language::LANG::SWIFT)
+    .value("D", dw::CompilationUnit::Language::LANG::D)
+    .value("JAVA", dw::CompilationUnit::Language::LANG::JAVA)
+    .value("COBOL", dw::CompilationUnit::Language::LANG::COBOL)
+  ;
 
   Lang
     .def_rw("lang", &dw::CompilationUnit::Language::lang,
@@ -153,7 +160,9 @@ void create<dw::CompilationUnit>(nb::module_& m) {
     .def_prop_ro("types",
         [] (dw::CompilationUnit& self) {
           auto types = self.types();
-          return nb::make_iterator(nb::type<dw::CompilationUnit>(), "types_it", types);
+          return nb::make_iterator<nb::rv_policy::reference_internal>(
+            nb::type<dw::CompilationUnit>(), "types_it", types
+          );
         }, nb::keep_alive<0, 1>(),
         R"doc(
         Return an iterator over the different types defined in this
@@ -164,8 +173,9 @@ void create<dw::CompilationUnit>(nb::module_& m) {
     .def_prop_ro("functions",
         [] (dw::CompilationUnit& self) {
           auto functions = self.functions();
-          return nb::make_iterator(
-              nb::type<dw::CompilationUnit>(), "functions_it", functions);
+          return nb::make_iterator<nb::rv_policy::reference_internal>(
+            nb::type<dw::CompilationUnit>(), "functions_it", functions
+          );
         }, nb::keep_alive<0, 1>(),
         R"delim(
         Return an iterator over the functions implemented in this compilation
@@ -193,10 +203,38 @@ void create<dw::CompilationUnit>(nb::module_& m) {
         )delim"_doc
     )
 
+    .def_prop_ro("imported_functions",
+        [] (dw::CompilationUnit& self) {
+          auto imported_functions = self.imported_functions();
+          return nb::make_iterator<nb::rv_policy::reference_internal>(
+            nb::type<dw::CompilationUnit>(), "functions_it", imported_functions
+          );
+        }, nb::keep_alive<0, 1>(),
+        R"delim(
+        Return an iterator over the functions **imported** in this compilation
+        unit **but not** implemented.
+
+        For instance with this code:
+
+        .. code-block:: cpp
+
+          #include <cstdio>
+          int main() {
+            printf("Hello\n");
+            return 0;
+          }
+
+        ``printf`` is imported from the standard libc so the function is returned by
+        the iterator. On the other hand, ``main()`` is implemented in this
+        compilation unit so it is not returned by :attr:`.imported_function` but
+        :attr:`.functions`.
+        )delim"_doc
+    )
+
     .def_prop_ro("variables",
         [] (dw::CompilationUnit& self) {
           auto variables = self.variables();
-          return nb::make_iterator(
+          return nb::make_iterator<nb::rv_policy::reference_internal>(
               nb::type<dw::CompilationUnit>(), "vars_it", variables);
         }, nb::keep_alive<0, 1>(),
         R"delim(

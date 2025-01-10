@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@
 #include <nanobind/stl/string.h>
 #include <nanobind/stl/vector.h>
 #include <nanobind/stl/unique_ptr.h>
-#include "nanobind/extra/memoryview.hpp"
+#include "nanobind/extra/stl/lief_span.h"
 #include "nanobind/utils.hpp"
 
 #include "ELF/pyELF.hpp"
@@ -40,8 +40,6 @@ void create<Note>(nb::module_& m) {
   #define ENTRY(X) .value(to_string(Note::TYPE::X), Note::TYPE::X)
   enum_<Note::TYPE>(note, "TYPE", "LIEF representation of the ELF `NT_` values.")
     ENTRY(UNKNOWN)
-    ENTRY(GNU_ABI_TAG)
-    ENTRY(GNU_HWCAP)
     ENTRY(GNU_ABI_TAG)
     ENTRY(GNU_HWCAP)
     ENTRY(GNU_BUILD_ID)
@@ -150,9 +148,7 @@ void create<Note>(nb::module_& m) {
         )doc"_doc)
 
     .def_prop_rw("description",
-        [] (const Note& self) {
-          return nb::to_memoryview(self.description());
-        },
+        nb::overload_cast<>(&Note::description, nb::const_),
         nb::overload_cast<Note::description_t>(&Note::description),
         "Return the description associated with the note"_doc)
 

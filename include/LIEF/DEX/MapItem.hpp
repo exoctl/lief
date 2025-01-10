@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ namespace DEX {
 class Parser;
 class Class;
 
-//! Class which represents an element of the MapList object
+/// Class which represents an element of the MapList object
 class LIEF_API MapItem : public Object {
   friend class Parser;
 
@@ -63,17 +63,17 @@ class LIEF_API MapItem : public Object {
   MapItem(const MapItem&);
   MapItem& operator=(const MapItem&);
 
-  //! The type of the item
+  /// The type of the item
   TYPES type() const;
 
-  //! Reserved value (likely for alignment prupose)
+  /// Reserved value (likely for alignment prupose)
   uint16_t reserved() const;
 
-  //! The number of elements (the real meaning depends on the type)
+  /// The number of elements (the real meaning depends on the type)
   uint32_t size() const;
 
-  //! Offset from the start of the DEX file to the items associated with
-  //! the underlying TYPES
+  /// Offset from the start of the DEX file to the items associated with
+  /// the underlying TYPES
   uint32_t offset() const;
 
   void accept(Visitor& visitor) const override;

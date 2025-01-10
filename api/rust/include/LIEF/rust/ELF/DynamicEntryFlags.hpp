@@ -1,4 +1,4 @@
-/* Copyright 2024 R. Thomas
+/* Copyright 2024 - 2025 R. Thomas
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,14 @@ class ELF_DynamicEntryFlags : public ELF_DynamicEntry {
   public:
   using lief_t = LIEF::ELF::DynamicEntryFlags;
 
+  auto flags() const {
+    return impl().raw_flags();
+  }
+
   static bool classof(const ELF_DynamicEntry& entry) {
     return lief_t::classof(&entry.get());
   }
+
+  private:
+  const lief_t& impl() const { return as<lief_t>(this); }
 };

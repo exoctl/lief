@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ namespace LIEF {
 namespace ELF {
 class Parser;
 
-//! @brief Class which represents an Auxiliary Symbol version
+/// Class which represents an Auxiliary Symbol version
 class LIEF_API SymbolVersionAux : public Object {
   friend class Parser;
   public:
@@ -39,7 +39,7 @@ class LIEF_API SymbolVersionAux : public Object {
   SymbolVersionAux& operator=(const SymbolVersionAux&) = default;
   SymbolVersionAux(const SymbolVersionAux&) = default;
 
-  //! Symbol's aux name (e.g. ``GLIBC_2.2.5``)
+  /// Symbol's aux name (e.g. ``GLIBC_2.2.5``)
   const std::string& name() const {
     return name_;
   }

@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <a href="https://discord.gg/7hRFGWYedu">
+  <a href="https://discord.gg/jGQtyAYChJ">
     <img src="https://img.shields.io/discord/1117013848914931762">
   </a>
   &nbsp;
@@ -38,6 +38,10 @@
   <a href="https://twitter.com/LIEF_project">
    <img alt="Twitter Follow" src="https://img.shields.io/twitter/follow/lief_project">
   </a>
+  &nbsp;
+  <a href="https://gurubase.io/g/lief">
+    <img src="https://img.shields.io/badge/Gurubase-Ask%20LIEF%20Guru-006BFF">
+  </a>
 </p>
 
 <br />
@@ -60,11 +64,14 @@ modify and abstract ELF, PE and MachO formats.
   * **Abstract**: Three formats have common features like sections, symbols, entry point... LIEF factors them.
   * **API**: LIEF can be used in C++, Python, Rust and C
 
-Extended features:
+**Extended features**:
 
-  * [**DWAF/PDB** Support](https://lief.re/doc/latest/extended/debug_info/index.html)
+  * [**DWARF/PDB** Support](https://lief.re/doc/latest/extended/debug_info/index.html)
   * [**Objective-C** Metadata](https://lief.re/doc/latest/extended/objc/index.html)
   * [**Dyld Shared Cache**](https://lief.re/doc/latest/extended/dsc/index.html) with support for extracting Dylib
+  * [**Disassembler**](https://lief.re/doc/latest/extended/disassembler/index.html): AArch64, x86/x86-64, ARM, RISC-V, Mips, PowerPC, eBPF
+  * [**Assembler**](https://lief.re/doc/latest/extended/assembler/index.html): AArch64, x86/x86-64
+
 
 # Content
 
@@ -113,7 +120,7 @@ version = "0.0.1"
 edition = "2021"
 
 [dependencies]
-lief = "0.15.1"
+lief = "0.16.2"
 ```
 
 ## Python
@@ -127,20 +134,21 @@ pip install lief
 To install nightly build:
 
 ```console
-pip install [--user] --index-url https://lief.s3-website.fr-par.scw.cloud/latest lief==0.16.0.dev0
+pip install [--user] --force-reinstall --index-url https://lief.s3-website.fr-par.scw.cloud/latest lief==0.17.0.dev0
 ```
 
 ### Packages
 
+- LIEF Extended: https://extended.lief.re (GitHub OAuth)
 - **Nightly**:
   * SDK: https://lief.s3-website.fr-par.scw.cloud/latest/sdk
   * Python Wheels: https://lief.s3-website.fr-par.scw.cloud/latest/lief
-- **v0.15.1**: https://github.com/lief-project/LIEF/releases/tag/0.15.1
+- **v0.16.2**: https://github.com/lief-project/LIEF/releases/tag/0.16.2
 
 Here are guides to install or integrate LIEF:
 
   * [Python](https://lief.re/doc/latest/installation.html#python)
-  * [VisualStudio](https://lief.re/doc/latest/installation.html#visual-studio-integration)
+  * [Visual Studio](https://lief.re/doc/latest/installation.html#visual-studio-integration)
   * [XCode](https://lief.re/doc/latest/installation.html#xcode-integration)
   * [CMake](https://lief.re/doc/latest/installation.html#cmake-integration)
 
@@ -249,11 +257,11 @@ int main(int argc, char** argv) {
 
 ### Authors
 
-Romain Thomas ([@rh0main](https://twitter.com/rh0main)) - [Quarkslab](https://www.quarkslab.com)
+Romain Thomas ([@rh0main](https://www.romainthomas.fr/)) - Formerly at [Quarkslab](https://www.quarkslab.com)
 
 ### License
 
-LIEF is provided under the [Apache 2.0 license](https://github.com/lief-project/LIEF/blob/0.15.1/LICENSE).
+LIEF is provided under the [Apache 2.0 license](https://github.com/lief-project/LIEF/blob/0.16.1/LICENSE).
 
 ### Bibtex
 

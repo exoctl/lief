@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ template<class T>
 struct load_configuration_v2;
 }
 
-//! @brief LoadConfiguration enhanced with code integrity
+/// LoadConfiguration enhanced with code integrity
 class LIEF_API LoadConfigurationV2 : public LoadConfigurationV1 {
   public:
   static constexpr VERSION WIN_VERSION = VERSION::WIN_10_0_9879;
@@ -47,7 +47,7 @@ class LIEF_API LoadConfigurationV2 : public LoadConfigurationV1 {
     return WIN_VERSION;
   }
 
-  //! @brief CodeIntegrity associated with
+  /// CodeIntegrity associated with
   const CodeIntegrity& code_integrity() const {
     return code_integrity_;
   }

@@ -1,4 +1,4 @@
-/* Copyright 2021 - 2024 R. Thomas
+/* Copyright 2021 - 2025 R. Thomas
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,7 +43,7 @@
 
 #include "ELF/Structures.hpp"
 #include "internal_utils.hpp"
-#include "LIEF/logging.hpp"
+#include "logging.hpp"
 #include "Layout.hpp"
 
 namespace LIEF {
@@ -72,8 +72,8 @@ inline Relocation::TYPE relative_from_arch(ARCH arch) {
   return TYPE::UNKNOWN;
 }
 
-//! Compute the size and the offset of the elements
-//! needed to rebuild the ELF file.
+/// Compute the size and the offset of the elements
+/// needed to rebuild the ELF file.
 class LIEF_LOCAL ExeLayout : public Layout {
   public:
   struct sym_verdef_info_t {
@@ -1560,16 +1560,16 @@ class LIEF_LOCAL ExeLayout : public Layout {
       }
       if (strtab_section_ != nullptr) {
         LIEF_DEBUG("Removing the old section: {} 0x{:x} (size: 0x{:x})",
-                   strtab_section_->name(), strtab_section_->file_offset(), strtab_section_->size());
+                   strtab_section_->name(), strtab_section_->file_offset(),
+                   strtab_section_->size());
         binary_->remove(*strtab_section_, /* clear */ true);
-        strtab_idx = binary_->sections().size() - 1;
-      } else {
-        strtab_idx = binary_->sections().size();
       }
       Section strtab{".strtab", Section::TYPE::STRTAB};
       strtab.content(raw_strtab_);
       strtab.alignment(1);
       Section* new_strtab = binary_->add(strtab, /* loaded */ false);
+
+      strtab_idx = binary_->sections().size() - 1;
 
       if (new_strtab == nullptr) {
         LIEF_ERR("Can't add a new .strtab section");
@@ -1596,14 +1596,24 @@ class LIEF_LOCAL ExeLayout : public Layout {
     if (symtab_size_ > 0) {
       LIEF_DEBUG("Relocate .symtab");
 
-      Section* sec_symtab = binary_->get(Section::TYPE::SYMTAB);
-      if (sec_symtab != nullptr) {
+      const auto sections = binary_->sections();
+      auto it_sec_symtab = std::find_if(sections.begin(), sections.end(),
+          [] (const Section& sec) { return sec.type() == Section::TYPE::SYMTAB; }
+      );
+
+      if (it_sec_symtab != sections.end()) {
+        const size_t pos = std::distance(sections.begin(), it_sec_symtab);
+
         if (strtab_idx == 0) {
-          strtab_idx = sec_symtab->link();
+          strtab_idx = it_sec_symtab->link();
         }
+
         LIEF_DEBUG("Removing the old section: {} 0x{:x} (size: 0x{:x})",
-                   sec_symtab->name(), sec_symtab->file_offset(), sec_symtab->size());
-        binary_->remove(*sec_symtab, /* clear */ true);
+                   it_sec_symtab->name(), it_sec_symtab->file_offset(), it_sec_symtab->size());
+        binary_->remove(*it_sec_symtab, /* clear */ true);
+        if (pos < strtab_idx) {
+          --strtab_idx;
+        }
       }
 
       Section symtab{".symtab", Section::TYPE::SYMTAB};

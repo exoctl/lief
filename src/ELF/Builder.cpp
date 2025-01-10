@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -69,12 +69,12 @@ Builder::Builder(Binary& binary) :
 
 
 bool Builder::should_swap() const {
-  switch (binary_->header().abstract_endianness()) {
+  switch (binary_->get_abstract_header().endianness()) {
 #ifdef __BYTE_ORDER__
 #if  defined(__ORDER_LITTLE_ENDIAN__) && (__BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__)
-    case ENDIANNESS::ENDIAN_BIG:
+    case LIEF::Header::ENDIANNESS::BIG:
 #elif defined(__ORDER_BIG_ENDIAN__) && (__BYTE_ORDER__ == __ORDER_BIG_ENDIAN__)
-    case ENDIANNESS::ENDIAN_LITTLE:
+    case LIEF::Header::LITTLE:
 #endif
       return true;
 #endif // __BYTE_ORDER__

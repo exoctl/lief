@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ template<class T>
 struct load_configuration_v6;
 }
 
-//! @brief Load Configuration enhanced with Hotpatch and improved RFG
+/// Load Configuration enhanced with Hotpatch and improved RFG
 class LIEF_API LoadConfigurationV6 : public LoadConfigurationV5 {
   public:
   static constexpr VERSION WIN_VERSION = VERSION::WIN_10_0_15002;
@@ -46,12 +46,12 @@ class LIEF_API LoadConfigurationV6 : public LoadConfigurationV5 {
     return WIN_VERSION;
   }
 
-  //! @brief VA of the Function verifying the stack pointer
+  /// VA of the Function verifying the stack pointer
   uint64_t guard_rf_verify_stackpointer_function_pointer() const {
     return guardrf_verify_stackpointer_function_pointer_;
   }
 
-  //! @brief Offset to the *hotpatch* table
+  /// Offset to the *hotpatch* table
   uint32_t hotpatch_table_offset() const {
     return hotpatch_table_offset_;
   }

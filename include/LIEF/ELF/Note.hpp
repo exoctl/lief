@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,7 +42,7 @@ class LIEF_API Note : public Object {
   friend class Binary;
 
   public:
-  //! Container used to handle the description data
+  /// Container used to handle the description data
   using description_t = std::vector<uint8_t>;
 
   /// LIEF representation of the ELF `NT_` values.

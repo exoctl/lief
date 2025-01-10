@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@
 #include <nanobind/stl/vector.h>
 #include <nanobind/stl/string.h>
 #include <nanobind/stl/unique_ptr.h>
-#include "nanobind/extra/memoryview.hpp"
+#include "nanobind/extra/stl/lief_span.h"
 #include "nanobind/extra/random_access_iterator.hpp"
 
 #include "LIEF/MachO/Binary.hpp"
@@ -41,6 +41,7 @@
 #include "LIEF/MachO/FunctionStarts.hpp"
 #include "LIEF/MachO/LinkEdit.hpp"
 #include "LIEF/MachO/LinkerOptHint.hpp"
+#include "LIEF/MachO/AtomInfo.hpp"
 #include "LIEF/MachO/MainCommand.hpp"
 #include "LIEF/MachO/Routine.hpp"
 #include "LIEF/MachO/RPathCommand.hpp"
@@ -441,7 +442,6 @@ void create<Binary>(nb::module_& m) {
         "Return the binary's " RST_CLASS_REF(lief.MachO.TwoLevelHints) " if any, or None"_doc,
         nb::rv_policy::reference_internal)
 
-
     .def_prop_ro("has_linker_opt_hint",
         &Binary::has_linker_opt_hint,
         "``True`` if the binary embeds the Linker optimization hint command (" RST_CLASS_REF(lief.MachO.LinkerOptHint) ")"_doc)
@@ -449,6 +449,15 @@ void create<Binary>(nb::module_& m) {
     .def_prop_ro("linker_opt_hint",
         nb::overload_cast<>(&Binary::linker_opt_hint),
         "Return the binary's " RST_CLASS_REF(lief.MachO.LinkerOptHint) " if any, or None"_doc,
+        nb::rv_policy::reference_internal)
+
+    .def_prop_ro("has_atom_info",
+        &Binary::has_atom_info,
+        "``True`` if the binary embeds the ``LC_ATOM_INFO`` command (" RST_CLASS_REF(lief.MachO.AtomInfo) ")"_doc)
+
+    .def_prop_ro("atom_info",
+        nb::overload_cast<>(&Binary::atom_info),
+        "Return the binary's " RST_CLASS_REF(lief.MachO.AtomInfo) " if any, or None"_doc,
         nb::rv_policy::reference_internal)
 
     .def("virtual_address_to_offset",
@@ -499,8 +508,17 @@ void create<Binary>(nb::module_& m) {
 
     .def("write",
         nb::overload_cast<const std::string&>(&Binary::write),
-        "Rebuild the binary and write and write its content if the file given in parameter"_doc,
+        "Rebuild the binary and write its content in the file given in the first parameter"_doc,
         "output"_a,
+        nb::rv_policy::reference_internal)
+
+    .def("write",
+        nb::overload_cast<const std::string&, Builder::config_t>(&Binary::write),
+        R"doc(
+        Rebuild the binary and write its content in the file given in the first parameter.
+        The ``config`` parameter can be used to tweak the building process.
+        )doc"_doc,
+        "output"_a, "config"_a,
         nb::rv_policy::reference_internal)
 
     .def("add",
@@ -612,6 +630,11 @@ void create<Binary>(nb::module_& m) {
         "section"_a,
         nb::rv_policy::reference_internal)
 
+    .def("extend_section",
+        nb::overload_cast<Section&, size_t>(&Binary::extend_section),
+        "Extend the **content** of the given " RST_CLASS_REF(lief.MachO.Section) " by ``size``"_doc,
+        "section"_a, "size"_a)
+
     .def("add_library",
         nb::overload_cast<const std::string&>(&Binary::add_library),
         "Add a new library dependency"_doc,
@@ -684,7 +707,9 @@ void create<Binary>(nb::module_& m) {
     .def_prop_ro("bindings",
         [] (const Binary& self) {
           auto bindings = self.bindings();
-          return nb::make_iterator(nb::type<Binary>(), "bindings_it", bindings);
+          return nb::make_iterator<nb::rv_policy::reference_internal>(
+            nb::type<Binary>(), "bindings_it", bindings
+          );
         }, nb::keep_alive<0, 1>(),
         R"doc(
         Return an iterator over the binding info which can come from either
@@ -743,10 +768,7 @@ void create<Binary>(nb::module_& m) {
         nb::overload_cast<LoadCommand::TYPE>(&Binary::has, nb::const_))
 
     .def_prop_ro("overlay",
-        [] (const Binary& self) {
-          const span<const uint8_t> overlay = self.overlay();
-          return nb::memoryview::from_memory(overlay.data(), overlay.size());
-        })
+        nb::overload_cast<>(&Binary::overlay, nb::const_))
 
     LIEF_DEFAULT_STR(Binary);
 }

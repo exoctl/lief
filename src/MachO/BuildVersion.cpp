@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 #include <spdlog/fmt/fmt.h>
+#include <spdlog/fmt/ranges.h>
 #include "LIEF/Visitor.hpp"
 
 #include "frozen.hpp"
@@ -85,6 +86,12 @@ const char* to_string(BuildVersion::PLATFORMS e) {
     ENTRY(VISIONOS_SIMULATOR),
     ENTRY(FIRMWARE),
     ENTRY(SEPOS),
+    ENTRY(MACOS_EXCLAVE_CORE),
+    ENTRY(MACOS_EXCLAVE_KIT),
+    ENTRY(IOS_EXCLAVE_CORE),
+    ENTRY(IOS_EXCLAVE_KIT),
+    ENTRY(TVOS_EXCLAVE_CORE),
+    ENTRY(TVOS_EXCLAVE_KIT),
 
     ENTRY(ANY),
   };

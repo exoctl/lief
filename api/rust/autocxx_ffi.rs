@@ -7,6 +7,7 @@ include_cpp! {
     name!(autocxx_ffi)
 
     generate!("is_extended")
+    generate!("extended_version_info")
     generate!("demangle")
 
     generate_pod!("Span")
@@ -45,11 +46,18 @@ include_cpp! {
     generate!("AbstracDebugInfo")
     block_constructors!("AbstracDebugInfo")
 
+    generate!("AbstractBinary_it_instructions")
+    block_constructors!("AbstractBinary_it_instructions")
+
     // -------------------------------------------------------------------------
     // ELF
     // -------------------------------------------------------------------------
     generate!("ELF_Binary")
-    block_constructors!("ELF_Binary")
+
+    generate_pod!("ELF_Binary_write_config_t")
+    block_constructors!("ELF_Binary_write_config_t")
+
+    block_constructors!("Span")
     generate!("ELF_Binary_it_segments")
     block_constructors!("ELF_Binary_it_segments")
     generate!("ELF_Binary_it_sections")
@@ -309,6 +317,10 @@ include_cpp! {
     // -------------------------------------------------------------------------
     generate!("MachO_Binary")
     block_constructors!("MachO_Binary")
+
+    generate_pod!("MachO_Binary_write_config_t")
+    block_constructors!("MachO_Binary_write_config_t")
+
     generate!("MachO_Binary_it_stubs")
     block_constructors!("MachO_Binary_it_stubs")
     generate!("MachO_Binary_it_symbols")
@@ -389,6 +401,8 @@ include_cpp! {
     block_constructors!("MachO_FatBinary")
     generate!("MachO_Fileset")
     block_constructors!("MachO_Fileset")
+    generate!("MachO_AtomInfo")
+    block_constructors!("MachO_AtomInfo")
     generate!("MachO_FunctionStarts")
     block_constructors!("MachO_FunctionStarts")
     generate!("MachO_Header")
@@ -513,12 +527,22 @@ include_cpp! {
     block_constructors!("DWARF_CompilationUnit_Language")
     generate!("DWARF_Function")
     block_constructors!("DWARF_Function")
-    generate!("DWARF_Function_Parameter")
-    block_constructors!("DWARF_Function_Parameter")
+    generate!("DWARF_Parameter")
+    block_constructors!("DWARF_Parameter")
+    generate!("DWARF_parameters_Formal")
+    block_constructors!("DWARF_parameters_Formal")
+    generate!("DWARF_parameters_TemplateValue")
+    block_constructors!("DWARF_parameters_TemplateValue")
+    generate!("DWARF_parameters_TemplateType")
+    block_constructors!("DWARF_parameters_TemplateType")
     generate!("DWARF_Function_it_variables")
     block_constructors!("DWARF_Function_it_variables")
     generate!("DWARF_Function_it_parameters")
     block_constructors!("DWARF_Function_it_parameters")
+    generate!("DWARF_Function_it_thrown_types")
+    block_constructors!("DWARF_Function_it_thrown_types")
+    generate!("DWARF_Function_it_instructions")
+    block_constructors!("DWARF_Function_it_instructions")
     generate!("DWARF_CompilationUnit_it_functions")
     block_constructors!("DWARF_CompilationUnit_it_functions")
     generate!("DWARF_CompilationUnit_it_types")
@@ -533,6 +557,8 @@ include_cpp! {
     block_constructors!("DWARF_types_ClassLike")
     generate!("DWARF_types_ClassLike_it_members")
     block_constructors!("DWARF_types_ClassLike_it_members")
+    generate!("DWARF_types_ClassLike_it_functions")
+    block_constructors!("DWARF_types_ClassLike_it_functions")
     generate!("DWARF_types_ClassLike_Member")
     block_constructors!("DWARF_types_ClassLike_Member")
     generate!("DWARF_types_Class")
@@ -541,6 +567,8 @@ include_cpp! {
     block_constructors!("DWARF_types_Structure")
     generate!("DWARF_types_Union")
     block_constructors!("DWARF_types_Union")
+    generate!("DWARF_types_Packed")
+    block_constructors!("DWARF_types_Packed")
     generate!("DWARF_types_Pointer")
     block_constructors!("DWARF_types_Pointer")
     generate!("DWARF_types_Const")
@@ -549,6 +577,50 @@ include_cpp! {
     block_constructors!("DWARF_types_Base")
     generate!("DWARF_types_Array")
     block_constructors!("DWARF_types_Array")
+    generate!("DWARF_types_array_size_info")
+    block_constructors!("DWARF_types_array_size_info")
+    generate!("DWARF_types_Typedef")
+    block_constructors!("DWARF_types_Typedef")
+    generate!("DWARF_types_Atomic")
+    block_constructors!("DWARF_types_Atomic")
+    generate!("DWARF_types_Coarray")
+    block_constructors!("DWARF_types_Coarray")
+    generate!("DWARF_types_Dynamic")
+    block_constructors!("DWARF_types_Dynamic")
+    generate!("DWARF_types_File")
+    block_constructors!("DWARF_types_File")
+    generate!("DWARF_types_Immutable")
+    block_constructors!("DWARF_types_Immutable")
+    generate!("DWARF_types_Interface")
+    block_constructors!("DWARF_types_Interface")
+    generate!("DWARF_types_PointerToMember")
+    block_constructors!("DWARF_types_PointerToMember")
+    generate!("DWARF_types_RValueReference")
+    block_constructors!("DWARF_types_RValueReference")
+    generate!("DWARF_types_Reference")
+    block_constructors!("DWARF_types_Reference")
+    generate!("DWARF_types_Restrict")
+    block_constructors!("DWARF_types_Restrict")
+    generate!("DWARF_types_SetTy")
+    block_constructors!("DWARF_types_SetTy")
+    generate!("DWARF_types_Shared")
+    block_constructors!("DWARF_types_Shared")
+    generate!("DWARF_types_StringTy")
+    block_constructors!("DWARF_types_StringTy")
+    generate!("DWARF_types_Subroutine")
+    block_constructors!("DWARF_types_Subroutine")
+    generate!("DWARF_types_Subroutine_it_parameters")
+    block_constructors!("DWARF_types_Subroutine_it_parameters")
+    generate!("DWARF_types_TemplateAlias")
+    block_constructors!("DWARF_types_TemplateAlias")
+    generate!("DWARF_types_TemplateAlias_it_parameters")
+    block_constructors!("DWARF_types_TemplateAlias_it_parameters")
+    generate!("DWARF_types_Thrown")
+    block_constructors!("DWARF_types_Thrown")
+    generate!("DWARF_types_Volatile")
+    block_constructors!("DWARF_types_Volatile")
+    generate!("DWARF_types_Enum")
+    block_constructors!("DWARF_types_Enum")
     generate!("DWARF_Scope")
     block_constructors!("DWARF_Scope")
 
@@ -612,6 +684,9 @@ include_cpp! {
     generate!("dsc_DyldSharedCache_it_subcaches")
     block_constructors!("dsc_DyldSharedCache_it_subcaches")
 
+    generate!("dsc_DyldSharedCache_it_instructions")
+    block_constructors!("dsc_DyldSharedCache_it_instructions")
+
     generate!("dsc_Dylib")
     block_constructors!("dsc_Dylib")
 
@@ -623,6 +698,100 @@ include_cpp! {
 
     generate!("dsc_SubCache")
     block_constructors!("dsc_SubCache")
+
+    // -------------------------------------------------------------------------
+    // ASM Support
+    // -------------------------------------------------------------------------
+    generate!("asm_Engine")
+    block_constructors!("asm_Engine")
+
+    generate!("asm_Instruction")
+    block_constructors!("asm_Instruction")
+
+    /* AArch64 { */
+        generate!("asm_aarch64_Instruction")
+        block_constructors!("asm_aarch64_Instruction")
+
+        generate!("asm_aarch64_Instruction_it_operands")
+        block_constructors!("asm_aarch64_Instruction_it_operands")
+
+        /* Operands { */
+            generate!("asm_aarch64_Operand")
+            block_constructors!("asm_aarch64_Operand")
+
+            generate!("asm_aarch64_operands_Register")
+            block_constructors!("asm_aarch64_operands_Register")
+
+            generate_pod!("asm_aarch64_operands_Register_reg_t")
+            block_constructors!("asm_aarch64_operands_Register_reg_t")
+
+            generate!("asm_aarch64_operands_Memory")
+            block_constructors!("asm_aarch64_operands_Memory")
+
+            generate_pod!("asm_aarch64_operands_Memory_offset_t")
+            block_constructors!("asm_aarch64_operands_Memory_offset_t")
+
+            generate_pod!("asm_aarch64_operands_Memory_shift_info_t")
+            block_constructors!("asm_aarch64_operands_Memory_shift_info_t")
+
+            generate!("asm_aarch64_operands_Immediate")
+            block_constructors!("asm_aarch64_operands_Immediate")
+
+            generate!("asm_aarch64_operands_PCRelative")
+            block_constructors!("asm_aarch64_operands_PCRelative")
+        /* } */
+
+    /* } AArch64 */
+
+    /* X86 { */
+        generate!("asm_x86_Instruction")
+        block_constructors!("asm_x86_Instruction")
+
+        generate!("asm_x86_Instruction_it_operands")
+        block_constructors!("asm_x86_Instruction_it_operands")
+
+        /* Operands { */
+            generate!("asm_x86_Operand")
+            block_constructors!("asm_x86_Operand")
+
+            generate!("asm_x86_operands_Register")
+            block_constructors!("asm_x86_operands_Register")
+
+            generate!("asm_x86_operands_Memory")
+            block_constructors!("asm_x86_operands_Memory")
+
+            generate!("asm_x86_operands_Immediate")
+            block_constructors!("asm_x86_operands_Immediate")
+
+            generate!("asm_x86_operands_PCRelative")
+            block_constructors!("asm_x86_operands_PCRelative")
+        /* } */
+    /* } X86 */
+
+    /* Mips { */
+        generate!("asm_mips_Instruction")
+        block_constructors!("asm_mips_Instruction")
+    /* } Mips */
+
+    /* PowerPC { */
+        generate!("asm_powerpc_Instruction")
+        block_constructors!("asm_powerpc_Instruction")
+    /* } PowerPC */
+
+    /* RISC-V { */
+        generate!("asm_riscv_Instruction")
+        block_constructors!("asm_riscv_Instruction")
+    /* } RISC-V */
+
+    /* ARM { */
+        generate!("asm_arm_Instruction")
+        block_constructors!("asm_arm_Instruction")
+    /* } ARM */
+
+    /* eBPF { */
+        generate!("asm_ebpf_Instruction")
+        block_constructors!("asm_ebpf_Instruction")
+    /* } eBPF */
 
     safety!(unsafe)
 }

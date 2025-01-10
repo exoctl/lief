@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,8 +29,8 @@ namespace details {
 struct dylinker_command;
 }
 
-//! Class that represents the Mach-O linker, also named loader.
-//! Most of the time, DylinkerCommand::name() should return ``/usr/lib/dyld``
+/// Class that represents the Mach-O linker, also named loader.
+/// Most of the time, DylinkerCommand::name() should return ``/usr/lib/dyld``
 class LIEF_API DylinkerCommand : public LoadCommand {
   public:
   DylinkerCommand() = default;
@@ -48,7 +48,7 @@ class LIEF_API DylinkerCommand : public LoadCommand {
 
   std::ostream& print(std::ostream& os) const override;
 
-  //! Path to the linker (or loader)
+  /// Path to the linker (or loader)
   const std::string& name() const {
     return name_;
   }

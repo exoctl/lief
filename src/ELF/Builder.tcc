@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  * Copyright 2017 - 2021, NVIDIA CORPORATION. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,7 +20,7 @@
 #include <numeric>
 #include <unordered_map>
 
-#include "LIEF/logging.hpp"
+#include "logging.hpp"
 
 #include "LIEF/BinaryStream/VectorStream.hpp"
 
@@ -805,7 +805,7 @@ ok_error_t Builder::build_symtab_symbols() {
 
   auto* layout = static_cast<ExeLayout*>(layout_.get());
 
-  LIEF_DEBUG("== Build symtabl symbols ==");
+  LIEF_DEBUG("== Build .symtab symbols ==");
   Section* symbol_section = binary_->symtab_symbols_section();
   if (symbol_section == nullptr) {
     LIEF_ERR("Can't find the .symtab section");

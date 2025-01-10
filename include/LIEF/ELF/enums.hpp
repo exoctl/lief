@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ namespace LIEF {
 namespace ELF {
 
 /**
- * @brief Machine architectures
+ * Machine architectures
  * See current registered ELF machine architectures at:
  * http://www.sco.com/developers/gabi/latest/ch4.eheader.html
  */
@@ -204,7 +204,8 @@ enum class ARCH {
   CSR_KALIMBA   = 219, /**< CSR Kalimba architecture family */
   AMDGPU        = 224, /**< AMD GPU architecture */
   RISCV         = 243, /**< RISC-V */
-  BPF           = 247,  /**< eBPF Filter */
+  BPF           = 247, /**< eBPF Filter */
+  CSKY          = 252, /**< C-SKY */
   LOONGARCH     = 258  /**< LoongArch */
 };
 

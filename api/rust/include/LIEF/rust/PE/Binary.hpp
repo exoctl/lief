@@ -1,4 +1,4 @@
-/* Copyright 2024 R. Thomas
+/* Copyright 2024 - 2025 R. Thomas
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -253,6 +253,9 @@ class PE_Binary : public AbstractBinary {
     return make_span(impl().get_content_from_virtual_address(virtual_address, size));
   }
 
+  void write(std::string output) { impl().write(output); }
+
   private:
   const lief_t& impl() const { return as<lief_t>(this); }
+  lief_t& impl() { return as<lief_t>(this); }
 };

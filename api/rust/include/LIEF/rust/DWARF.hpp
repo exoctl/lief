@@ -1,4 +1,4 @@
-/* Copyright 2022 - 2024 R. Thomas
+/* Copyright 2022 - 2025 R. Thomas
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,29 @@
 #include "LIEF/rust/DWARF/Variable.hpp"
 #include "LIEF/rust/DWARF/Scope.hpp"
 #include "LIEF/rust/DWARF/Type.hpp"
+#include "LIEF/rust/DWARF/Parameter.hpp"
+
 #include "LIEF/rust/DWARF/types/ClassLike.hpp"
 #include "LIEF/rust/DWARF/types/Pointer.hpp"
 #include "LIEF/rust/DWARF/types/Const.hpp"
 #include "LIEF/rust/DWARF/types/Base.hpp"
 #include "LIEF/rust/DWARF/types/Array.hpp"
+#include "LIEF/rust/DWARF/types/Typedef.hpp"
+#include "LIEF/rust/DWARF/types/Atomic.hpp"
+#include "LIEF/rust/DWARF/types/Coarray.hpp"
+#include "LIEF/rust/DWARF/types/Dynamic.hpp"
+#include "LIEF/rust/DWARF/types/File.hpp"
+#include "LIEF/rust/DWARF/types/Immutable.hpp"
+#include "LIEF/rust/DWARF/types/Interface.hpp"
+#include "LIEF/rust/DWARF/types/PointerToMember.hpp"
+#include "LIEF/rust/DWARF/types/RValueRef.hpp"
+#include "LIEF/rust/DWARF/types/Reference.hpp"
+#include "LIEF/rust/DWARF/types/Restrict.hpp"
+#include "LIEF/rust/DWARF/types/SetTy.hpp"
+#include "LIEF/rust/DWARF/types/Shared.hpp"
+#include "LIEF/rust/DWARF/types/StringTy.hpp"
+#include "LIEF/rust/DWARF/types/Subroutine.hpp"
+#include "LIEF/rust/DWARF/types/TemplateAlias.hpp"
+#include "LIEF/rust/DWARF/types/Thrown.hpp"
+#include "LIEF/rust/DWARF/types/Volatile.hpp"
+#include "LIEF/rust/DWARF/types/Enum.hpp"

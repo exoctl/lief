@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,12 +36,12 @@ class LIEF_API CodeIntegrity : public Object {
   CodeIntegrity& operator=(const CodeIntegrity&) = default;
   CodeIntegrity(const CodeIntegrity&) = default;
 
-  //! Flags to indicate if CI information is available, etc.
+  /// Flags to indicate if CI information is available, etc.
   uint16_t flags() const {
     return flags_;
   }
 
-  //! 0xFFFF means not available
+  /// 0xFFFF means not available
   uint16_t catalog() const {
     return catalog_;
   }
@@ -49,7 +49,7 @@ class LIEF_API CodeIntegrity : public Object {
     return catalog_offset_;
   }
 
-  //! Additional bitmask to be defined later
+  /// Additional bitmask to be defined later
   uint32_t reserved() const {
     return reserved_;
   }

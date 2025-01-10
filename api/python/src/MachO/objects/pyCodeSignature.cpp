@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@
 #include "LIEF/MachO/CodeSignature.hpp"
 
 #include "MachO/pyMachO.hpp"
-#include "nanobind/extra/memoryview.hpp"
+#include "nanobind/extra/stl/lief_span.h"
 
 namespace LIEF::MachO::py {
 
@@ -40,10 +40,8 @@ void create<CodeSignature>(nb::module_& m) {
         "Size of the raw signature"_doc)
 
     .def_prop_ro("content",
-        [] (const CodeSignature& self) {
-          const span<const uint8_t> content = self.content();
-          return nb::memoryview::from_memory(content.data(), content.size());
-        }, "The raw signature as a bytes stream"_doc)
+        nb::overload_cast<>(&CodeSignature::content, nb::const_),
+        "The raw signature as a bytes stream"_doc)
 
   LIEF_DEFAULT_STR(CodeSignature);
 }

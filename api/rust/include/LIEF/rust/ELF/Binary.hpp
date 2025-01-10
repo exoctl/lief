@@ -1,4 +1,4 @@
-/* Copyright 2024 R. Thomas
+/* Copyright 2024 - 2025 R. Thomas
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,6 +34,30 @@
 #include "LIEF/rust/ELF/DynamicEntry.hpp"
 
 #include "LIEF/rust/error.hpp"
+
+class ELF_Binary_write_config_t {
+  public:
+  bool dt_hash;
+  bool dyn_str;
+  bool dynamic_section;
+  bool fini_array;
+  bool gnu_hash;
+  bool init_array;
+  bool interpreter;
+  bool jmprel;
+  bool notes;
+  bool preinit_array;
+  bool relr;
+  bool android_rela;
+  bool rela;
+  bool static_symtab;
+  bool sym_verdef;
+  bool sym_verneed;
+  bool sym_versym;
+  bool symtab;
+  bool coredump_notes;
+  bool force_relocate;
+};
 
 class ELF_Binary : public AbstractBinary {
   public:
@@ -328,6 +352,41 @@ class ELF_Binary : public AbstractBinary {
     return impl().get_relocated_dynamic_array(LIEF::ELF::DynamicEntry::TAG(tag));
   }
 
+  auto is_targeting_android() const {
+    return impl().is_targeting_android();
+  }
+
+  auto add_library(std::string library) {
+    return std::make_unique<ELF_DynamicEntryLibrary>(impl().add_library(library));
+  }
+
+  void write(std::string output) { impl().write(output); }
+  void write_with_config(std::string output, ELF_Binary_write_config_t config) {
+    impl().write(output, LIEF::ELF::Builder::config_t {
+      config.dt_hash,
+      config.dyn_str,
+      config.dynamic_section,
+      config.fini_array,
+      config.gnu_hash,
+      config.init_array,
+      config.interpreter,
+      config.jmprel,
+      config.notes,
+      config.preinit_array,
+      config.relr,
+      config.android_rela,
+      config.rela,
+      config.static_symtab,
+      config.sym_verdef,
+      config.sym_verneed,
+      config.sym_versym,
+      config.symtab,
+      config.coredump_notes,
+      config.force_relocate,
+    });
+  }
+
   private:
   const lief_t& impl() const { return as<lief_t>(this); }
+  lief_t& impl() { return as<lief_t>(this); }
 };

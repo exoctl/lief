@@ -5,7 +5,7 @@ use std::marker::PhantomData;
 use crate::dwarf::types::DwarfType;
 use crate::dwarf::Type;
 
-/// This structure represents a ``DW_TAG_pointer_type`` DWARF type.
+/// This structure represents a `DW_TAG_pointer_type` DWARF type.
 pub struct Pointer<'a> {
     ptr: cxx::UniquePtr<ffi::DWARF_types_Pointer>,
     _owner: PhantomData<&'a ()>,

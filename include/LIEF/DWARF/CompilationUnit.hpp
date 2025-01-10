@@ -1,4 +1,4 @@
-/* Copyright 2022 - 2024 R. Thomas
+/* Copyright 2022 - 2025 R. Thomas
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -114,6 +114,12 @@ class LIEF_API CompilationUnit {
       CPP,
       RUST,
       DART,
+      MODULA,
+      FORTRAN,
+      SWIFT,
+      D,
+      JAVA,
+      COBOL,
     };
 
     /// The language itself
@@ -227,6 +233,25 @@ class LIEF_API CompilationUnit {
   /// `get_secret_env` is inlined and thus, its implementation is located in
   /// `main`.
   functions_it functions() const;
+
+  /// Return an iterator over the functions **imported** in this compilation
+  /// unit **but not** implemented.
+  ///
+  /// For instance with this code:
+  ///
+  /// ```cpp
+  /// #include <cstdio>
+  /// int main() {
+  ///   printf("Hello\n");
+  ///   return 0;
+  /// }
+  /// ```
+  ///
+  /// `printf` is imported from the standard libc so the function is returned by
+  /// the iterator. On the other hand, `main()` is implemented in this
+  /// compilation unit so it is not returned by imported_function() but
+  /// functions().
+  functions_it imported_functions() const;
 
   /// Return an iterator over the different types defined in this
   /// compilation unit.

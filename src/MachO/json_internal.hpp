@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -65,8 +65,8 @@ class UUIDCommand;
 class VersionMin;
 class UnknownCommand;
 
-//! Class that implements the Visitor pattern to output
-//! a JSON representation of a MachO object
+/// Class that implements the Visitor pattern to output
+/// a JSON representation of a MachO object
 class JsonVisitor : public LIEF::JsonVisitor {
   public:
   using LIEF::JsonVisitor::JsonVisitor;

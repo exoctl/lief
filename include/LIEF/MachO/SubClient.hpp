@@ -1,4 +1,4 @@
-/* Copyright 2017 - 2024 R. Thomas
+/* Copyright 2017 - 2025 R. Thomas
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,7 +53,7 @@ class LIEF_API SubClient : public LoadCommand {
     return std::unique_ptr<SubClient>(new SubClient(*this));
   }
 
-  //! Name of the client
+  /// Name of the client
   const std::string& client() const {
     return client_;
   }

@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2024 R. Thomas
- * Copyright 2017 - 2024 Quarkslab
+/* Copyright 2017 - 2025 R. Thomas
+ * Copyright 2017 - 2025 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 #ifndef LIEF_ELF_CORE_PRPSINFO_H
 #define LIEF_ELF_CORE_PRPSINFO_H
 
-#include <vector>
 #include <ostream>
 
 #include "LIEF/visibility.h"
@@ -85,7 +84,7 @@ class LIEF_API CorePrPsInfo : public Note {
     return os;
   }
   private:
-  ARCH arch_ = ARCH::NONE;
+  [[maybe_unused]] ARCH arch_ = ARCH::NONE;
   Header::CLASS class_ = Header::CLASS::NONE;
 };
 
