@@ -15,7 +15,7 @@
  */
 #include <algorithm>
 
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 
 #include "Object.tcc"
 #include "Binary.tcc"

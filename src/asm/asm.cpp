@@ -52,7 +52,7 @@
 
 #include "internal_utils.hpp"
 #include "messages.hpp"
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 
 namespace LIEF {
 

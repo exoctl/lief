@@ -28,7 +28,7 @@
 
 #include "LIEF/BinaryStream/FileStream.hpp"
 #include "LIEF/BinaryStream/SpanStream.hpp"
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 
 
 namespace LIEF {

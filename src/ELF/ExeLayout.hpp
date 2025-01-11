@@ -43,7 +43,7 @@
 
 #include "ELF/Structures.hpp"
 #include "internal_utils.hpp"
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 #include "Layout.hpp"
 
 namespace LIEF {

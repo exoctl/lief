@@ -100,10 +100,10 @@ inline void needs_lief_extended() {
 
 #define CHECK(X, ...) do { if (!(X)) { } } while (false)
 #define CHECK_FATAL(X, ...) do { if ((X)) { std::abort(); } } while (false)
-#define LIEF_TRACE(msg, ...) if (LIEF::logging::logger::get_current_log_level() <= LIEF::logging::LEVEL::TRACE) LIEF::logging::logger(LIEF::logging::LEVEL::TRACE) << fmt::format(msg __VA_OPT__(, ) __VA_ARGS__)
-#define LIEF_DEBUG(msg, ...) if (LIEF::logging::logger::get_current_log_level() <= LIEF::logging::LEVEL::DEBUG) LIEF::logging::logger(LIEF::logging::LEVEL::DEBUG) << fmt::format(msg __VA_OPT__(, ) __VA_ARGS__)
-#define LIEF_INFO(msg, ...) if (LIEF::logging::logger::get_current_log_level() <= LIEF::logging::LEVEL::INFO) LIEF::logging::logger(LIEF::logging::LEVEL::INFO) << fmt::format(msg __VA_OPT__(, ) __VA_ARGS__)
-#define LIEF_WARN(msg, ...) if (LIEF::logging::logger::get_current_log_level() <= LIEF::logging::LEVEL::WARN) LIEF::logging::logger(LIEF::logging::LEVEL::WARN) << fmt::format(msg __VA_OPT__(, ) __VA_ARGS__)
-#define LIEF_ERR(msg, ...) if (LIEF::logging::logger::get_current_log_level() <= LIEF::logging::LEVEL::ERR) LIEF::logging::logger(LIEF::logging::LEVEL::ERR) << fmt::format(msg __VA_OPT__(, ) __VA_ARGS__)
+#define LIEF_TRACE(msg, ...) if (LIEF::logging::logger::get_current_log_level() <= LIEF::logging::LEVEL::Trace) LIEF::logging::logger(LIEF::logging::LEVEL::Trace) << fmt::format(msg __VA_OPT__(, ) __VA_ARGS__)
+#define LIEF_DEBUG(msg, ...) if (LIEF::logging::logger::get_current_log_level() <= LIEF::logging::LEVEL::Debug) LIEF::logging::logger(LIEF::logging::LEVEL::Debug) << fmt::format(msg __VA_OPT__(, ) __VA_ARGS__)
+#define LIEF_INFO(msg, ...) if (LIEF::logging::logger::get_current_log_level() <= LIEF::logging::LEVEL::Info) LIEF::logging::logger(LIEF::logging::LEVEL::Info) << fmt::format(msg __VA_OPT__(, ) __VA_ARGS__)
+#define LIEF_WARN(msg, ...) if (LIEF::logging::logger::get_current_log_level() <= LIEF::logging::LEVEL::Warn) LIEF::logging::logger(LIEF::logging::LEVEL::Warn) << fmt::format(msg __VA_OPT__(, ) __VA_ARGS__)
+#define LIEF_ERR(msg, ...) if (LIEF::logging::logger::get_current_log_level() <= LIEF::logging::LEVEL::Err) LIEF::logging::logger(LIEF::logging::LEVEL::Err) << fmt::format(msg __VA_OPT__(, ) __VA_ARGS__)
 
 #endif

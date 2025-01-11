@@ -24,7 +24,7 @@
 
 #include "frozen.hpp"
 #include "fmt_formatter.hpp"
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 #include "LIEF/config.h"
 
 FMT_FORMATTER(LIEF::Header::MODES, LIEF::to_string);

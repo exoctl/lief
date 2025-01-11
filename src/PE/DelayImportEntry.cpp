@@ -15,7 +15,7 @@
  */
 #include "spdlog/fmt/fmt.h"
 
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 
 #include "LIEF/config.h"
 #include "LIEF/utils.hpp"

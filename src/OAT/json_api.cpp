@@ -15,7 +15,7 @@
  */
 #include "LIEF/config.h"
 
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 #include "LIEF/OAT/json.hpp"
 
 #ifdef LIEF_JSON_SUPPORT

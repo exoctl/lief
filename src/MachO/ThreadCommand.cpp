@@ -15,7 +15,7 @@
  */
 #include <iomanip>
 
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 #include "LIEF/Visitor.hpp"
 
 #include "LIEF/MachO/ThreadCommand.hpp"

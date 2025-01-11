@@ -45,7 +45,7 @@
 
 #include "MachO/ChainedFixup.hpp"
 
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 #include "Object.tcc"
 
 #include <string>

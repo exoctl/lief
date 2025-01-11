@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 #include "LIEF/OAT/Header.hpp"
 #include "LIEF/OAT/EnumToString.hpp"
 #include "LIEF/OAT/hash.hpp"

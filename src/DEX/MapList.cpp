@@ -15,7 +15,7 @@
  */
 #include "LIEF/DEX/MapList.hpp"
 #include "LIEF/DEX/hash.hpp"
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 
 namespace LIEF {
 namespace DEX {

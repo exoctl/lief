@@ -18,7 +18,7 @@
 #include "LIEF/Visitor.hpp"
 
 #include "LIEF/utils.hpp"
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 
 #include "LIEF/PE/resources/ResourceStringFileInfo.hpp"
 

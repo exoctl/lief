@@ -27,22 +27,22 @@ namespace LIEF
             {
                 std::string prefix;
                 switch (level) {
-                    case LEVEL::TRACE:
+                    case LEVEL::Trace:
                         prefix = "TRACE   ";
                         break;
-                    case LEVEL::DEBUG:
+                    case LEVEL::Debug:
                         prefix = "DEBUG   ";
                         break;
-                    case LEVEL::INFO:
+                    case LEVEL::Info:
                         prefix = "INFO    ";
                         break;
-                    case LEVEL::WARN:
+                    case LEVEL::Warn:
                         prefix = "WARNING ";
                         break;
-                    case LEVEL::ERR:
+                    case LEVEL::Err:
                         prefix = "ERROR   ";
                         break;
-                    case LEVEL::CRITICAL:
+                    case LEVEL::Critical:
                         prefix = "CRITICAL";
                         break;
                 }
@@ -94,15 +94,15 @@ namespace LIEF
             switch (e) {
                 case LEVEL::Trace:
                     return "TRACE";
-                case LEVEL::DEBUG:
+                case LEVEL::Debug:
                     return "DEBUG";
-                case LEVEL::INFO:
+                case LEVEL::Info:
                     return "INFO";
-                case LEVEL::ERR:
+                case LEVEL::Err:
                     return "ERROR";
-                case LEVEL::WARN:
+                case LEVEL::Warn:
                     return "WARN";
-                case LEVEL::CRITICAL:
+                case LEVEL::Critical:
                     return "CRITICAL";
                 default:
                     return "UNDEFINED";

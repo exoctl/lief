@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 #include "frozen.hpp"
 #include "LIEF/BinaryStream/SpanStream.hpp"
 #include "LIEF/iostream.hpp"

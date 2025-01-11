@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 #include "LIEF/DEX/Field.hpp"
 #include "LIEF/DEX/Class.hpp"
 #include "LIEF/DEX/hash.hpp"

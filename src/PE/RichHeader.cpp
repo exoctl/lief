@@ -21,7 +21,7 @@
 #include "LIEF/PE/EnumToString.hpp"
 
 #include "frozen.hpp"
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 
 #define LIEF_PE_FORCE_UNDEF
 #include "LIEF/PE/undef.h"

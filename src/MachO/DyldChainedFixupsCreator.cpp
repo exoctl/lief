@@ -30,7 +30,7 @@
 
 #include "MachO/Structures.hpp"
 
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 
 namespace LIEF::MachO {
 

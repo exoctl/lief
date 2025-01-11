@@ -21,7 +21,7 @@
 
 #include "LIEF/DWARF/enums.hpp"
 
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 #include "paging.hpp"
 
 #include "LIEF/utils.hpp"

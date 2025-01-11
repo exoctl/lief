@@ -36,7 +36,7 @@ enum class REG {
   WZR = 10,
   XZR = 11,
   ZA = 12,
-  B0 = 13,
+  REG_B0 = 13,
   B1 = 14,
   B2 = 15,
   B3 = 16,

@@ -28,7 +28,7 @@
 #include "LIEF/BinaryStream/SpanStream.hpp"
 
 #include "frozen.hpp"
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 #include "internal_utils.hpp"
 #include "fmt_formatter.hpp"
 

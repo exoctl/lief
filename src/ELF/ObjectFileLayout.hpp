@@ -24,7 +24,7 @@
 
 #include "ELF/DataHandler/Handler.hpp"
 
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 #include "Layout.hpp"
 namespace LIEF {
 namespace ELF {

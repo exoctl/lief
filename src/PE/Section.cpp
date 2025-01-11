@@ -18,7 +18,7 @@
 #include <spdlog/fmt/fmt.h>
 
 #include "frozen.hpp"
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 #include "PE/Structures.hpp"
 
 #include "LIEF/Visitor.hpp"

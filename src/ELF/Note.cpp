@@ -34,7 +34,7 @@
 #include "LIEF/BinaryStream/SpanStream.hpp"
 
 #include "frozen.hpp"
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 #include "internal_utils.hpp"
 
 #define IMPL_READ_AT(T) \

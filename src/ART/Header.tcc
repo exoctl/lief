@@ -15,7 +15,7 @@
  */
 #include <string>
 
-#include "logging.hpp"
+#include "LIEF/logging.hpp"
 #include "LIEF/ART/Header.hpp"
 #include "LIEF/ART/EnumToString.hpp"
 #include "ART/Structures.hpp"
