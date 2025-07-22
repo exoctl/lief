@@ -18,6 +18,7 @@
 
 #include "LIEF/visibility.h"
 #include "LIEF/PE/signature/Attribute.hpp"
+#include <cstdint>
 
 namespace LIEF {
 namespace PE {

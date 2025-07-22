@@ -18,6 +18,7 @@
 
 #include <memory>
 #include <string>
+#include <cstdint>
 
 namespace LIEF {
 namespace objc {

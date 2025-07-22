@@ -30,7 +30,7 @@ enum SWITCH_ARRAY_IDENT : uint16_t {
 
 /// The Dalvik Opcodes
 enum OPCODES : uint8_t {
-  OP_NOP                    = 0x00,
+  OP_NOP                    ,
   OP_MOVE                   = 0x01,
   OP_MOVE_FROM_16           = 0x02,
   OP_MOVE_16                = 0x03,

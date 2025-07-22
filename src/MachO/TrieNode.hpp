@@ -20,6 +20,7 @@
 #include <memory>
 
 #include "LIEF/visibility.h"
+#include <cstdint>
 
 namespace LIEF {
 class vector_iostream;

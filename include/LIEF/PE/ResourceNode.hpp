@@ -22,6 +22,7 @@
 #include "LIEF/Object.hpp"
 #include "LIEF/visibility.h"
 #include "LIEF/iterators.hpp"
+#include <cstdint>
 
 namespace LIEF {
 namespace PE {
